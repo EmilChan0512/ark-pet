@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "characterId": "char_4058_pepe",
+  "name": "佩佩",
+  "skin": "默认",
+  "view": "基建",
+  "sourceMetaUrl": "https://torappu.prts.wiki/assets/char_spine/char_4058_pepe/meta.json",
+  "baseUrl": "https://torappu.prts.wiki/assets/char_spine/char_4058_pepe/defaultskin/build/build_char_4058_pepe",
+  "skeletonUrl": "https://torappu.prts.wiki/assets/char_spine/char_4058_pepe/defaultskin/build/build_char_4058_pepe.skel",
+  "atlasUrl": "https://torappu.prts.wiki/assets/char_spine/char_4058_pepe/defaultskin/build/build_char_4058_pepe.atlas",
+  "textureUrls": [
+    "https://torappu.prts.wiki/assets/char_spine/char_4058_pepe/defaultskin/build/build_char_4058_pepe.png"
+  ],
+  "spine": {
+    "hash": "AxSgE0gR0FkXmaaehno2ciYrb0U",
+    "version": "3.8.99",
+    "majorMinor": "3.8",
+    "recommendedRuntime": "spine-3.8"
+  },
+  "localFiles": {
+    "https://torappu.prts.wiki/assets/char_spine/char_4058_pepe/defaultskin/build/build_char_4058_pepe.skel": "build_char_4058_pepe.skel",
+    "https://torappu.prts.wiki/assets/char_spine/char_4058_pepe/defaultskin/build/build_char_4058_pepe.atlas": "build_char_4058_pepe.atlas",
+    "https://torappu.prts.wiki/assets/char_spine/char_4058_pepe/defaultskin/build/build_char_4058_pepe.png": "build_char_4058_pepe.png"
+  }
+}

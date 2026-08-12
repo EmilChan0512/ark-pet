@@ -1,0 +1,1376 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@pixi-spine/all-3.8': 4.0.6
+  '@pixi/assets': 7.4.3
+  '@pixi/core': 7.4.3
+  '@pixi/display': 7.4.3
+  '@pixi/graphics': 7.4.3
+  '@pixi/mesh': 7.4.3
+  '@pixi/mesh-extras': 7.4.3
+  '@pixi/sprite': 7.4.3
+  '@tauri-apps/api': 2.11.1
+  '@tauri-apps/cli': 2.11.4
+  '@tauri-apps/plugin-process': 2.3.1
+  '@types/node': ^24.13.2
+  '@types/react': ^19.2.17
+  '@types/react-dom': ^19.2.3
+  '@vitejs/plugin-react': ^6.0.3
+  oxlint: ^1.71.0
+  pixi.js: 7.4.3
+  react: ^19.2.7
+  react-dom: ^19.2.7
+  typescript: ~6.0.2
+  vite: ^8.1.1
+  zod: ^4.1.5
+
+dependencies:
+  '@pixi-spine/all-3.8': 4.0.6_j3atrtjmrdzd4xnywbrn5wgvmm
+  '@pixi/assets': 7.4.3_@pixi+core@7.4.3
+  '@pixi/core': 7.4.3
+  '@pixi/display': 7.4.3_@pixi+core@7.4.3
+  '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
+  '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+  '@pixi/mesh-extras': 7.4.3_7l2wkaqppxg7auqtzi6tsdukoe
+  '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+  '@tauri-apps/api': 2.11.1
+  '@tauri-apps/plugin-process': 2.3.1
+  pixi.js: 7.4.3
+  react: 19.2.8
+  react-dom: 19.2.8_react@19.2.8
+  zod: 4.4.3
+
+devDependencies:
+  '@tauri-apps/cli': 2.11.4
+  '@types/node': 24.13.3
+  '@types/react': 19.2.18
+  '@types/react-dom': 19.2.4_@types+react@19.2.18
+  '@vitejs/plugin-react': 6.0.5_vite@8.2.1
+  oxlint: 1.78.0
+  typescript: 6.0.3
+  vite: 8.2.1_@types+node@24.13.3
+
+packages:
+
+  /@oxc-project/types/0.143.0:
+    resolution: {integrity: sha1-w+TzF4t7VOTdGU6sbUUlimDwCSs=, tarball: '@oxc-project/types/download/@oxc-project/types-0.143.0.tgz'}
+    dev: true
+
+  /@oxlint/binding-android-arm-eabi/1.78.0:
+    resolution: {integrity: sha1-WZfR0v5dZMqVvDzC6ZCiGNE1c7w=, tarball: '@oxlint/binding-android-arm-eabi/download/@oxlint/binding-android-arm-eabi-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-android-arm64/1.78.0:
+    resolution: {integrity: sha1-VYsyL9FBp0zaAiv7Zw9gjKORCUQ=, tarball: '@oxlint/binding-android-arm64/download/@oxlint/binding-android-arm64-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-darwin-arm64/1.78.0:
+    resolution: {integrity: sha1-auuzefROZM1rhO/j0o5Rkjw4jHo=, tarball: '@oxlint/binding-darwin-arm64/download/@oxlint/binding-darwin-arm64-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-darwin-x64/1.78.0:
+    resolution: {integrity: sha1-+MQcp8xwJC5oRi2yKRQqkxbSAnw=, tarball: '@oxlint/binding-darwin-x64/download/@oxlint/binding-darwin-x64-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-freebsd-x64/1.78.0:
+    resolution: {integrity: sha1-mciu9/nP7b5dJdMrIoJM1Q+gF70=, tarball: '@oxlint/binding-freebsd-x64/download/@oxlint/binding-freebsd-x64-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-arm-gnueabihf/1.78.0:
+    resolution: {integrity: sha1-Fu0PZ/AqOOh1S5AB0PZyiWeIfgU=, tarball: '@oxlint/binding-linux-arm-gnueabihf/download/@oxlint/binding-linux-arm-gnueabihf-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-arm-musleabihf/1.78.0:
+    resolution: {integrity: sha1-YPxuJBMSrwUvRZ658ay0zxbLWNQ=, tarball: '@oxlint/binding-linux-arm-musleabihf/download/@oxlint/binding-linux-arm-musleabihf-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-arm64-gnu/1.78.0:
+    resolution: {integrity: sha1-y9GepwaAafIREv7lfUqelqy3Bw4=, tarball: '@oxlint/binding-linux-arm64-gnu/download/@oxlint/binding-linux-arm64-gnu-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-arm64-musl/1.78.0:
+    resolution: {integrity: sha1-jW/tI8T1QGfIjDs/QRDIxP2aykA=, tarball: '@oxlint/binding-linux-arm64-musl/download/@oxlint/binding-linux-arm64-musl-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-ppc64-gnu/1.78.0:
+    resolution: {integrity: sha1-obQn7gOdZH/n4NsCO1ghtNYJnMg=, tarball: '@oxlint/binding-linux-ppc64-gnu/download/@oxlint/binding-linux-ppc64-gnu-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-riscv64-gnu/1.78.0:
+    resolution: {integrity: sha1-GEF15gMva7tGIUBbI08NL3hL848=, tarball: '@oxlint/binding-linux-riscv64-gnu/download/@oxlint/binding-linux-riscv64-gnu-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-riscv64-musl/1.78.0:
+    resolution: {integrity: sha1-4QrP+7M0DEg48mmee7GFEDepgLM=, tarball: '@oxlint/binding-linux-riscv64-musl/download/@oxlint/binding-linux-riscv64-musl-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-s390x-gnu/1.78.0:
+    resolution: {integrity: sha1-Hck0Y7F6iLnyUZ6A8MO2GykQCSE=, tarball: '@oxlint/binding-linux-s390x-gnu/download/@oxlint/binding-linux-s390x-gnu-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-x64-gnu/1.78.0:
+    resolution: {integrity: sha1-b8w6nJUnREYJgoMyaIpX9Gx+FoE=, tarball: '@oxlint/binding-linux-x64-gnu/download/@oxlint/binding-linux-x64-gnu-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-linux-x64-musl/1.78.0:
+    resolution: {integrity: sha1-Eb1JA56XM3Odfnf8OOGuzvrbtco=, tarball: '@oxlint/binding-linux-x64-musl/download/@oxlint/binding-linux-x64-musl-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-openharmony-arm64/1.78.0:
+    resolution: {integrity: sha1-dXdBoXatvixfXJe7T3HYQo12Qe8=, tarball: '@oxlint/binding-openharmony-arm64/download/@oxlint/binding-openharmony-arm64-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-win32-arm64-msvc/1.78.0:
+    resolution: {integrity: sha1-QQ3eRDlQng7Jgptiy0m2FJdGobQ=, tarball: '@oxlint/binding-win32-arm64-msvc/download/@oxlint/binding-win32-arm64-msvc-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-win32-ia32-msvc/1.78.0:
+    resolution: {integrity: sha1-EJpgt5X1FszdV6+oN97iiAYNi9M=, tarball: '@oxlint/binding-win32-ia32-msvc/download/@oxlint/binding-win32-ia32-msvc-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@oxlint/binding-win32-x64-msvc/1.78.0:
+    resolution: {integrity: sha1-5ot7S5mOjh6sltNXzURHG8o3xDA=, tarball: '@oxlint/binding-win32-x64-msvc/download/@oxlint/binding-win32-x64-msvc-1.78.0.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@pixi-spine/all-3.8/4.0.6_j3atrtjmrdzd4xnywbrn5wgvmm:
+    resolution: {integrity: sha1-WB8OOWXZCeRTrudrunIHk/fnJZU=, tarball: '@pixi-spine/all-3.8/download/@pixi-spine/all-3.8-4.0.6.tgz'}
+    peerDependencies:
+      '@pixi/assets': ^7.0.0
+      '@pixi/core': ^7.0.0
+      '@pixi/display': ^7.0.0
+      '@pixi/graphics': ^7.0.0
+      '@pixi/mesh': ^7.0.0
+      '@pixi/mesh-extras': ^7.0.0
+      '@pixi/sprite': ^7.0.0
+    dependencies:
+      '@pixi-spine/base': 4.0.6_ts2afwzkqjlagdvtqbcn2z23w4
+      '@pixi-spine/loader-3.8': 4.0.6_oa3ils5d4dzocvucr27u4euwhu
+      '@pixi-spine/loader-base': 4.0.6_l4fkdv3vqexjm6oew7ye7keahy
+      '@pixi-spine/runtime-3.8': 4.0.6_qh6fhis5bpaksikkp3n6fjolki
+      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
+      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+      '@pixi/mesh-extras': 7.4.3_7l2wkaqppxg7auqtzi6tsdukoe
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi-spine/base/4.0.6_ts2afwzkqjlagdvtqbcn2z23w4:
+    resolution: {integrity: sha1-maF22MUp96a3+K/sbKuqUEvfL+4=, tarball: '@pixi-spine/base/download/@pixi-spine/base-4.0.6.tgz'}
+    peerDependencies:
+      '@pixi/core': ^7.0.0
+      '@pixi/display': ^7.0.0
+      '@pixi/graphics': ^7.0.0
+      '@pixi/mesh': ^7.0.0
+      '@pixi/mesh-extras': ^7.0.0
+      '@pixi/sprite': ^7.0.0
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
+      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+      '@pixi/mesh-extras': 7.4.3_7l2wkaqppxg7auqtzi6tsdukoe
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi-spine/loader-3.8/4.0.6_oa3ils5d4dzocvucr27u4euwhu:
+    resolution: {integrity: sha1-FZ9o3uqRG/MDU7MLA7YwbyZxlJo=, tarball: '@pixi-spine/loader-3.8/download/@pixi-spine/loader-3.8-4.0.6.tgz'}
+    peerDependencies:
+      '@pixi-spine/loader-base': ^4.0.0
+      '@pixi-spine/runtime-3.8': ^4.0.0
+    dependencies:
+      '@pixi-spine/loader-base': 4.0.6_l4fkdv3vqexjm6oew7ye7keahy
+      '@pixi-spine/runtime-3.8': 4.0.6_qh6fhis5bpaksikkp3n6fjolki
+    dev: false
+
+  /@pixi-spine/loader-base/4.0.6_l4fkdv3vqexjm6oew7ye7keahy:
+    resolution: {integrity: sha1-bcbaA4eEyrQV+978wUOiXHcGYAU=, tarball: '@pixi-spine/loader-base/download/@pixi-spine/loader-base-4.0.6.tgz'}
+    peerDependencies:
+      '@pixi-spine/base': ^4.0.0
+      '@pixi/assets': ' ^7.0.0'
+      '@pixi/core': ^7.0.0
+    dependencies:
+      '@pixi-spine/base': 4.0.6_ts2afwzkqjlagdvtqbcn2z23w4
+      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi-spine/runtime-3.8/4.0.6_qh6fhis5bpaksikkp3n6fjolki:
+    resolution: {integrity: sha1-4CBjWLFRjRsjVTRLsnIkLSCwDMM=, tarball: '@pixi-spine/runtime-3.8/download/@pixi-spine/runtime-3.8-4.0.6.tgz'}
+    peerDependencies:
+      '@pixi-spine/base': ^4.0.0
+      '@pixi/core': ^7.0.0
+    dependencies:
+      '@pixi-spine/base': 4.0.6_ts2afwzkqjlagdvtqbcn2z23w4
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/accessibility/7.4.3_5xeadyefqngwnxo3jvj2fjgtfy:
+    resolution: {integrity: sha1-WdFKmIboU9Skac89QlbLjoq5KA0=, tarball: '@pixi/accessibility/download/@pixi/accessibility-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+      '@pixi/events': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/events': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi/app/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
+    resolution: {integrity: sha1-LotwDBRnVCE2+i0INvEHVGmq5a4=, tarball: '@pixi/app/download/@pixi/app-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+    dev: false
+
+  /@pixi/assets/7.4.3_@pixi+core@7.4.3:
+    resolution: {integrity: sha1-eHqxLWTJ1oIjEt+XBYajNhcYu+I=, tarball: '@pixi/assets/download/@pixi/assets-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@types/css-font-loading-module': 0.0.12
+    dev: false
+
+  /@pixi/color/7.4.3:
+    resolution: {integrity: sha1-Vje9wOS/J0v8IWyJnUNnYTvg0Nw=, tarball: '@pixi/color/download/@pixi/color-7.4.3.tgz'}
+    dependencies:
+      '@pixi/colord': 2.9.6
+    dev: false
+
+  /@pixi/colord/2.9.6:
+    resolution: {integrity: sha1-fk54UUgNpv08704zHwCNYL5+EgQ=, tarball: '@pixi/colord/download/@pixi/colord-2.9.6.tgz'}
+    dev: false
+
+  /@pixi/compressed-textures/7.4.3_vxedn37wtpnt4ozhh2j5kf7zxi:
+    resolution: {integrity: sha1-PXi5lf4KHvsypuZ5MraiJ8/Jhc0=, tarball: '@pixi/compressed-textures/download/@pixi/compressed-textures-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/assets': 7.4.3
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/constants/7.4.3:
+    resolution: {integrity: sha1-r3WNro+tvtFiM8e98TWOviaNRkY=, tarball: '@pixi/constants/download/@pixi/constants-7.4.3.tgz'}
+    dev: false
+
+  /@pixi/core/7.4.3:
+    resolution: {integrity: sha1-gjD6kuADbsD7XB7qJ9wUDHgkftw=, tarball: '@pixi/core/download/@pixi/core-7.4.3.tgz'}
+    dependencies:
+      '@pixi/color': 7.4.3
+      '@pixi/constants': 7.4.3
+      '@pixi/extensions': 7.4.3
+      '@pixi/math': 7.4.3
+      '@pixi/runner': 7.4.3
+      '@pixi/settings': 7.4.3
+      '@pixi/ticker': 7.4.3
+      '@pixi/utils': 7.4.3
+    dev: false
+
+  /@pixi/display/7.4.3_@pixi+core@7.4.3:
+    resolution: {integrity: sha1-r4z6Fp0aeMJHBnlBlwc4SwdRI2U=, tarball: '@pixi/display/download/@pixi/display-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/events/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
+    resolution: {integrity: sha1-quXCklyshnxJb3laha1USZ/mvnY=, tarball: '@pixi/events/download/@pixi/events-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+    dev: false
+
+  /@pixi/extensions/7.4.3:
+    resolution: {integrity: sha1-XZ6YS77xDMXPOsFyC8AjtX9jP2Q=, tarball: '@pixi/extensions/download/@pixi/extensions-7.4.3.tgz'}
+    dev: false
+
+  /@pixi/extract/7.4.3_@pixi+core@7.4.3:
+    resolution: {integrity: sha1-ihCU85BCa/nipOx6QHB+dRlpJ/M=, tarball: '@pixi/extract/download/@pixi/extract-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/filter-alpha/7.4.3_@pixi+core@7.4.3:
+    resolution: {integrity: sha1-DsGOuGKom4FwN3YL+hGRVVHEBsY=, tarball: '@pixi/filter-alpha/download/@pixi/filter-alpha-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/filter-blur/7.4.3_@pixi+core@7.4.3:
+    resolution: {integrity: sha1-lDEeDUSUbxqi3xAtU4/Md8lAEeo=, tarball: '@pixi/filter-blur/download/@pixi/filter-blur-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/filter-color-matrix/7.4.3_@pixi+core@7.4.3:
+    resolution: {integrity: sha1-26NmJi3F+oUMLeyP61udpg5JG/o=, tarball: '@pixi/filter-color-matrix/download/@pixi/filter-color-matrix-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/filter-displacement/7.4.3_@pixi+core@7.4.3:
+    resolution: {integrity: sha1-1srY35HY1+fIxlBMp9mnPuqe1DI=, tarball: '@pixi/filter-displacement/download/@pixi/filter-displacement-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/filter-fxaa/7.4.3_@pixi+core@7.4.3:
+    resolution: {integrity: sha1-auiM02T0VGQ4CbLUIwlwDkNuNoM=, tarball: '@pixi/filter-fxaa/download/@pixi/filter-fxaa-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/filter-noise/7.4.3_@pixi+core@7.4.3:
+    resolution: {integrity: sha1-72+0maaRqw4KEWWeaC3nNYjpLUM=, tarball: '@pixi/filter-noise/download/@pixi/filter-noise-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/graphics/7.4.3_qegou4ohxoxx6fjwhsqriswvqy:
+    resolution: {integrity: sha1-Bb+r40dT43R9dJDPemctDH1BcyE=, tarball: '@pixi/graphics/download/@pixi/graphics-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+      '@pixi/sprite': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi/math/7.4.3:
+    resolution: {integrity: sha1-5B7PfHTalDOBbmYblvtfbXzGNS4=, tarball: '@pixi/math/download/@pixi/math-7.4.3.tgz'}
+    dev: false
+
+  /@pixi/mesh-extras/7.4.3_7l2wkaqppxg7auqtzi6tsdukoe:
+    resolution: {integrity: sha1-sYbCigPDOM58J6H0T8a854wuJUc=, tarball: '@pixi/mesh-extras/download/@pixi/mesh-extras-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/mesh': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi/mesh/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
+    resolution: {integrity: sha1-HPrkwyo9XVOpVgUBEyUNF3d58bA=, tarball: '@pixi/mesh/download/@pixi/mesh-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+    dev: false
+
+  /@pixi/mixin-cache-as-bitmap/7.4.3_qegou4ohxoxx6fjwhsqriswvqy:
+    resolution: {integrity: sha1-TZ3d9HlASP0ppOKG341CZYz5yjU=, tarball: '@pixi/mixin-cache-as-bitmap/download/@pixi/mixin-cache-as-bitmap-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+      '@pixi/sprite': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi/mixin-get-child-by-name/7.4.3_@pixi+display@7.4.3:
+    resolution: {integrity: sha1-GS9qLcFlVTXwt57gykf8BmRE19I=, tarball: '@pixi/mixin-get-child-by-name/download/@pixi/mixin-get-child-by-name-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/display': 7.4.3
+    dependencies:
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+    dev: false
+
+  /@pixi/mixin-get-global-position/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
+    resolution: {integrity: sha1-JuM+DPhb6Ac43Ivqg1kDBIKnObE=, tarball: '@pixi/mixin-get-global-position/download/@pixi/mixin-get-global-position-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+    dev: false
+
+  /@pixi/particle-container/7.4.3_qegou4ohxoxx6fjwhsqriswvqy:
+    resolution: {integrity: sha1-f2uGKs3mT1jLKcOyGV8YEJ/T730=, tarball: '@pixi/particle-container/download/@pixi/particle-container-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+      '@pixi/sprite': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi/prepare/7.4.3_rq3qs5klubyyxapin3tgdowapu:
+    resolution: {integrity: sha1-dV6ZHJnkUGbvnk1XUxCtdk8PVDQ=, tarball: '@pixi/prepare/download/@pixi/prepare-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+      '@pixi/graphics': 7.4.3
+      '@pixi/text': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
+      '@pixi/text': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
+    dev: false
+
+  /@pixi/runner/7.4.3:
+    resolution: {integrity: sha1-GN0m1lb0TGEypiszEB5YcMihhbo=, tarball: '@pixi/runner/download/@pixi/runner-7.4.3.tgz'}
+    dev: false
+
+  /@pixi/settings/7.4.3:
+    resolution: {integrity: sha1-v4M1ctSLxcdRsEqd9sE4IGjm1fg=, tarball: '@pixi/settings/download/@pixi/settings-7.4.3.tgz'}
+    dependencies:
+      '@pixi/constants': 7.4.3
+      '@types/css-font-loading-module': 0.0.12
+      ismobilejs: 1.1.1
+    dev: false
+
+  /@pixi/sprite-animated/7.4.3_7jbw4n67slm5gct6vpsyqfzpte:
+    resolution: {integrity: sha1-ki7D9JSGRZf+1UvJrf1yqcsTJlM=, tarball: '@pixi/sprite-animated/download/@pixi/sprite-animated-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/sprite': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi/sprite-tiling/7.4.3_qegou4ohxoxx6fjwhsqriswvqy:
+    resolution: {integrity: sha1-K/cUGS/h41QJ2NOcu1e+eeW+eI4=, tarball: '@pixi/sprite-tiling/download/@pixi/sprite-tiling-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+      '@pixi/sprite': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi/sprite/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
+    resolution: {integrity: sha1-7dlzn4fD6qQnoV691YQYpYqXOIg=, tarball: '@pixi/sprite/download/@pixi/sprite-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+    dev: false
+
+  /@pixi/spritesheet/7.4.3_vxedn37wtpnt4ozhh2j5kf7zxi:
+    resolution: {integrity: sha1-MNyqWZG8jJDD4RnKl9HhJ/9+ugg=, tarball: '@pixi/spritesheet/download/@pixi/spritesheet-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/assets': 7.4.3
+      '@pixi/core': 7.4.3
+    dependencies:
+      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
+      '@pixi/core': 7.4.3
+    dev: false
+
+  /@pixi/text-bitmap/7.4.3_dperfufo3ym6q22v4uhh3zhfky:
+    resolution: {integrity: sha1-1rEtpgjYYNyIo1la/gcPhq8A6F0=, tarball: '@pixi/text-bitmap/download/@pixi/text-bitmap-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/assets': 7.4.3
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+      '@pixi/mesh': 7.4.3
+      '@pixi/text': 7.4.3
+    dependencies:
+      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+      '@pixi/text': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
+    dev: false
+
+  /@pixi/text-html/7.4.3_domgap63ib46s4q7earsfybkce:
+    resolution: {integrity: sha1-z0GuH42X6rCO9bNZK3l4kM6MbnE=, tarball: '@pixi/text-html/download/@pixi/text-html-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3
+      '@pixi/sprite': 7.4.3
+      '@pixi/text': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+      '@pixi/text': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
+    dev: false
+
+  /@pixi/text/7.4.3_7jbw4n67slm5gct6vpsyqfzpte:
+    resolution: {integrity: sha1-AqdUFSAu5vhFNFer63jG3jz6L5g=, tarball: '@pixi/text/download/@pixi/text-7.4.3.tgz'}
+    peerDependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/sprite': 7.4.3
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+    dev: false
+
+  /@pixi/ticker/7.4.3:
+    resolution: {integrity: sha1-zKaSVjFGgj1/UbikS+eZPTxu0gM=, tarball: '@pixi/ticker/download/@pixi/ticker-7.4.3.tgz'}
+    dependencies:
+      '@pixi/extensions': 7.4.3
+      '@pixi/settings': 7.4.3
+      '@pixi/utils': 7.4.3
+    dev: false
+
+  /@pixi/utils/7.4.3:
+    resolution: {integrity: sha1-ciEfjl6I7uHY3GXKkhEsPYlsdFE=, tarball: '@pixi/utils/download/@pixi/utils-7.4.3.tgz'}
+    dependencies:
+      '@pixi/color': 7.4.3
+      '@pixi/constants': 7.4.3
+      '@pixi/settings': 7.4.3
+      '@types/earcut': 2.1.4
+      earcut: 2.2.4
+      eventemitter3: 4.0.7
+      url: 0.11.4
+    dev: false
+
+  /@rolldown/binding-android-arm64/1.2.3:
+    resolution: {integrity: sha1-ABuLCwGERwHv2hu2vthLaBxKSIs=, tarball: '@rolldown/binding-android-arm64/download/@rolldown/binding-android-arm64-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-darwin-arm64/1.2.3:
+    resolution: {integrity: sha1-XofGAu1jSm/vCS4hYuJPv7iBxOw=, tarball: '@rolldown/binding-darwin-arm64/download/@rolldown/binding-darwin-arm64-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-darwin-x64/1.2.3:
+    resolution: {integrity: sha1-8y4LKGcUvQOkIdaTQV0F2X0mW3c=, tarball: '@rolldown/binding-darwin-x64/download/@rolldown/binding-darwin-x64-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-freebsd-x64/1.2.3:
+    resolution: {integrity: sha1-XzitV2G2t7IbV6mVZrtSY0xgqxk=, tarball: '@rolldown/binding-freebsd-x64/download/@rolldown/binding-freebsd-x64-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-linux-arm-gnueabihf/1.2.3:
+    resolution: {integrity: sha1-q03NB/G9iOjWWa4MO7nS8pCtuJc=, tarball: '@rolldown/binding-linux-arm-gnueabihf/download/@rolldown/binding-linux-arm-gnueabihf-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-linux-arm64-gnu/1.2.3:
+    resolution: {integrity: sha1-0nm3AWA5pyX7ZtgnhLmEH0Lfg9o=, tarball: '@rolldown/binding-linux-arm64-gnu/download/@rolldown/binding-linux-arm64-gnu-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-linux-arm64-musl/1.2.3:
+    resolution: {integrity: sha1-0Iu8k9J0IhRUjFrfffd4iUTlqJo=, tarball: '@rolldown/binding-linux-arm64-musl/download/@rolldown/binding-linux-arm64-musl-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-linux-ppc64-gnu/1.2.3:
+    resolution: {integrity: sha1-ZBjmN0WzGT8mqzu4h0SzpKE1bXw=, tarball: '@rolldown/binding-linux-ppc64-gnu/download/@rolldown/binding-linux-ppc64-gnu-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-linux-s390x-gnu/1.2.3:
+    resolution: {integrity: sha1-d+ww0HBM9OsctKY/UByYUsZyjPQ=, tarball: '@rolldown/binding-linux-s390x-gnu/download/@rolldown/binding-linux-s390x-gnu-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-linux-x64-gnu/1.2.3:
+    resolution: {integrity: sha1-O5tuDdPobFl/QoWHSMol8d/Vjtg=, tarball: '@rolldown/binding-linux-x64-gnu/download/@rolldown/binding-linux-x64-gnu-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-linux-x64-musl/1.2.3:
+    resolution: {integrity: sha1-94AzxZLIvSr0goSkX45LqqC++/U=, tarball: '@rolldown/binding-linux-x64-musl/download/@rolldown/binding-linux-x64-musl-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-openharmony-arm64/1.2.3:
+    resolution: {integrity: sha1-NulR9ab8qSKlIF4oPQqCufmBmco=, tarball: '@rolldown/binding-openharmony-arm64/download/@rolldown/binding-openharmony-arm64-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-win32-arm64-msvc/1.2.3:
+    resolution: {integrity: sha1-weSUrEfhO9hX/KCzrVnDNYAkH34=, tarball: '@rolldown/binding-win32-arm64-msvc/download/@rolldown/binding-win32-arm64-msvc-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/binding-win32-x64-msvc/1.2.3:
+    resolution: {integrity: sha1-sO///NaHL4oCE3PrQ3kWsbUig6Q=, tarball: '@rolldown/binding-win32-x64-msvc/download/@rolldown/binding-win32-x64-msvc-1.2.3.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@rolldown/pluginutils/1.0.1:
+    resolution: {integrity: sha1-4/zuCT+7XOdl4a0Ij/TeKIn2+b4=, tarball: '@rolldown/pluginutils/download/@rolldown/pluginutils-1.0.1.tgz'}
+    dev: true
+
+  /@tauri-apps/api/2.11.1:
+    resolution: {integrity: sha1-zWsT/CZAPKCVoC457NvsgEjShy0=, tarball: '@tauri-apps/api/download/@tauri-apps/api-2.11.1.tgz'}
+    dev: false
+
+  /@tauri-apps/cli-darwin-arm64/2.11.4:
+    resolution: {integrity: sha1-KITm8uYjGOTKHbDW076DgNy2xUI=, tarball: '@tauri-apps/cli-darwin-arm64/download/@tauri-apps/cli-darwin-arm64-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-darwin-x64/2.11.4:
+    resolution: {integrity: sha1-2eLZKxXuL/C3gZ6lxt85jy/HVLo=, tarball: '@tauri-apps/cli-darwin-x64/download/@tauri-apps/cli-darwin-x64-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-arm-gnueabihf/2.11.4:
+    resolution: {integrity: sha1-rxSuI303pAOs21bHQhR2tlBX2yc=, tarball: '@tauri-apps/cli-linux-arm-gnueabihf/download/@tauri-apps/cli-linux-arm-gnueabihf-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-arm64-gnu/2.11.4:
+    resolution: {integrity: sha1-/lIWV/sBHrmlI2xcnQ+mPrzjndQ=, tarball: '@tauri-apps/cli-linux-arm64-gnu/download/@tauri-apps/cli-linux-arm64-gnu-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-arm64-musl/2.11.4:
+    resolution: {integrity: sha1-SsfcwiwlsXOLHTkEMnFKqdmQWhA=, tarball: '@tauri-apps/cli-linux-arm64-musl/download/@tauri-apps/cli-linux-arm64-musl-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-riscv64-gnu/2.11.4:
+    resolution: {integrity: sha1-8M2N4knI7edFz2m1fZatnx3FV0M=, tarball: '@tauri-apps/cli-linux-riscv64-gnu/download/@tauri-apps/cli-linux-riscv64-gnu-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-x64-gnu/2.11.4:
+    resolution: {integrity: sha1-lEY2pUZWyVvw62ykrz/jF/TZqC4=, tarball: '@tauri-apps/cli-linux-x64-gnu/download/@tauri-apps/cli-linux-x64-gnu-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-linux-x64-musl/2.11.4:
+    resolution: {integrity: sha1-BQ+Yt4AO63gS1tWDQj03pbYp9XE=, tarball: '@tauri-apps/cli-linux-x64-musl/download/@tauri-apps/cli-linux-x64-musl-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-win32-arm64-msvc/2.11.4:
+    resolution: {integrity: sha1-JL6R3Fj4nNjJFCtSeXVEmR2MwWw=, tarball: '@tauri-apps/cli-win32-arm64-msvc/download/@tauri-apps/cli-win32-arm64-msvc-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-win32-ia32-msvc/2.11.4:
+    resolution: {integrity: sha1-D7gN+RakvQV2yjww0jCOeGgz9DM=, tarball: '@tauri-apps/cli-win32-ia32-msvc/download/@tauri-apps/cli-win32-ia32-msvc-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli-win32-x64-msvc/2.11.4:
+    resolution: {integrity: sha1-MZF+JVIUcxsxoPuEcnm+cf4+Bdg=, tarball: '@tauri-apps/cli-win32-x64-msvc/download/@tauri-apps/cli-win32-x64-msvc-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@tauri-apps/cli/2.11.4:
+    resolution: {integrity: sha1-6v6w06e9Nk0nAUhD+wqE2cly5iY=, tarball: '@tauri-apps/cli/download/@tauri-apps/cli-2.11.4.tgz'}
+    engines: {node: '>= 10'}
+    hasBin: true
+    optionalDependencies:
+      '@tauri-apps/cli-darwin-arm64': 2.11.4
+      '@tauri-apps/cli-darwin-x64': 2.11.4
+      '@tauri-apps/cli-linux-arm-gnueabihf': 2.11.4
+      '@tauri-apps/cli-linux-arm64-gnu': 2.11.4
+      '@tauri-apps/cli-linux-arm64-musl': 2.11.4
+      '@tauri-apps/cli-linux-riscv64-gnu': 2.11.4
+      '@tauri-apps/cli-linux-x64-gnu': 2.11.4
+      '@tauri-apps/cli-linux-x64-musl': 2.11.4
+      '@tauri-apps/cli-win32-arm64-msvc': 2.11.4
+      '@tauri-apps/cli-win32-ia32-msvc': 2.11.4
+      '@tauri-apps/cli-win32-x64-msvc': 2.11.4
+    dev: true
+
+  /@tauri-apps/plugin-process/2.3.1:
+    resolution: {integrity: sha1-//d6p1UMnFNHaJyFnVgfiCh7964=, tarball: '@tauri-apps/plugin-process/download/@tauri-apps/plugin-process-2.3.1.tgz'}
+    dependencies:
+      '@tauri-apps/api': 2.11.1
+    dev: false
+
+  /@types/css-font-loading-module/0.0.12:
+    resolution: {integrity: sha1-ZUlIM5KII/mY++joYxKCGHXYDbU=, tarball: '@types/css-font-loading-module/download/@types/css-font-loading-module-0.0.12.tgz'}
+    dev: false
+
+  /@types/earcut/2.1.4:
+    resolution: {integrity: sha1-WBHX0zMEj1p1c7It3ISSPmlZbaY=, tarball: '@types/earcut/download/@types/earcut-2.1.4.tgz'}
+    dev: false
+
+  /@types/node/24.13.3:
+    resolution: {integrity: sha1-SfGL08ZHhm3NpRoHVsFF4UWQzhY=, tarball: '@types/node/download/@types/node-24.13.3.tgz'}
+    dependencies:
+      undici-types: 7.18.2
+    dev: true
+
+  /@types/react-dom/19.2.4_@types+react@19.2.18:
+    resolution: {integrity: sha1-Flq16X37CBhHsPZ1UGDPQKP2Zms=, tarball: '@types/react-dom/download/@types/react-dom-19.2.4.tgz'}
+    peerDependencies:
+      '@types/react': ^19.2.0
+    dependencies:
+      '@types/react': 19.2.18
+    dev: true
+
+  /@types/react/19.2.18:
+    resolution: {integrity: sha1-6wtqH7Y10alpLV+Eo0lb2K0VNwc=, tarball: '@types/react/download/@types/react-19.2.18.tgz'}
+    dependencies:
+      csstype: 3.2.3
+    dev: true
+
+  /@vitejs/plugin-react/6.0.5_vite@8.2.1:
+    resolution: {integrity: sha1-SO55UQk/+QVJUs/51k6HQ1XN43I=, tarball: '@vitejs/plugin-react/download/@vitejs/plugin-react-6.0.5.tgz'}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    peerDependencies:
+      '@rolldown/plugin-babel': ^0.1.7 || ^0.2.0
+      babel-plugin-react-compiler: ^1.0.0
+      vite: ^8.0.0
+    peerDependenciesMeta:
+      '@rolldown/plugin-babel':
+        optional: true
+      babel-plugin-react-compiler:
+        optional: true
+    dependencies:
+      '@rolldown/pluginutils': 1.0.1
+      vite: 8.2.1_@types+node@24.13.3
+    dev: true
+
+  /call-bind-apply-helpers/1.0.2:
+    resolution: {integrity: sha1-S1QowiK+mF15w9gmV0edvgtZstY=, tarball: call-bind-apply-helpers/download/call-bind-apply-helpers-1.0.2.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      es-errors: 1.3.0
+      function-bind: 1.1.2
+    dev: false
+
+  /call-bound/1.0.4:
+    resolution: {integrity: sha1-I43pNdKippKSjFOMfM+pEGf9Bio=, tarball: call-bound/download/call-bound-1.0.4.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      get-intrinsic: 1.3.0
+    dev: false
+
+  /csstype/3.2.3:
+    resolution: {integrity: sha1-7EjA8+mT5QZIyG2lWeJhCZXPmJo=, tarball: csstype/download/csstype-3.2.3.tgz}
+    dev: true
+
+  /detect-libc/2.1.2:
+    resolution: {integrity: sha1-aJxdzcGQDvVYOky59te0c3QgdK0=, tarball: detect-libc/download/detect-libc-2.1.2.tgz}
+    engines: {node: '>=8'}
+    dev: true
+
+  /dunder-proto/1.0.1:
+    resolution: {integrity: sha1-165mfh3INIL4tw/Q9u78UNow9Yo=, tarball: dunder-proto/download/dunder-proto-1.0.1.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      es-errors: 1.3.0
+      gopd: 1.2.0
+    dev: false
+
+  /earcut/2.2.4:
+    resolution: {integrity: sha1-bQL9TWgWDBFIJdBokKkuyq5gNDo=, tarball: earcut/download/earcut-2.2.4.tgz}
+    dev: false
+
+  /es-define-property/1.0.1:
+    resolution: {integrity: sha1-mD6y+aZyTpMD9hrd8BHHLgngsPo=, tarball: es-define-property/download/es-define-property-1.0.1.tgz}
+    engines: {node: '>= 0.4'}
+    dev: false
+
+  /es-errors/1.3.0:
+    resolution: {integrity: sha1-BfdaJdq5jk+x3NXhRywFRtUFfI8=, tarball: es-errors/download/es-errors-1.3.0.tgz}
+    engines: {node: '>= 0.4'}
+    dev: false
+
+  /es-object-atoms/1.1.2:
+    resolution: {integrity: sha1-otCzcyBXJN+lJdI7DD4bHKWCyZs=, tarball: es-object-atoms/download/es-object-atoms-1.1.2.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      es-errors: 1.3.0
+    dev: false
+
+  /eventemitter3/4.0.7:
+    resolution: {integrity: sha1-Lem2j2Uo1WRO9cWVJqG0oHMGFp8=, tarball: eventemitter3/download/eventemitter3-4.0.7.tgz}
+    dev: false
+
+  /fdir/6.5.0_picomatch@4.0.5:
+    resolution: {integrity: sha1-7Sq5Z6MxreYvGNB32uGSaE1Q01A=, tarball: fdir/download/fdir-6.5.0.tgz}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      picomatch: ^3 || ^4
+    peerDependenciesMeta:
+      picomatch:
+        optional: true
+    dependencies:
+      picomatch: 4.0.5
+    dev: true
+
+  /fsevents/2.3.3:
+    resolution: {integrity: sha1-ysZAd4XQNnWipeGlMFxpezR9kNY=, tarball: fsevents/download/fsevents-2.3.3.tgz}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /function-bind/1.1.2:
+    resolution: {integrity: sha1-LALYZNl/PqbIgwxGTL0Rq26rehw=, tarball: function-bind/download/function-bind-1.1.2.tgz}
+    dev: false
+
+  /get-intrinsic/1.3.0:
+    resolution: {integrity: sha1-dD8OO2lkqTpUke0b/6rgVNf5jQE=, tarball: get-intrinsic/download/get-intrinsic-1.3.0.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      es-define-property: 1.0.1
+      es-errors: 1.3.0
+      es-object-atoms: 1.1.2
+      function-bind: 1.1.2
+      get-proto: 1.0.1
+      gopd: 1.2.0
+      has-symbols: 1.1.0
+      hasown: 2.0.4
+      math-intrinsics: 1.1.0
+    dev: false
+
+  /get-proto/1.0.1:
+    resolution: {integrity: sha1-FQs/J0OGnvPoUewMSdFbHRTQDuE=, tarball: get-proto/download/get-proto-1.0.1.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      dunder-proto: 1.0.1
+      es-object-atoms: 1.1.2
+    dev: false
+
+  /gopd/1.2.0:
+    resolution: {integrity: sha1-ifVrghe9vIgCvSmd9tfxCB1+UaE=, tarball: gopd/download/gopd-1.2.0.tgz}
+    engines: {node: '>= 0.4'}
+    dev: false
+
+  /has-symbols/1.1.0:
+    resolution: {integrity: sha1-/JxqeDoISVHQuXH+EBjegTcHozg=, tarball: has-symbols/download/has-symbols-1.1.0.tgz}
+    engines: {node: '>= 0.4'}
+    dev: false
+
+  /hasown/2.0.4:
+    resolution: {integrity: sha1-jGLYy5C+sqrV0KW2dYGtmFTD8AM=, tarball: hasown/download/hasown-2.0.4.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      function-bind: 1.1.2
+    dev: false
+
+  /ismobilejs/1.1.1:
+    resolution: {integrity: sha1-xWygro5Sskyg8iul7zIVot27qg4=, tarball: ismobilejs/download/ismobilejs-1.1.1.tgz}
+    dev: false
+
+  /lightningcss-android-arm64/1.33.0:
+    resolution: {integrity: sha1-mmhB+IrlD8g1ApA4krQa9BvCuQc=, tarball: lightningcss-android-arm64/download/lightningcss-android-arm64-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-darwin-arm64/1.33.0:
+    resolution: {integrity: sha1-wPLDHAv9GfpN0/GOlXofGhUgl9Y=, tarball: lightningcss-darwin-arm64/download/lightningcss-darwin-arm64-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-darwin-x64/1.33.0:
+    resolution: {integrity: sha1-ywcFllrLU4xmg5Sc5pJfs833w2E=, tarball: lightningcss-darwin-x64/download/lightningcss-darwin-x64-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-freebsd-x64/1.33.0:
+    resolution: {integrity: sha1-djU4gosmurJoDa2vzITueLDrUCs=, tarball: lightningcss-freebsd-x64/download/lightningcss-freebsd-x64-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-linux-arm-gnueabihf/1.33.0:
+    resolution: {integrity: sha1-aGLjF2ozGu297B7TUrTX0N0HhN4=, tarball: lightningcss-linux-arm-gnueabihf/download/lightningcss-linux-arm-gnueabihf-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-linux-arm64-gnu/1.33.0:
+    resolution: {integrity: sha1-xqOi7RUUHa9r3CYokw+OOb30c6o=, tarball: lightningcss-linux-arm64-gnu/download/lightningcss-linux-arm64-gnu-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-linux-arm64-musl/1.33.0:
+    resolution: {integrity: sha1-f6EzSXH8goRfmCffbvigsgkUusY=, tarball: lightningcss-linux-arm64-musl/download/lightningcss-linux-arm64-musl-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-linux-x64-gnu/1.33.0:
+    resolution: {integrity: sha1-i5J4YuqMK7xoMaRlCSRLUNmTblU=, tarball: lightningcss-linux-x64-gnu/download/lightningcss-linux-x64-gnu-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-linux-x64-musl/1.33.0:
+    resolution: {integrity: sha1-DFJbsHff2UQEwFnP5C2teX6Wrq8=, tarball: lightningcss-linux-x64-musl/download/lightningcss-linux-x64-musl-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-win32-arm64-msvc/1.33.0:
+    resolution: {integrity: sha1-hQ7hED2smJz6tQ46wi0aaeOU5j0=, tarball: lightningcss-win32-arm64-msvc/download/lightningcss-win32-arm64-msvc-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss-win32-x64-msvc/1.33.0:
+    resolution: {integrity: sha1-40OuFS7tNgncbhGUnRo785oclG8=, tarball: lightningcss-win32-x64-msvc/download/lightningcss-win32-x64-msvc-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lightningcss/1.33.0:
+    resolution: {integrity: sha1-wIhn1xp5OFxuGQIU/XL+8+X5Xws=, tarball: lightningcss/download/lightningcss-1.33.0.tgz}
+    engines: {node: '>= 12.0.0'}
+    dependencies:
+      detect-libc: 2.1.2
+    optionalDependencies:
+      lightningcss-android-arm64: 1.33.0
+      lightningcss-darwin-arm64: 1.33.0
+      lightningcss-darwin-x64: 1.33.0
+      lightningcss-freebsd-x64: 1.33.0
+      lightningcss-linux-arm-gnueabihf: 1.33.0
+      lightningcss-linux-arm64-gnu: 1.33.0
+      lightningcss-linux-arm64-musl: 1.33.0
+      lightningcss-linux-x64-gnu: 1.33.0
+      lightningcss-linux-x64-musl: 1.33.0
+      lightningcss-win32-arm64-msvc: 1.33.0
+      lightningcss-win32-x64-msvc: 1.33.0
+    dev: true
+
+  /math-intrinsics/1.1.0:
+    resolution: {integrity: sha1-oN10voHiqlwvJ+Zc4oNgXuTit/k=, tarball: math-intrinsics/download/math-intrinsics-1.1.0.tgz}
+    engines: {node: '>= 0.4'}
+    dev: false
+
+  /nanoid/3.3.18:
+    resolution: {integrity: sha1-9mot4Rmf/eD88hyKXxMQaxwIGRM=, tarball: nanoid/download/nanoid-3.3.18.tgz}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+    dev: true
+
+  /object-inspect/1.13.4:
+    resolution: {integrity: sha1-g3UmXiG8IND6WCwi4bE0hdbgAhM=, tarball: object-inspect/download/object-inspect-1.13.4.tgz}
+    engines: {node: '>= 0.4'}
+    dev: false
+
+  /oxlint/1.78.0:
+    resolution: {integrity: sha1-KGVmgXiWoqfwTSsjBazcSEe81lA=, tarball: oxlint/download/oxlint-1.78.0.tgz}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    hasBin: true
+    peerDependencies:
+      oxlint-tsgolint: '>=7.0.2001'
+      vite-plus: '*'
+    peerDependenciesMeta:
+      oxlint-tsgolint:
+        optional: true
+      vite-plus:
+        optional: true
+    optionalDependencies:
+      '@oxlint/binding-android-arm-eabi': 1.78.0
+      '@oxlint/binding-android-arm64': 1.78.0
+      '@oxlint/binding-darwin-arm64': 1.78.0
+      '@oxlint/binding-darwin-x64': 1.78.0
+      '@oxlint/binding-freebsd-x64': 1.78.0
+      '@oxlint/binding-linux-arm-gnueabihf': 1.78.0
+      '@oxlint/binding-linux-arm-musleabihf': 1.78.0
+      '@oxlint/binding-linux-arm64-gnu': 1.78.0
+      '@oxlint/binding-linux-arm64-musl': 1.78.0
+      '@oxlint/binding-linux-ppc64-gnu': 1.78.0
+      '@oxlint/binding-linux-riscv64-gnu': 1.78.0
+      '@oxlint/binding-linux-riscv64-musl': 1.78.0
+      '@oxlint/binding-linux-s390x-gnu': 1.78.0
+      '@oxlint/binding-linux-x64-gnu': 1.78.0
+      '@oxlint/binding-linux-x64-musl': 1.78.0
+      '@oxlint/binding-openharmony-arm64': 1.78.0
+      '@oxlint/binding-win32-arm64-msvc': 1.78.0
+      '@oxlint/binding-win32-ia32-msvc': 1.78.0
+      '@oxlint/binding-win32-x64-msvc': 1.78.0
+    dev: true
+
+  /picocolors/1.1.1:
+    resolution: {integrity: sha1-PTIa8+q5ObCDyPkpodEs2oHCa2s=, tarball: picocolors/download/picocolors-1.1.1.tgz}
+    dev: true
+
+  /picomatch/4.0.5:
+    resolution: {integrity: sha1-UepXoX2G9gX4EDlZX7xA7QalX6s=, tarball: picomatch/download/picomatch-4.0.5.tgz}
+    engines: {node: '>=12'}
+    dev: true
+
+  /pixi.js/7.4.3:
+    resolution: {integrity: sha1-CWQk4lTevLT+EGwWLVagXOp31LY=, tarball: pixi.js/download/pixi.js-7.4.3.tgz}
+    dependencies:
+      '@pixi/accessibility': 7.4.3_5xeadyefqngwnxo3jvj2fjgtfy
+      '@pixi/app': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
+      '@pixi/compressed-textures': 7.4.3_vxedn37wtpnt4ozhh2j5kf7zxi
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3_@pixi+core@7.4.3
+      '@pixi/events': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+      '@pixi/extensions': 7.4.3
+      '@pixi/extract': 7.4.3_@pixi+core@7.4.3
+      '@pixi/filter-alpha': 7.4.3_@pixi+core@7.4.3
+      '@pixi/filter-blur': 7.4.3_@pixi+core@7.4.3
+      '@pixi/filter-color-matrix': 7.4.3_@pixi+core@7.4.3
+      '@pixi/filter-displacement': 7.4.3_@pixi+core@7.4.3
+      '@pixi/filter-fxaa': 7.4.3_@pixi+core@7.4.3
+      '@pixi/filter-noise': 7.4.3_@pixi+core@7.4.3
+      '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
+      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+      '@pixi/mesh-extras': 7.4.3_7l2wkaqppxg7auqtzi6tsdukoe
+      '@pixi/mixin-cache-as-bitmap': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
+      '@pixi/mixin-get-child-by-name': 7.4.3_@pixi+display@7.4.3
+      '@pixi/mixin-get-global-position': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+      '@pixi/particle-container': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
+      '@pixi/prepare': 7.4.3_rq3qs5klubyyxapin3tgdowapu
+      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
+      '@pixi/sprite-animated': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
+      '@pixi/sprite-tiling': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
+      '@pixi/spritesheet': 7.4.3_vxedn37wtpnt4ozhh2j5kf7zxi
+      '@pixi/text': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
+      '@pixi/text-bitmap': 7.4.3_dperfufo3ym6q22v4uhh3zhfky
+      '@pixi/text-html': 7.4.3_domgap63ib46s4q7earsfybkce
+    dev: false
+
+  /postcss/8.5.26:
+    resolution: {integrity: sha1-bnUTV4DH4Q3zQzvyJmxVLTXIxiA=, tarball: postcss/download/postcss-8.5.26.tgz}
+    engines: {node: ^10 || ^12 || >=14}
+    dependencies:
+      nanoid: 3.3.18
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+    dev: true
+
+  /punycode/1.4.1:
+    resolution: {integrity: sha1-wNWmOycYgArY4esPpSachN1BhF4=, tarball: punycode/download/punycode-1.4.1.tgz}
+    dev: false
+
+  /qs/6.15.3:
+    resolution: {integrity: sha1-doUhMqWO1cfA72fkRBubtdYGGzs=, tarball: qs/download/qs-6.15.3.tgz}
+    engines: {node: '>=0.6'}
+    dependencies:
+      es-define-property: 1.0.1
+      side-channel: 1.1.1
+    dev: false
+
+  /react-dom/19.2.8_react@19.2.8:
+    resolution: {integrity: sha1-O0a57tqHfN/yzxPSdw//SuNsLsI=, tarball: react-dom/download/react-dom-19.2.8.tgz}
+    peerDependencies:
+      react: ^19.2.8
+    dependencies:
+      react: 19.2.8
+      scheduler: 0.27.0
+    dev: false
+
+  /react/19.2.8:
+    resolution: {integrity: sha1-qAZj27WNacb+P9KR08syTop9/y0=, tarball: react/download/react-19.2.8.tgz}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
+  /rolldown/1.2.3:
+    resolution: {integrity: sha1-EDvcu9V11RJlJ3uLUQ8ICCe2628=, tarball: rolldown/download/rolldown-1.2.3.tgz}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    hasBin: true
+    dependencies:
+      '@oxc-project/types': 0.143.0
+      '@rolldown/pluginutils': 1.0.1
+    optionalDependencies:
+      '@rolldown/binding-android-arm64': 1.2.3
+      '@rolldown/binding-darwin-arm64': 1.2.3
+      '@rolldown/binding-darwin-x64': 1.2.3
+      '@rolldown/binding-freebsd-x64': 1.2.3
+      '@rolldown/binding-linux-arm-gnueabihf': 1.2.3
+      '@rolldown/binding-linux-arm64-gnu': 1.2.3
+      '@rolldown/binding-linux-arm64-musl': 1.2.3
+      '@rolldown/binding-linux-ppc64-gnu': 1.2.3
+      '@rolldown/binding-linux-s390x-gnu': 1.2.3
+      '@rolldown/binding-linux-x64-gnu': 1.2.3
+      '@rolldown/binding-linux-x64-musl': 1.2.3
+      '@rolldown/binding-openharmony-arm64': 1.2.3
+      '@rolldown/binding-win32-arm64-msvc': 1.2.3
+      '@rolldown/binding-win32-x64-msvc': 1.2.3
+    dev: true
+
+  /scheduler/0.27.0:
+    resolution: {integrity: sha1-DE74LWfR5cHjWej8dtOofwRf5b0=, tarball: scheduler/download/scheduler-0.27.0.tgz}
+    dev: false
+
+  /side-channel-list/1.0.1:
+    resolution: {integrity: sha1-wuC1oUpUCuvuO7xsP4ZmzJtQkSc=, tarball: side-channel-list/download/side-channel-list-1.0.1.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+    dev: false
+
+  /side-channel-map/1.0.1:
+    resolution: {integrity: sha1-1rtrN5Asb+9RdOX1M/q0xzKib0I=, tarball: side-channel-map/download/side-channel-map-1.0.1.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+    dev: false
+
+  /side-channel-weakmap/1.0.2:
+    resolution: {integrity: sha1-Ed2hnVNo5Azp7CvcH7DsvAeQ7Oo=, tarball: side-channel-weakmap/download/side-channel-weakmap-1.0.2.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-map: 1.0.1
+    dev: false
+
+  /side-channel/1.1.1:
+    resolution: {integrity: sha1-6gLGLgXcS+pn1EQvD7ce4ZL44Ks=, tarball: side-channel/download/side-channel-1.1.1.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-list: 1.0.1
+      side-channel-map: 1.0.1
+      side-channel-weakmap: 1.0.2
+    dev: false
+
+  /source-map-js/1.2.1:
+    resolution: {integrity: sha1-HOVlD93YerwJnto33P8CTCZnrkY=, tarball: source-map-js/download/source-map-js-1.2.1.tgz}
+    engines: {node: '>=0.10.0'}
+    dev: true
+
+  /tinyglobby/0.2.17:
+    resolution: {integrity: sha1-ViqabJ6ys7Ej05cZ+a9btE/NdjE=, tarball: tinyglobby/download/tinyglobby-0.2.17.tgz}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      fdir: 6.5.0_picomatch@4.0.5
+      picomatch: 4.0.5
+    dev: true
+
+  /typescript/6.0.3:
+    resolution: {integrity: sha1-kCUdwAeRbpcnhsuU100VsYVXfSE=, tarball: typescript/download/typescript-6.0.3.tgz}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
+
+  /undici-types/7.18.2:
+    resolution: {integrity: sha1-KTV6iee3ykrvO/D9P9DNc4hCKek=, tarball: undici-types/download/undici-types-7.18.2.tgz}
+    dev: true
+
+  /url/0.11.4:
+    resolution: {integrity: sha1-rcp3s1YtVrcnRudrMwt/J7ZyHzw=, tarball: url/download/url-0.11.4.tgz}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      punycode: 1.4.1
+      qs: 6.15.3
+    dev: false
+
+  /vite/8.2.1_@types+node@24.13.3:
+    resolution: {integrity: sha1-b8jYu4Q71SNTCR+sl44ZTU3lsx0=, tarball: vite/download/vite-8.2.1.tgz}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^20.19.0 || >=22.12.0
+      '@vitejs/devtools': ^0.4.0
+      esbuild: ^0.27.0 || ^0.28.0
+      jiti: '>=1.21.0'
+      less: ^4.0.0
+      sass: ^1.70.0
+      sass-embedded: ^1.70.0
+      stylus: '>=0.54.8'
+      sugarss: ^5.0.0
+      terser: ^5.16.0
+      tsx: ^4.8.1
+      yaml: ^2.4.2
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      '@vitejs/devtools':
+        optional: true
+      esbuild:
+        optional: true
+      jiti:
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      sass-embedded:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+      tsx:
+        optional: true
+      yaml:
+        optional: true
+    dependencies:
+      '@types/node': 24.13.3
+      lightningcss: 1.33.0
+      picomatch: 4.0.5
+      postcss: 8.5.26
+      rolldown: 1.2.3
+      tinyglobby: 0.2.17
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
+
+  /zod/4.4.3:
+    resolution: {integrity: sha1-toDxcohdGLvr8hqDTqJeVaG781Y=, tarball: zod/download/zod-4.4.3.tgz}
+    dev: false

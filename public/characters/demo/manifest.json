@@ -1,0 +1,13 @@
+{
+  "id": "demo",
+  "name": "佩佩",
+  "skeleton": "build_char_4058_pepe.skel",
+  "atlas": "build_char_4058_pepe.atlas",
+  "scale": 0.5,
+  "spineVersion": "3.8.99",
+  "animations": {
+    "idle": "Relax",
+    "interact": "Interact",
+    "drag": "Move"
+  }
+}
