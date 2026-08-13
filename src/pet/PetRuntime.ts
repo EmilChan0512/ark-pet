@@ -177,14 +177,16 @@ export class PetRuntime {
     const moved = Math.hypot(deltaX, deltaY) > 4
 
     if (moved && !this.dragController.isDragging()) {
-      const started = await this.dragController.start(this.pointerDown.x, this.pointerDown.y)
+      const started = await this.dragController.start()
       if (started) {
+        await this.nativeWindowService.setIgnoreCursorEvents(false)
+        this.debugStore.patch({ mousePassthrough: false, hitTest: true })
         this.enterDragging()
       }
     }
 
     if (this.dragController.isDragging()) {
-      await this.dragController.update(event.clientX, event.clientY)
+      await this.dragController.update()
     }
   }
 
@@ -394,6 +396,14 @@ export class PetRuntime {
   private async evaluatePointer(clientX: number, clientY: number) {
     if (this.uiInteractionActive) {
       return { hit: false, pointer: { x: clientX, y: clientY } }
+    }
+    if (this.dragController.isDragging()) {
+      this.debugStore.patch({
+        pointerPosition: { x: clientX, y: clientY },
+        hitTest: true,
+        mousePassthrough: false,
+      })
+      return { hit: true, pointer: { x: clientX, y: clientY } }
     }
     const result = await this.hitTestController.evaluate(clientX, clientY)
     this.debugStore.patch({

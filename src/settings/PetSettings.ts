@@ -14,7 +14,7 @@ const petSettingsSchema = z
 export type PetSettings = z.infer<typeof petSettingsSchema>
 
 export const DEFAULT_PET_SETTINGS: PetSettings = Object.freeze({
-  scale: 1,
+  scale: 0.8,
   fps: 60,
   alwaysOnTop: true,
   showDebugPanel: import.meta.env.DEV,

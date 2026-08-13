@@ -106,18 +106,6 @@ export default function App() {
     <div className="app-shell">
       <div ref={hostRef} className="pet-host" />
 
-      <aside className="overlay-card">
-        <div className="overlay-card__title">Desktop Pet</div>
-        <div className="overlay-card__row">
-          <button onClick={() => runtimeRef.current?.reloadCharacter()}>Reload</button>
-          <button onClick={() => runtimeRef.current?.show()}>Show</button>
-          <button onClick={() => runtimeRef.current?.hide()}>Hide</button>
-        </div>
-        <div className="overlay-card__hint">
-          Real Pepe Spine assets are running on the 3.8-compatible runtime path.
-        </div>
-      </aside>
-
       {settingsOpen ? (
         <aside className="settings-panel" aria-label="Pet settings">
           <div className="settings-panel__header">

@@ -19,13 +19,13 @@ dependencies.
 - Reset all settings to their defaults.
 
 Character scale is a multiplier applied to the scale in the character manifest.
-The default multiplier is `1`.
+The default multiplier is `0.8`.
 
 ## Defaults
 
 | Setting | Default |
 | --- | --- |
-| Character scale | 100% |
+| Character scale | 80% |
 | FPS cap | 60 |
 | Always on top | Enabled |
 | Debug panel | Enabled in development, disabled in production |

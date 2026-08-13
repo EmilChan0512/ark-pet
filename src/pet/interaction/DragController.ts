@@ -5,30 +5,30 @@ interface DragSession {
   pointerY: number
   windowX: number
   windowY: number
-  scaleFactor: number
 }
 
 export class DragController {
   private session: DragSession | null = null
+  private updateRequested = false
+  private updatePromise: Promise<void> | null = null
   private readonly nativeWindowService: NativeWindowService
 
   constructor(nativeWindowService: NativeWindowService) {
     this.nativeWindowService = nativeWindowService
   }
 
-  async start(pointerX: number, pointerY: number) {
-    const [windowPosition, scaleFactor] = await Promise.all([
+  async start() {
+    const [windowPosition, pointerPosition] = await Promise.all([
       this.nativeWindowService.getWindowPosition(),
-      this.nativeWindowService.getScaleFactor(),
+      this.nativeWindowService.getCursorPosition(),
     ])
-    if (!windowPosition) return false
+    if (!windowPosition || !pointerPosition) return false
 
     this.session = {
-      pointerX,
-      pointerY,
+      pointerX: pointerPosition.x,
+      pointerY: pointerPosition.y,
       windowX: windowPosition.x,
       windowY: windowPosition.y,
-      scaleFactor,
     }
 
     return true
@@ -38,17 +38,33 @@ export class DragController {
     return this.session !== null
   }
 
-  async update(pointerX: number, pointerY: number) {
+  async update() {
     if (!this.session) return
 
-    const nextX =
-      this.session.windowX + (pointerX - this.session.pointerX) * this.session.scaleFactor
-    const nextY =
-      this.session.windowY + (pointerY - this.session.pointerY) * this.session.scaleFactor
-    await this.nativeWindowService.moveWindow(nextX, nextY)
+    this.updateRequested = true
+    if (!this.updatePromise) {
+      this.updatePromise = this.flushUpdates().finally(() => {
+        this.updatePromise = null
+      })
+    }
+    await this.updatePromise
+  }
+
+  private async flushUpdates() {
+    while (this.session && this.updateRequested) {
+      this.updateRequested = false
+      const pointerPosition = await this.nativeWindowService.getCursorPosition()
+      const session = this.session
+      if (!pointerPosition || !session) return
+
+      const nextX = session.windowX + pointerPosition.x - session.pointerX
+      const nextY = session.windowY + pointerPosition.y - session.pointerY
+      await this.nativeWindowService.moveWindow(nextX, nextY)
+    }
   }
 
   stop() {
     this.session = null
+    this.updateRequested = false
   }
 }

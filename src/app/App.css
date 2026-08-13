@@ -19,7 +19,6 @@
   background: transparent;
 }
 
-.overlay-card,
 .debug-panel,
 .settings-panel {
   position: absolute;
@@ -146,47 +145,6 @@
   border-color: transparent;
   background: #7c3aed;
   color: #fff;
-}
-
-.overlay-card {
-  top: 16px;
-  left: 16px;
-  width: 220px;
-  padding: 14px;
-}
-
-.overlay-card__title {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #ddd6fe;
-}
-
-.overlay-card__row {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.overlay-card__row button {
-  flex: 1;
-  border: 0;
-  border-radius: 10px;
-  padding: 8px 10px;
-  background: rgba(139, 92, 246, 0.9);
-  color: #fff;
-  cursor: pointer;
-}
-
-.overlay-card__row button:hover {
-  background: rgba(124, 58, 237, 0.96);
-}
-
-.overlay-card__hint {
-  margin-top: 10px;
-  font-size: 12px;
-  color: #ddd6fe;
 }
 
 .debug-panel {
