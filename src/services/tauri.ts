@@ -1,6 +1,6 @@
 import { defaultWindowIcon } from '@tauri-apps/api/app'
 import { isTauri } from '@tauri-apps/api/core'
-import { LogicalPosition, type PhysicalPosition } from '@tauri-apps/api/dpi'
+import { PhysicalPosition } from '@tauri-apps/api/dpi'
 import { Menu } from '@tauri-apps/api/menu'
 import { TrayIcon } from '@tauri-apps/api/tray'
 import { cursorPosition, getCurrentWindow } from '@tauri-apps/api/window'
@@ -31,9 +31,14 @@ export class NativeWindowService {
     return cursorPosition()
   }
 
+  async getScaleFactor() {
+    if (!this.appWindow) return 1
+    return this.appWindow.scaleFactor()
+  }
+
   async moveWindow(x: number, y: number) {
     if (!this.appWindow) return
-    await this.appWindow.setPosition(new LogicalPosition(x, y))
+    await this.appWindow.setPosition(new PhysicalPosition(Math.round(x), Math.round(y)))
   }
 
   async moveWindowBy(deltaX: number, deltaY: number) {

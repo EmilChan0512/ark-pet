@@ -45,6 +45,20 @@ export class PetRuntime {
     this.debugStore = debugStore
   }
 
+  private readonly updateDebugSnapshot = () => {
+    const app = this.renderer.getApplication()
+    const now = performance.now()
+    if (now - this.fpsSampleAt > 250) {
+      this.fpsSampleAt = now
+      this.debugStore.patch({
+        fps: Math.round(app.ticker.FPS),
+        petState: this.stateMachine.getState(),
+        currentAnimation: this.currentAnimation,
+        characterManifest: this.currentManifest,
+      })
+    }
+  }
+
   async init() {
     this.controller.enterLoading()
     this.debugStore.patch({ petState: 'loading', rendererStatus: 'idle' })
@@ -62,18 +76,7 @@ export class PetRuntime {
         })
       })
 
-      app.ticker.add(() => {
-        const now = performance.now()
-        if (now - this.fpsSampleAt > 250) {
-          this.fpsSampleAt = now
-          this.debugStore.patch({
-            fps: Math.round(app.ticker.FPS),
-            petState: this.stateMachine.getState(),
-            currentAnimation: this.currentAnimation,
-            characterManifest: this.currentManifest,
-          })
-        }
-      })
+      app.ticker.add(this.updateDebugSnapshot)
 
       this.attachPointerEvents()
       this.startCursorMonitor()
@@ -116,6 +119,7 @@ export class PetRuntime {
       this.cursorPollId = null
     }
     this.detachPointerEvents()
+    this.renderer.removeTickerCallback(this.updateDebugSnapshot)
     this.characterManager.destroy()
     this.placeholder?.destroy({ children: true })
     this.placeholder = null
@@ -127,9 +131,10 @@ export class PetRuntime {
       pointerPosition: { x: event.clientX, y: event.clientY },
     })
 
-    await this.evaluatePointer(event.clientX, event.clientY)
-
-    if (!this.pointerDown) return
+    if (!this.pointerDown) {
+      await this.evaluatePointer(event.clientX, event.clientY)
+      return
+    }
 
     const deltaX = event.clientX - this.pointerDown.x
     const deltaY = event.clientY - this.pointerDown.y
@@ -154,15 +159,15 @@ export class PetRuntime {
   }
 
   private readonly handlePointerUp = async (event: PointerEvent) => {
-    const result = await this.evaluatePointer(event.clientX, event.clientY)
-
     if (this.dragController.isDragging()) {
       this.dragController.stop()
       this.enterIdle()
       this.pointerDown = null
+      await this.evaluatePointer(event.clientX, event.clientY)
       return
     }
 
+    const result = await this.evaluatePointer(event.clientX, event.clientY)
     if (this.pointerDown && result.hit) {
       this.enterInteracting()
     }
@@ -170,16 +175,26 @@ export class PetRuntime {
     this.pointerDown = null
   }
 
+  private readonly handlePointerCancel = () => {
+    if (this.dragController.isDragging()) {
+      this.dragController.stop()
+      this.enterIdle()
+    }
+    this.pointerDown = null
+  }
+
   private attachPointerEvents() {
     window.addEventListener('pointermove', this.handlePointerMove)
     window.addEventListener('pointerdown', this.handlePointerDown)
     window.addEventListener('pointerup', this.handlePointerUp)
+    window.addEventListener('pointercancel', this.handlePointerCancel)
   }
 
   private detachPointerEvents() {
     window.removeEventListener('pointermove', this.handlePointerMove)
     window.removeEventListener('pointerdown', this.handlePointerDown)
     window.removeEventListener('pointerup', this.handlePointerUp)
+    window.removeEventListener('pointercancel', this.handlePointerCancel)
   }
 
   private async loadCharacter(characterId: string) {
@@ -238,9 +253,9 @@ export class PetRuntime {
     const character = this.characterManager.getCurrentCharacter()
     if (!character || !this.currentManifest) return
 
-    this.controller.enterIdle(character, this.currentManifest)
-    this.currentAnimation = character.play(this.currentManifest.animations.idle, true)
-      ?.animation?.name ?? this.currentManifest.animations.idle
+    this.currentAnimation =
+      this.controller.enterIdle(character, this.currentManifest)?.animation?.name ??
+      this.currentManifest.animations.idle
     this.debugStore.patch({
       petState: 'idle',
       currentAnimation: this.currentAnimation,
@@ -251,13 +266,9 @@ export class PetRuntime {
     const character = this.characterManager.getCurrentCharacter()
     if (!character || !this.currentManifest) return
 
-    this.controller.enterInteracting(character, this.currentManifest)
     this.currentAnimation =
-      character.play(
-        this.currentManifest.animations.interact,
-        false,
-        this.currentManifest.animations.idle,
-      )?.animation?.name ?? this.currentManifest.animations.idle
+      this.controller.enterInteracting(character, this.currentManifest)?.animation?.name ??
+      this.currentManifest.animations.idle
     this.debugStore.patch({
       petState: 'interacting',
       currentAnimation: this.currentAnimation,
@@ -268,13 +279,9 @@ export class PetRuntime {
     const character = this.characterManager.getCurrentCharacter()
     if (!character || !this.currentManifest) return
 
-    this.controller.enterDragging(character, this.currentManifest)
     this.currentAnimation =
-      character.play(
-        this.currentManifest.animations.drag,
-        true,
-        this.currentManifest.animations.idle,
-      )?.animation?.name ?? this.currentManifest.animations.idle
+      this.controller.enterDragging(character, this.currentManifest)?.animation?.name ??
+      this.currentManifest.animations.idle
     this.debugStore.patch({
       petState: 'dragging',
       currentAnimation: this.currentAnimation,
@@ -358,15 +365,16 @@ export class PetRuntime {
     if (!this.nativeWindowService.isAvailable()) return
 
     this.cursorPollId = window.setInterval(async () => {
-      const [cursor, windowPosition] = await Promise.all([
+      const [cursor, windowPosition, scaleFactor] = await Promise.all([
         this.nativeWindowService.getCursorPosition(),
         this.nativeWindowService.getWindowPosition(),
+        this.nativeWindowService.getScaleFactor(),
       ])
 
       if (!cursor || !windowPosition) return
 
-      const localX = cursor.x - windowPosition.x
-      const localY = cursor.y - windowPosition.y
+      const localX = (cursor.x - windowPosition.x) / scaleFactor
+      const localY = (cursor.y - windowPosition.y) / scaleFactor
 
       this.debugStore.patch({
         pointerPosition: { x: localX, y: localY },

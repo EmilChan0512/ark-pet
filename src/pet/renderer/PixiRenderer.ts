@@ -65,6 +65,10 @@ export class PixiRenderer {
     this.app?.ticker.start()
   }
 
+  removeTickerCallback(callback: () => void) {
+    this.app?.ticker.remove(callback)
+  }
+
   destroy() {
     window.removeEventListener('resize', this.onWindowResize)
 

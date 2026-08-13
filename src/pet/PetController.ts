@@ -19,17 +19,17 @@ export class PetController {
 
   enterIdle(character: SpineCharacter, manifest: CharacterManifestWithPaths) {
     this.transition('idle')
-    character.play(manifest.animations.idle, true)
+    return character.play(manifest.animations.idle, true)
   }
 
   enterInteracting(character: SpineCharacter, manifest: CharacterManifestWithPaths) {
     this.transition('interacting')
-    character.play(manifest.animations.interact, false, manifest.animations.idle)
+    return character.play(manifest.animations.interact, false, manifest.animations.idle)
   }
 
   enterDragging(character: SpineCharacter, manifest: CharacterManifestWithPaths) {
     this.transition('dragging')
-    character.play(manifest.animations.drag, true, manifest.animations.idle)
+    return character.play(manifest.animations.drag, true, manifest.animations.idle)
   }
 
   getState(): PetState {
