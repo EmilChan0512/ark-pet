@@ -19,6 +19,7 @@ export class PixiRenderer {
         clearBeforeRender: true,
         resolution: window.devicePixelRatio || 1,
       })
+      app.ticker.maxFPS = 60
 
       const view = app.view as HTMLCanvasElement
       view.style.width = '100%'
