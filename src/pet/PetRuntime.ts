@@ -1,5 +1,5 @@
 import { Container, Graphics, Text } from 'pixi.js'
-import type { CharacterManifestWithPaths } from '../types/character'
+import type { CharacterManifestWithPaths, FacingDirection } from '../types/character'
 import type { DebugStore } from '../types/pet'
 import type { PetSettings } from '../settings/PetSettings'
 import { NativeWindowService } from '../services/tauri'
@@ -21,7 +21,10 @@ export class PetRuntime {
   private readonly controller = new PetController(this.stateMachine)
   private readonly characterManager = new CharacterManager()
   private readonly nativeWindowService = new NativeWindowService()
-  private readonly dragController = new DragController(this.nativeWindowService)
+  private readonly dragController = new DragController(
+    this.nativeWindowService,
+    (direction) => this.setFacing(direction),
+  )
   private readonly hitTestController = new HitTestController(
     () => this.getCharacterBounds(),
     async (passthroughEnabled) => {
@@ -40,6 +43,7 @@ export class PetRuntime {
   private fpsSampleAt = 0
   private settings: PetSettings
   private uiInteractionActive = false
+  private facing: FacingDirection = 'right'
   private readonly host: HTMLElement
   private readonly debugStore: DebugStore
   private readonly onSettingsRequested: () => void
@@ -181,6 +185,9 @@ export class PetRuntime {
       if (started) {
         await this.nativeWindowService.setIgnoreCursorEvents(false)
         this.debugStore.patch({ mousePassthrough: false, hitTest: true })
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          this.setFacing(deltaX < 0 ? 'left' : 'right')
+        }
         this.enterDragging()
       }
     }
@@ -256,7 +263,9 @@ export class PetRuntime {
       )
       this.currentManifest = this.characterManager.getCurrentManifest()
       if (this.currentManifest) {
+        this.facing = this.currentManifest.nativeFacing ?? 'right'
         character.setScale(this.currentManifest.scale * this.settings.scale)
+        character.setFacing(this.facing)
       }
       this.layoutCharacter()
 
@@ -329,12 +338,18 @@ export class PetRuntime {
     })
   }
 
+  private setFacing(facing: FacingDirection) {
+    if (this.facing === facing) return
+    this.facing = facing
+    this.characterManager.getCurrentCharacter()?.setFacing(facing)
+  }
+
   private layoutCharacter() {
     const character = this.characterManager.getCurrentCharacter()
     const view = character?.getView()
     if (!character || !view) return
 
-    const bounds = character.getBounds()
+    const bounds = character.getLocalBounds()
     if (!bounds) return
 
     view.pivot.set(bounds.x + bounds.width / 2, bounds.y + bounds.height)

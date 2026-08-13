@@ -1,4 +1,5 @@
 export type PetState = 'loading' | 'idle' | 'interacting' | 'dragging' | 'error'
+export type FacingDirection = 'left' | 'right'
 
 export interface CharacterAnimationMap {
   idle: string
@@ -12,6 +13,7 @@ export interface CharacterManifest {
   skeleton: string
   atlas: string
   scale: number
+  nativeFacing?: FacingDirection
   spineVersion?: string
   defaultSkin?: string
   animations: CharacterAnimationMap

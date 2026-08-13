@@ -10,6 +10,7 @@ const manifestSchema = z.object({
   skeleton: z.string().min(1),
   atlas: z.string().min(1),
   scale: z.number().positive().default(1),
+  nativeFacing: z.enum(['left', 'right']).default('right'),
   spineVersion: z.string().min(3).optional(),
   defaultSkin: z.string().min(1).optional(),
   animations: z.object({

@@ -1,10 +1,14 @@
 import type { NativeWindowService } from '../../services/tauri'
+import type { FacingDirection } from '../../types/character'
+
+const DIRECTION_DEAD_ZONE = 2
 
 interface DragSession {
   pointerX: number
   pointerY: number
   windowX: number
   windowY: number
+  lastPointerX: number
 }
 
 export class DragController {
@@ -12,9 +16,14 @@ export class DragController {
   private updateRequested = false
   private updatePromise: Promise<void> | null = null
   private readonly nativeWindowService: NativeWindowService
+  private readonly onDirectionChanged: (direction: FacingDirection) => void
 
-  constructor(nativeWindowService: NativeWindowService) {
+  constructor(
+    nativeWindowService: NativeWindowService,
+    onDirectionChanged: (direction: FacingDirection) => void,
+  ) {
     this.nativeWindowService = nativeWindowService
+    this.onDirectionChanged = onDirectionChanged
   }
 
   async start() {
@@ -29,6 +38,7 @@ export class DragController {
       pointerY: pointerPosition.y,
       windowX: windowPosition.x,
       windowY: windowPosition.y,
+      lastPointerX: pointerPosition.x,
     }
 
     return true
@@ -56,6 +66,12 @@ export class DragController {
       const pointerPosition = await this.nativeWindowService.getCursorPosition()
       const session = this.session
       if (!pointerPosition || !session) return
+
+      const horizontalDelta = pointerPosition.x - session.lastPointerX
+      if (Math.abs(horizontalDelta) >= DIRECTION_DEAD_ZONE) {
+        this.onDirectionChanged(horizontalDelta < 0 ? 'left' : 'right')
+        session.lastPointerX = pointerPosition.x
+      }
 
       const nextX = session.windowX + pointerPosition.x - session.pointerX
       const nextY = session.windowY + pointerPosition.y - session.pointerY
