@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import type { DebugSnapshot, DebugStore } from '../types/pet'
 import { PetRuntime } from '../pet/PetRuntime'
+import { createPetSettingsStore } from '../settings/PetSettings'
 import { ensureTray, quitApplication } from '../services/tauri'
 import './App.css'
 
@@ -41,16 +42,25 @@ export default function App() {
   const hostRef = useRef<HTMLDivElement | null>(null)
   const runtimeRef = useRef<PetRuntime | null>(null)
   const debugStore = useMemo(() => createDebugStore(), [])
+  const settingsStore = useMemo(() => createPetSettingsStore(), [])
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const snapshot = useSyncExternalStore(
     debugStore.subscribe,
     debugStore.getSnapshot,
     debugStore.getSnapshot,
   )
+  const settings = useSyncExternalStore(
+    settingsStore.subscribe,
+    settingsStore.getSnapshot,
+    settingsStore.getSnapshot,
+  )
 
   useEffect(() => {
     if (!hostRef.current) return
 
-    const runtime = new PetRuntime(hostRef.current, debugStore)
+    const runtime = new PetRuntime(hostRef.current, debugStore, settingsStore.getSnapshot(), () => {
+      setSettingsOpen((open) => !open)
+    })
     runtimeRef.current = runtime
 
     let trayCleanup: (() => Promise<void>) | null = null
@@ -82,7 +92,15 @@ export default function App() {
       void trayCleanup?.()
       runtimeRef.current = null
     }
-  }, [debugStore])
+  }, [debugStore, settingsStore])
+
+  useEffect(() => {
+    void runtimeRef.current?.applySettings(settings)
+  }, [settings])
+
+  useEffect(() => {
+    void runtimeRef.current?.setUiInteractionActive(settingsOpen)
+  }, [settingsOpen])
 
   return (
     <div className="app-shell">
@@ -100,7 +118,90 @@ export default function App() {
         </div>
       </aside>
 
-      {import.meta.env.DEV ? (
+      {settingsOpen ? (
+        <aside className="settings-panel" aria-label="Pet settings">
+          <div className="settings-panel__header">
+            <div>
+              <div className="settings-panel__eyebrow">CODEX PET</div>
+              <h1>Settings</h1>
+            </div>
+            <button
+              className="settings-panel__close"
+              type="button"
+              aria-label="Close settings"
+              onClick={() => setSettingsOpen(false)}
+            >
+              ×
+            </button>
+          </div>
+
+          <label className="settings-field">
+            <span>
+              Character scale <output>{Math.round(settings.scale * 100)}%</output>
+            </span>
+            <input
+              type="range"
+              min="0.6"
+              max="1.4"
+              step="0.1"
+              value={settings.scale}
+              onChange={(event) => settingsStore.update({ scale: Number(event.target.value) })}
+            />
+          </label>
+
+          <label className="settings-field">
+            <span>Render frame rate</span>
+            <select
+              value={settings.fps}
+              onChange={(event) =>
+                settingsStore.update({ fps: Number(event.target.value) as 30 | 60 })
+              }
+            >
+              <option value={30}>30 FPS · Power saver</option>
+              <option value={60}>60 FPS · Smooth</option>
+            </select>
+          </label>
+
+          <label className="settings-toggle">
+            <span>
+              <strong>Always on top</strong>
+              <small>Keep the pet above other windows</small>
+            </span>
+            <input
+              type="checkbox"
+              checked={settings.alwaysOnTop}
+              onChange={(event) => settingsStore.update({ alwaysOnTop: event.target.checked })}
+            />
+          </label>
+
+          {import.meta.env.DEV ? (
+            <label className="settings-toggle">
+              <span>
+                <strong>Debug panel</strong>
+                <small>Show live renderer and interaction state</small>
+              </span>
+              <input
+                type="checkbox"
+                checked={settings.showDebugPanel}
+                onChange={(event) =>
+                  settingsStore.update({ showDebugPanel: event.target.checked })
+                }
+              />
+            </label>
+          ) : null}
+
+          <div className="settings-panel__actions">
+            <button type="button" onClick={() => settingsStore.reset()}>
+              Reset defaults
+            </button>
+            <button type="button" className="settings-panel__done" onClick={() => setSettingsOpen(false)}>
+              Done
+            </button>
+          </div>
+        </aside>
+      ) : null}
+
+      {import.meta.env.DEV && settings.showDebugPanel ? (
         <aside className="debug-panel">
           <div>FPS: {snapshot.fps}</div>
           <div>Pet State: {snapshot.petState}</div>

@@ -20,7 +20,8 @@
 }
 
 .overlay-card,
-.debug-panel {
+.debug-panel,
+.settings-panel {
   position: absolute;
   z-index: 20;
   border: 1px solid rgba(196, 181, 253, 0.28);
@@ -29,6 +30,122 @@
   backdrop-filter: blur(12px);
   box-shadow: 0 12px 36px rgba(15, 23, 42, 0.28);
   pointer-events: auto;
+}
+
+.settings-panel {
+  top: 50%;
+  left: 50%;
+  width: min(360px, calc(100vw - 32px));
+  padding: 20px;
+  color: #f8fafc;
+  transform: translate(-50%, -50%);
+}
+
+.settings-panel__header,
+.settings-field > span,
+.settings-toggle,
+.settings-panel__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-panel__header h1 {
+  margin: 2px 0 0;
+  font-size: 22px;
+}
+
+.settings-panel__eyebrow {
+  color: #a78bfa;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.settings-panel__close {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(196, 181, 253, 0.25);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 21px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.settings-field {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  color: #e2e8f0;
+  font-size: 13px;
+}
+
+.settings-field output {
+  color: #c4b5fd;
+  font-variant-numeric: tabular-nums;
+}
+
+.settings-field input[type='range'] {
+  width: 100%;
+  accent-color: #8b5cf6;
+}
+
+.settings-field select {
+  width: 100%;
+  border: 1px solid rgba(196, 181, 253, 0.2);
+  border-radius: 9px;
+  padding: 9px 10px;
+  background: #1e293b;
+  color: #f8fafc;
+}
+
+.settings-toggle {
+  gap: 16px;
+  margin-top: 16px;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+  padding-top: 14px;
+  cursor: pointer;
+}
+
+.settings-toggle span {
+  display: grid;
+}
+
+.settings-toggle strong {
+  font-size: 13px;
+}
+
+.settings-toggle small {
+  color: #94a3b8;
+}
+
+.settings-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: #8b5cf6;
+}
+
+.settings-panel__actions {
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.settings-panel__actions button {
+  flex: 1;
+  border: 1px solid rgba(196, 181, 253, 0.24);
+  border-radius: 9px;
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+  cursor: pointer;
+}
+
+.settings-panel__actions .settings-panel__done {
+  border-color: transparent;
+  background: #7c3aed;
+  color: #fff;
 }
 
 .overlay-card {

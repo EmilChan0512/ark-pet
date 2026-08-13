@@ -66,6 +66,10 @@ export class PixiRenderer {
     this.app?.ticker.start()
   }
 
+  setMaxFPS(fps: 30 | 60) {
+    if (this.app) this.app.ticker.maxFPS = fps
+  }
+
   removeTickerCallback(callback: () => void) {
     this.app?.ticker.remove(callback)
   }

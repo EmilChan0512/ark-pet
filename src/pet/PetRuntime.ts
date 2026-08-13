@@ -1,6 +1,7 @@
 import { Container, Graphics, Text } from 'pixi.js'
 import type { CharacterManifestWithPaths } from '../types/character'
 import type { DebugStore } from '../types/pet'
+import type { PetSettings } from '../settings/PetSettings'
 import { NativeWindowService } from '../services/tauri'
 import { PetController } from './PetController'
 import { PetStateMachine } from './PetStateMachine'
@@ -37,12 +38,22 @@ export class PetRuntime {
   private windowMoveCleanup: (() => void) | null = null
   private cursorPollId: number | null = null
   private fpsSampleAt = 0
+  private settings: PetSettings
+  private uiInteractionActive = false
   private readonly host: HTMLElement
   private readonly debugStore: DebugStore
+  private readonly onSettingsRequested: () => void
 
-  constructor(host: HTMLElement, debugStore: DebugStore) {
+  constructor(
+    host: HTMLElement,
+    debugStore: DebugStore,
+    settings: PetSettings,
+    onSettingsRequested: () => void,
+  ) {
     this.host = host
     this.debugStore = debugStore
+    this.settings = settings
+    this.onSettingsRequested = onSettingsRequested
   }
 
   private readonly updateDebugSnapshot = () => {
@@ -67,7 +78,8 @@ export class PetRuntime {
       const app = await this.renderer.init(this.host)
       this.debugStore.patch({ rendererStatus: 'ready' })
 
-      await this.nativeWindowService.setAlwaysOnTop(true)
+      this.renderer.setMaxFPS(this.settings.fps)
+      await this.nativeWindowService.setAlwaysOnTop(this.settings.alwaysOnTop)
       await this.characterManager.init()
 
       this.windowMoveCleanup = await this.nativeWindowService.onMoved((position) => {
@@ -108,7 +120,31 @@ export class PetRuntime {
   }
 
   async openSettings() {
-    console.info('[PetRuntime] Settings requested')
+    await this.show()
+    this.onSettingsRequested()
+  }
+
+  async applySettings(settings: PetSettings) {
+    this.settings = settings
+    this.renderer.setMaxFPS(settings.fps)
+    await this.nativeWindowService.setAlwaysOnTop(settings.alwaysOnTop)
+
+    const character = this.characterManager.getCurrentCharacter()
+    if (character && this.currentManifest) {
+      character.setScale(this.currentManifest.scale * settings.scale)
+      this.layoutCharacter()
+    }
+  }
+
+  async setUiInteractionActive(active: boolean) {
+    if (this.uiInteractionActive === active) return
+    this.uiInteractionActive = active
+    this.hitTestController.reset()
+
+    if (active) {
+      await this.nativeWindowService.setIgnoreCursorEvents(false)
+      this.debugStore.patch({ mousePassthrough: false, hitTest: false })
+    }
   }
 
   destroy() {
@@ -217,6 +253,9 @@ export class PetRuntime {
         this.renderer.getRoot(),
       )
       this.currentManifest = this.characterManager.getCurrentManifest()
+      if (this.currentManifest) {
+        character.setScale(this.currentManifest.scale * this.settings.scale)
+      }
       this.layoutCharacter()
 
       this.animationCompleteCleanup = character.onAnimationComplete(() => {
@@ -353,6 +392,9 @@ export class PetRuntime {
   }
 
   private async evaluatePointer(clientX: number, clientY: number) {
+    if (this.uiInteractionActive) {
+      return { hit: false, pointer: { x: clientX, y: clientY } }
+    }
     const result = await this.hitTestController.evaluate(clientX, clientY)
     this.debugStore.patch({
       pointerPosition: result.pointer,

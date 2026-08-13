@@ -16,6 +16,10 @@ export class HitTestController {
     this.setPassthrough = setPassthrough
   }
 
+  reset() {
+    this.lastHit = null
+  }
+
   async evaluate(clientX: number, clientY: number): Promise<HitTestResult> {
     const bounds = this.getBounds()
     const hit =
