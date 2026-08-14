@@ -21,6 +21,9 @@ export interface DebugSnapshot {
   lastBehaviorError: string | null
   ambientSchedulerStatus: AmbientSchedulerStatus
   nextAmbientActionAt: number | null
+  activeRuntimeCommand: string | null
+  runtimeCommandQueueDepth: number
+  lastRuntimeCommandError: string | null
   lastError: string | null
 }
 

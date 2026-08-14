@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import type { DebugSnapshot, DebugStore } from '../types/pet'
 import { PetRuntime } from '../pet/PetRuntime'
+import { createPetRuntimeCommandHandler } from '../pet/runtime/PetRuntimeCommandHandler'
+import {
+  RuntimeCommandCoordinator,
+  type RuntimeCommand,
+} from '../pet/runtime/RuntimeCommandCoordinator'
 import { createPetSettingsStore } from '../settings/PetSettings'
 import { ensureTray, quitApplication } from '../services/tauri'
 import './App.css'
@@ -21,6 +26,9 @@ function createDebugStore(): DebugStore {
     lastBehaviorError: null,
     ambientSchedulerStatus: 'paused',
     nextAmbientActionAt: null,
+    activeRuntimeCommand: null,
+    runtimeCommandQueueDepth: 0,
+    lastRuntimeCommandError: null,
     lastError: null,
   }
   const listeners = new Set<() => void>()
@@ -44,7 +52,7 @@ function createDebugStore(): DebugStore {
 
 export default function App() {
   const hostRef = useRef<HTMLDivElement | null>(null)
-  const runtimeRef = useRef<PetRuntime | null>(null)
+  const commandCoordinatorRef = useRef<RuntimeCommandCoordinator | null>(null)
   const debugStore = useMemo(() => createDebugStore(), [])
   const settingsStore = useMemo(() => createPetSettingsStore(), [])
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -62,29 +70,62 @@ export default function App() {
   useEffect(() => {
     if (!hostRef.current) return
 
-    const runtime = new PetRuntime(hostRef.current, debugStore, settingsStore.getSnapshot(), () => {
-      setSettingsOpen((open) => !open)
-    })
-    runtimeRef.current = runtime
+    const runtime = new PetRuntime(
+      hostRef.current,
+      debugStore,
+      settingsStore.getSnapshot(),
+      () => setSettingsOpen(true),
+    )
+    const coordinator = new RuntimeCommandCoordinator(
+      createPetRuntimeCommandHandler(runtime),
+      {
+        publish: (commandSnapshot) => {
+          debugStore.patch({
+            activeRuntimeCommand: commandSnapshot.activeCommand,
+            runtimeCommandQueueDepth: commandSnapshot.queueDepth,
+            lastRuntimeCommandError: commandSnapshot.lastError,
+          })
+        },
+        reportError: (command, error) => {
+          console.error(`[RuntimeCommand] ${command.type}`, error)
+        },
+      },
+    )
+    commandCoordinatorRef.current = coordinator
 
     let trayCleanup: (() => Promise<void>) | null = null
     let disposed = false
 
-    void runtime
-      .init()
-      .then(async () => {
-        if (disposed) return
+    const dispatch = (command: RuntimeCommand) => coordinator.dispatch(command)
 
-        trayCleanup = await ensureTray({
-          onShow: () => runtime.show(),
-          onHide: () => runtime.hide(),
-          onReloadCharacter: () => runtime.reloadCharacter(),
-          onSettings: () => runtime.openSettings(),
+    void dispatch({ type: 'initialize' })
+      .then(async (outcome) => {
+        if (disposed) return
+        if (outcome !== 'executed') return
+
+        const cleanup = await ensureTray({
+          onShow: async () => {
+            await dispatch({ type: 'show' })
+          },
+          onHide: async () => {
+            await dispatch({ type: 'hide' })
+          },
+          onReloadCharacter: async () => {
+            await dispatch({ type: 'reload-character' })
+          },
+          onSettings: async () => {
+            await dispatch({ type: 'request-settings' })
+          },
           onQuit: async () => {
-            await runtime.destroy()
+            await dispatch({ type: 'destroy' })
             await quitApplication()
           },
         })
+        // Strict Mode or a real unmount may dispose the runtime while native
+        // tray creation is still awaiting. Close that late resource instead of
+        // publishing it into an already-finished component lifecycle.
+        if (disposed) await cleanup()
+        else trayCleanup = cleanup
       })
       .catch((error) => {
         console.error('[App] Failed to initialize pet runtime', error)
@@ -92,18 +133,21 @@ export default function App() {
 
     return () => {
       disposed = true
-      void runtime.destroy()
+      void coordinator.dispatch({ type: 'destroy' })
       void trayCleanup?.()
-      runtimeRef.current = null
+      commandCoordinatorRef.current = null
     }
   }, [debugStore, settingsStore])
 
   useEffect(() => {
-    void runtimeRef.current?.applySettings(settings)
+    void commandCoordinatorRef.current?.dispatch({ type: 'apply-settings', settings })
   }, [settings])
 
   useEffect(() => {
-    void runtimeRef.current?.setUiInteractionActive(settingsOpen)
+    void commandCoordinatorRef.current?.dispatch({
+      type: 'set-ui-interaction',
+      active: settingsOpen,
+    })
   }, [settingsOpen])
 
   return (
@@ -229,6 +273,11 @@ export default function App() {
           <div>Character ID: {snapshot.characterId ?? 'n/a'}</div>
           <div>Active Behavior: {snapshot.activeBehavior ?? 'n/a'}</div>
           <div>Ambient Scheduler: {snapshot.ambientSchedulerStatus}</div>
+          <div>Runtime Command: {snapshot.activeRuntimeCommand ?? 'n/a'}</div>
+          <div>Command Queue: {snapshot.runtimeCommandQueueDepth}</div>
+          {snapshot.lastRuntimeCommandError ? (
+            <pre>{snapshot.lastRuntimeCommandError}</pre>
+          ) : null}
           {snapshot.lastBehaviorError ? <pre>{snapshot.lastBehaviorError}</pre> : null}
           {snapshot.lastError ? <pre>{snapshot.lastError}</pre> : null}
         </aside>

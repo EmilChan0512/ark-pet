@@ -80,6 +80,10 @@ Architecture maintenance guides:
   module, time, coordinate, and cancellation ownership for Phase 5.
 - [Phase 5 requirements](docs/phase-5-requirements.md): first autonomous
   behavior modules built on the Phase 4 engine.
+- [Runtime command boundary](docs/architecture/runtime-command-boundary.md):
+  ordering, coalescing, shutdown, and extension rules for external commands.
+- [Phase 6 requirements](docs/phase-6-requirements.md): typed orchestration for
+  tray, React, settings, visibility, reload, and runtime cleanup.
 
 React does not own Pixi or Spine lifecycle. `PetRuntime` runs independently and React only mounts the host element plus UI panels.
 
@@ -133,6 +137,8 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
   engine foundation
 - Schedules local, interruptible walking, sitting, and sleeping behavior through
   registered ambient modules
+- Serializes tray and React runtime commands through a documented, testable
+  lifecycle boundary
 - Shows an optional debug panel in development
 - Provides tray actions for show, hide, reload, settings, and quit
 
@@ -146,4 +152,5 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 ## Status
 
 Phase 1–3 runtime behavior is integrated. Phase 4 establishes the documented,
-tested behavior engine, and Phase 5 adds the first modular ambient behaviors.
+tested behavior engine, Phase 5 adds the first modular ambient behaviors, and
+Phase 6 establishes the runtime command and shutdown boundary.
