@@ -131,6 +131,29 @@ describe('BehaviorEngine', () => {
     expect(engine.getSnapshot().activeBehaviorId).toBe('core.idle')
   })
 
+  it('waits for natural-completion cleanup before activating a replacement', async () => {
+    const slowExit = deferred()
+    const registry = new BehaviorRegistry<TestContext>()
+      .register(
+        definition('ambient.walk', 20, {
+          update: () => 'completed',
+          exit: () => slowExit.promise,
+        }),
+      )
+      .register(definition('core.idle', 0))
+    const engine = new BehaviorEngine(registry)
+
+    await engine.request('ambient.walk', { allowed: true })
+    engine.update(100)
+    const idleRequest = engine.request('core.idle', { allowed: true }, { force: true })
+    await Promise.resolve()
+    expect(engine.getSnapshot().activeBehaviorId).toBeNull()
+
+    slowExit.resolve()
+    expect(await idleRequest).toBe(true)
+    expect(engine.getSnapshot().activeBehaviorId).toBe('core.idle')
+  })
+
   it('contains update failures and remains reusable', async () => {
     const snapshots: BehaviorEngineSnapshot[] = []
     const diagnostics: BehaviorDiagnosticsPort = {

@@ -19,6 +19,8 @@ function createDebugStore(): DebugStore {
     characterManifest: null,
     activeBehavior: null,
     lastBehaviorError: null,
+    ambientSchedulerStatus: 'paused',
+    nextAmbientActionAt: null,
     lastError: null,
   }
   const listeners = new Set<() => void>()
@@ -164,6 +166,20 @@ export default function App() {
             />
           </label>
 
+          <label className="settings-toggle">
+            <span>
+              <strong>Autonomous behavior</strong>
+              <small>Allow local walking, sitting, and sleeping</small>
+            </span>
+            <input
+              type="checkbox"
+              checked={settings.autonomousBehavior}
+              onChange={(event) =>
+                settingsStore.update({ autonomousBehavior: event.target.checked })
+              }
+            />
+          </label>
+
           {import.meta.env.DEV ? (
             <label className="settings-toggle">
               <span>
@@ -212,6 +228,7 @@ export default function App() {
           <div>Mouse Passthrough: {String(snapshot.mousePassthrough)}</div>
           <div>Character ID: {snapshot.characterId ?? 'n/a'}</div>
           <div>Active Behavior: {snapshot.activeBehavior ?? 'n/a'}</div>
+          <div>Ambient Scheduler: {snapshot.ambientSchedulerStatus}</div>
           {snapshot.lastBehaviorError ? <pre>{snapshot.lastBehaviorError}</pre> : null}
           {snapshot.lastError ? <pre>{snapshot.lastError}</pre> : null}
         </aside>

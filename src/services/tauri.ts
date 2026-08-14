@@ -3,7 +3,7 @@ import { isTauri } from '@tauri-apps/api/core'
 import { PhysicalPosition } from '@tauri-apps/api/dpi'
 import { Menu } from '@tauri-apps/api/menu'
 import { TrayIcon } from '@tauri-apps/api/tray'
-import { cursorPosition, getCurrentWindow } from '@tauri-apps/api/window'
+import { currentMonitor, cursorPosition, getCurrentWindow } from '@tauri-apps/api/window'
 import { exit } from '@tauri-apps/plugin-process'
 
 export interface TrayCallbacks {
@@ -34,6 +34,25 @@ export class NativeWindowService {
   async getScaleFactor() {
     if (!this.appWindow) return 1
     return this.appWindow.scaleFactor()
+  }
+
+  async getWindowGeometry() {
+    if (!this.appWindow) return null
+    const [position, size, monitor] = await Promise.all([
+      this.appWindow.innerPosition(),
+      this.appWindow.innerSize(),
+      currentMonitor(),
+    ])
+    if (!monitor) return null
+
+    return {
+      position: { x: position.x, y: position.y },
+      size: { width: size.width, height: size.height },
+      workArea: {
+        position: { x: monitor.workArea.position.x, y: monitor.workArea.position.y },
+        size: { width: monitor.workArea.size.width, height: monitor.workArea.size.height },
+      },
+    }
   }
 
   async moveWindow(x: number, y: number) {

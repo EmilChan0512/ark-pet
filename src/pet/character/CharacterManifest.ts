@@ -17,6 +17,9 @@ const manifestSchema = z.object({
     idle: z.string().min(1),
     interact: z.string().min(1).optional(),
     drag: z.string().min(1).optional(),
+    walk: z.string().min(1).optional(),
+    sit: z.string().min(1).optional(),
+    sleep: z.string().min(1).optional(),
   }),
 })
 

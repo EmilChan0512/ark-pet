@@ -6,6 +6,8 @@ import { NativeWindowService } from '../services/tauri'
 import { PetController } from './PetController'
 import { PetStateMachine } from './PetStateMachine'
 import { RuntimeBehaviorAdapter } from './behavior/adapters/RuntimeBehaviorAdapter'
+import { TauriWindowMotionAdapter } from './behavior/adapters/TauriWindowMotionAdapter'
+import type { AmbientAnimationKind } from './behavior/ambient/AmbientBehaviorModule'
 import { CharacterManager } from './character/CharacterManager'
 import { DragController } from './interaction/DragController'
 import { HitTestController } from './interaction/HitTestController'
@@ -22,6 +24,9 @@ export class PetRuntime {
   private readonly controller = new PetController(this.stateMachine)
   private readonly characterManager = new CharacterManager()
   private readonly nativeWindowService = new NativeWindowService()
+  private readonly windowMotionAdapter = new TauriWindowMotionAdapter(
+    this.nativeWindowService,
+  )
   private readonly dragController = new DragController(
     this.nativeWindowService,
     (direction) => this.setFacing(direction),
@@ -66,7 +71,15 @@ export class PetRuntime {
         enterIdle: () => this.applyIdleBehavior(),
         enterInteraction: () => this.applyInteractionBehavior(),
         enterDrag: () => this.applyDragBehavior(),
+        ambientAnimation: {
+          has: (kind) => this.hasAmbientAnimation(kind),
+          enter: (kind) => this.applyAmbientBehavior(kind),
+          setFacing: (direction) => this.setFacing(direction),
+        },
+        windowMotion: this.windowMotionAdapter,
+        random: { next: () => Math.random() },
       },
+      settings.autonomousBehavior,
       {
         publish: (snapshot) => {
           this.debugStore.patch({
@@ -77,6 +90,12 @@ export class PetRuntime {
         reportError: (behaviorId, phase, error) => {
           console.error(`[BehaviorEngine] ${behaviorId}:${phase}`, error)
         },
+      },
+      (snapshot) => {
+        this.debugStore.patch({
+          ambientSchedulerStatus: snapshot.status,
+          nextAmbientActionAt: snapshot.nextActionAt,
+        })
       },
     )
   }
@@ -136,13 +155,13 @@ export class PetRuntime {
     this.renderer.resumeTicker()
     if (this.hidden) {
       this.hidden = false
-      void this.behaviorAdapter.requestIdle('completed')
+      void this.behaviorAdapter.resume(performance.now())
     }
   }
 
   async hide() {
     this.cancelPointerSession()
-    await this.behaviorAdapter.cancel('hidden')
+    await this.behaviorAdapter.pause('hidden')
     this.hidden = true
     this.renderer.pauseTicker()
     await this.nativeWindowService.hide()
@@ -150,7 +169,7 @@ export class PetRuntime {
 
   async reloadCharacter() {
     this.cancelPointerSession()
-    await this.behaviorAdapter.cancel('reload')
+    await this.behaviorAdapter.pause('reload')
     await this.loadCharacter(this.currentManifest?.id ?? 'demo')
   }
 
@@ -163,6 +182,10 @@ export class PetRuntime {
     this.settings = settings
     this.renderer.setMaxFPS(settings.fps)
     await this.nativeWindowService.setAlwaysOnTop(settings.alwaysOnTop)
+    await this.behaviorAdapter.setAutonomousEnabled(
+      settings.autonomousBehavior,
+      performance.now(),
+    )
 
     const character = this.characterManager.getCurrentCharacter()
     if (character && this.currentManifest) {
@@ -178,11 +201,11 @@ export class PetRuntime {
 
     if (active) {
       this.cancelPointerSession()
-      await this.behaviorAdapter.cancel('paused')
+      await this.behaviorAdapter.pause('paused')
       await this.nativeWindowService.setIgnoreCursorEvents(false)
       this.debugStore.patch({ mousePassthrough: false, hitTest: false })
     } else {
-      void this.behaviorAdapter.requestIdle('completed')
+      void this.behaviorAdapter.resume(performance.now())
     }
   }
 
@@ -239,7 +262,7 @@ export class PetRuntime {
   private readonly handlePointerDown = async (event: PointerEvent) => {
     const result = await this.evaluatePointer(event.clientX, event.clientY)
     if (!result.hit) return
-    await this.behaviorAdapter.cancel('user-input')
+    await this.behaviorAdapter.interruptForUser(performance.now())
     this.pointerDown = { x: event.clientX, y: event.clientY }
   }
 
@@ -288,7 +311,7 @@ export class PetRuntime {
   }
 
   private async loadCharacter(characterId: string) {
-    await this.behaviorAdapter.cancel('reload')
+    await this.behaviorAdapter.pause('reload')
     this.controller.enterLoading()
     this.debugStore.patch({
       petState: 'loading',
@@ -314,6 +337,7 @@ export class PetRuntime {
         character.setFacing(this.facing)
       }
       this.layoutCharacter()
+      this.behaviorAdapter.refreshAmbientCapabilities()
 
       this.animationCompleteCleanup = character.onAnimationComplete(() => {
         if (this.stateMachine.getState() === 'interacting') {
@@ -322,6 +346,9 @@ export class PetRuntime {
       })
 
       this.enterIdle()
+      if (!this.hidden && !this.uiInteractionActive) {
+        void this.behaviorAdapter.resume(performance.now())
+      }
 
       this.debugStore.patch({
         petState: 'idle',
@@ -363,7 +390,7 @@ export class PetRuntime {
   }
 
   private enterInteracting() {
-    void this.behaviorAdapter.requestInteraction()
+    void this.behaviorAdapter.requestInteraction(performance.now())
   }
 
   private applyInteractionBehavior() {
@@ -380,7 +407,7 @@ export class PetRuntime {
   }
 
   private enterDragging() {
-    void this.behaviorAdapter.requestDrag()
+    void this.behaviorAdapter.requestDrag(performance.now())
   }
 
   private applyDragBehavior() {
@@ -394,6 +421,41 @@ export class PetRuntime {
       petState: 'dragging',
       currentAnimation: this.currentAnimation,
     })
+  }
+
+  private hasAmbientAnimation(kind: AmbientAnimationKind) {
+    const character = this.characterManager.getCurrentCharacter()
+    const animationName = this.getAmbientAnimationName(kind)
+    return Boolean(character && animationName && character.hasAnimation(animationName))
+  }
+
+  private applyAmbientBehavior(kind: AmbientAnimationKind) {
+    const character = this.characterManager.getCurrentCharacter()
+    if (!character || !this.currentManifest) return
+
+    const entry =
+      kind === 'walk'
+        ? this.controller.enterWalking(character, this.currentManifest)
+        : kind === 'sit'
+          ? this.controller.enterSitting(character, this.currentManifest)
+          : this.controller.enterSleeping(character, this.currentManifest)
+    this.currentAnimation = entry?.animation?.name ?? this.currentManifest.animations.idle
+    this.debugStore.patch({
+      petState: kind === 'walk' ? 'walking' : kind === 'sit' ? 'sitting' : 'sleeping',
+      currentAnimation: this.currentAnimation,
+    })
+  }
+
+  private getAmbientAnimationName(kind: AmbientAnimationKind) {
+    if (!this.currentManifest) return null
+    if (kind === 'walk') {
+      return (
+        this.currentManifest.animations.walk ??
+        this.currentManifest.animations.drag ??
+        this.currentManifest.animations.idle
+      )
+    }
+    return this.currentManifest.animations[kind] ?? null
   }
 
   private setFacing(facing: FacingDirection) {

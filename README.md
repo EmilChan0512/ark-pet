@@ -76,6 +76,10 @@ Architecture maintenance guides:
   invariants, dependency boundaries, extension steps, and testing strategy.
 - [Phase 4 requirements](docs/phase-4-requirements.md): architecture-first
   acceptance scope before autonomous features are enabled.
+- [Ambient behavior modules](docs/architecture/ambient-behaviors.md): scheduler,
+  module, time, coordinate, and cancellation ownership for Phase 5.
+- [Phase 5 requirements](docs/phase-5-requirements.md): first autonomous
+  behavior modules built on the Phase 4 engine.
 
 React does not own Pixi or Spine lifecycle. `PetRuntime` runs independently and React only mounts the host element plus UI panels.
 
@@ -127,6 +131,8 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 - Matches the `Move` animation facing to physical drag direction
 - Routes idle, interaction, and drag lifecycles through the documented behavior
   engine foundation
+- Schedules local, interruptible walking, sitting, and sleeping behavior through
+  registered ambient modules
 - Shows an optional debug panel in development
 - Provides tray actions for show, hide, reload, settings, and quit
 
@@ -140,4 +146,4 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 ## Status
 
 Phase 1–3 runtime behavior is integrated. Phase 4 establishes the documented,
-tested behavior-engine architecture before autonomous features are enabled.
+tested behavior engine, and Phase 5 adds the first modular ambient behaviors.

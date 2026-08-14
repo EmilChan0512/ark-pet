@@ -1,4 +1,5 @@
 import type { CharacterManifestWithPaths, PetState } from './character'
+import type { AmbientSchedulerStatus } from '../pet/behavior/ambient/AmbientScheduler'
 
 export interface WindowPoint {
   x: number
@@ -18,6 +19,8 @@ export interface DebugSnapshot {
   characterManifest: CharacterManifestWithPaths | null
   activeBehavior: string | null
   lastBehaviorError: string | null
+  ambientSchedulerStatus: AmbientSchedulerStatus
+  nextAmbientActionAt: number | null
   lastError: string | null
 }
 

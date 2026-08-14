@@ -41,6 +41,7 @@ const NULL_DIAGNOSTICS: BehaviorDiagnosticsPort = {
 export class BehaviorEngine<Context> {
   private active: Activation<Context> | null = null
   private pending: PendingRequest | null = null
+  private exitBarrier: Promise<void> | null = null
   private generation = 0
   private destroyed = false
   private lastError: string | null = null
@@ -100,7 +101,9 @@ export class BehaviorEngine<Context> {
     this.pending = { id, priority: definition.priority, generation: requestGeneration }
     const previous = this.detachActive()
     if (previous) {
-      await this.exitActivation(previous, options.replaceReason ?? 'replaced')
+      await this.beginExit(previous, options.replaceReason ?? 'replaced')
+    } else if (this.exitBarrier) {
+      await this.exitBarrier
     }
 
     // Another request/cancel may have won while the previous exit was awaited.
@@ -169,7 +172,8 @@ export class BehaviorEngine<Context> {
     ++this.generation
     this.pending = null
     const activation = this.detachActive()
-    if (activation) await this.exitActivation(activation, reason)
+    if (activation) await this.beginExit(activation, reason)
+    else if (this.exitBarrier) await this.exitBarrier
     this.publishSnapshot()
   }
 
@@ -180,7 +184,8 @@ export class BehaviorEngine<Context> {
     ++this.generation
     this.pending = null
     const activation = this.detachActive()
-    if (activation) await this.exitActivation(activation, 'destroyed')
+    if (activation) await this.beginExit(activation, 'destroyed')
+    else if (this.exitBarrier) await this.exitBarrier
     this.publishSnapshot()
   }
 
@@ -205,7 +210,7 @@ export class BehaviorEngine<Context> {
     ++this.generation
     this.active = null
     activation.controller.abort()
-    await this.exitActivation(activation, 'completed')
+    await this.beginExit(activation, 'completed')
     this.publishSnapshot()
   }
 
@@ -218,7 +223,7 @@ export class BehaviorEngine<Context> {
     ++this.generation
     this.active = null
     activation.controller.abort()
-    await this.exitActivation(activation, 'failed')
+    await this.beginExit(activation, 'failed')
     this.reportError(activation.definition.id, phase, error)
   }
 
@@ -237,6 +242,15 @@ export class BehaviorEngine<Context> {
     } catch (error) {
       this.reportError(activation.definition.id, 'exit', error)
     }
+  }
+
+  private beginExit(activation: Activation<Context>, reason: BehaviorExitReason) {
+    const exitPromise = this.exitActivation(activation, reason)
+    this.exitBarrier = exitPromise
+    void exitPromise.finally(() => {
+      if (this.exitBarrier === exitPromise) this.exitBarrier = null
+    })
+    return exitPromise
   }
 
   private reportError(id: string, phase: BehaviorPhase, error: unknown) {

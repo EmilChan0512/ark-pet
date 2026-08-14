@@ -9,6 +9,9 @@
   "animations": {
     "idle": "Relax",
     "interact": "Interact",
-    "drag": "Move"
+    "drag": "Move",
+    "walk": "Move",
+    "sit": "Sit",
+    "sleep": "Sleep"
   }
 }

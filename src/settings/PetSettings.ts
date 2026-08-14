@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-export const PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v1'
+export const PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v2'
+export const LEGACY_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v1'
 
 const petSettingsSchema = z
   .object({
@@ -8,8 +9,11 @@ const petSettingsSchema = z
     fps: z.union([z.literal(30), z.literal(60)]),
     alwaysOnTop: z.boolean(),
     showDebugPanel: z.boolean(),
+    autonomousBehavior: z.boolean(),
   })
   .strict()
+
+const legacyPetSettingsSchema = petSettingsSchema.omit({ autonomousBehavior: true })
 
 export type PetSettings = z.infer<typeof petSettingsSchema>
 
@@ -18,6 +22,7 @@ export const DEFAULT_PET_SETTINGS: PetSettings = Object.freeze({
   fps: 60,
   alwaysOnTop: true,
   showDebugPanel: import.meta.env.DEV,
+  autonomousBehavior: true,
 })
 
 export interface PetSettingsStore {
@@ -27,13 +32,45 @@ export interface PetSettingsStore {
   reset: () => void
 }
 
+/** Pure migration entry point used by storage loading and unit tests. */
+export function parsePetSettings(
+  value: unknown,
+  defaults: PetSettings = DEFAULT_PET_SETTINGS,
+): PetSettings | null {
+  const current = petSettingsSchema.safeParse(value)
+  if (current.success) return current.data
+
+  const legacy = legacyPetSettingsSchema.safeParse(value)
+  if (legacy.success) {
+    return { ...legacy.data, autonomousBehavior: defaults.autonomousBehavior }
+  }
+
+  return null
+}
+
+function parseStoredValue(raw: string | null) {
+  if (!raw) return null
+  try {
+    return parsePetSettings(JSON.parse(raw))
+  } catch {
+    return null
+  }
+}
+
 function loadSettings(): PetSettings {
   try {
-    const stored = window.localStorage.getItem(PET_SETTINGS_STORAGE_KEY)
-    if (!stored) return DEFAULT_PET_SETTINGS
+    const currentRaw = window.localStorage.getItem(PET_SETTINGS_STORAGE_KEY)
+    const legacyRaw = window.localStorage.getItem(LEGACY_PET_SETTINGS_STORAGE_KEY)
+    if (!currentRaw && !legacyRaw) return DEFAULT_PET_SETTINGS
 
-    const result = petSettingsSchema.safeParse(JSON.parse(stored))
-    if (result.success) return result.data
+    const current = parseStoredValue(currentRaw)
+    if (current) return current
+
+    const migrated = parseStoredValue(legacyRaw)
+    if (migrated) {
+      window.localStorage.setItem(PET_SETTINGS_STORAGE_KEY, JSON.stringify(migrated))
+      return migrated
+    }
 
     console.warn('[PetSettings] Invalid persisted settings; using defaults')
   } catch (error) {

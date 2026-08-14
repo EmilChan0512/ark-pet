@@ -1,10 +1,21 @@
-export type PetState = 'loading' | 'idle' | 'interacting' | 'dragging' | 'error'
+export type PetState =
+  | 'loading'
+  | 'idle'
+  | 'interacting'
+  | 'dragging'
+  | 'walking'
+  | 'sitting'
+  | 'sleeping'
+  | 'error'
 export type FacingDirection = 'left' | 'right'
 
 export interface CharacterAnimationMap {
   idle: string
   interact?: string
   drag?: string
+  walk?: string
+  sit?: string
+  sleep?: string
 }
 
 export interface CharacterManifest {

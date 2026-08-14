@@ -33,6 +33,8 @@ The default multiplier is `0.8`.
 ## Storage and failure behavior
 
 - Store settings under the versioned local-storage key `ark-pet.settings.v1`.
+- Phase 5 supersedes the active key with `ark-pet.settings.v2`; the v1 key is
+  retained as a documented migration source.
 - Validate stored data before use.
 - Missing, malformed, incomplete, or unsupported values fall back to defaults.
 - Storage failures must not prevent the pet from starting or settings from

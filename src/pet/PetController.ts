@@ -32,6 +32,25 @@ export class PetController {
     return character.play(manifest.animations.drag, true, manifest.animations.idle)
   }
 
+  enterWalking(character: SpineCharacter, manifest: CharacterManifestWithPaths) {
+    this.transition('walking')
+    return character.play(
+      manifest.animations.walk,
+      true,
+      manifest.animations.drag ?? manifest.animations.idle,
+    )
+  }
+
+  enterSitting(character: SpineCharacter, manifest: CharacterManifestWithPaths) {
+    this.transition('sitting')
+    return character.play(manifest.animations.sit, true, manifest.animations.idle)
+  }
+
+  enterSleeping(character: SpineCharacter, manifest: CharacterManifestWithPaths) {
+    this.transition('sleeping')
+    return character.play(manifest.animations.sleep, true, manifest.animations.idle)
+  }
+
   getState(): PetState {
     return this.stateMachine.getState()
   }
