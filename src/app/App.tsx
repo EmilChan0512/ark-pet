@@ -17,6 +17,8 @@ function createDebugStore(): DebugStore {
     characterId: null,
     rendererStatus: 'idle',
     characterManifest: null,
+    activeBehavior: null,
+    lastBehaviorError: null,
     lastError: null,
   }
   const listeners = new Set<() => void>()
@@ -77,7 +79,7 @@ export default function App() {
           onReloadCharacter: () => runtime.reloadCharacter(),
           onSettings: () => runtime.openSettings(),
           onQuit: async () => {
-            runtime.destroy()
+            await runtime.destroy()
             await quitApplication()
           },
         })
@@ -88,7 +90,7 @@ export default function App() {
 
     return () => {
       disposed = true
-      runtime.destroy()
+      void runtime.destroy()
       void trayCleanup?.()
       runtimeRef.current = null
     }
@@ -209,6 +211,8 @@ export default function App() {
           <div>Hit Test: {String(snapshot.hitTest)}</div>
           <div>Mouse Passthrough: {String(snapshot.mousePassthrough)}</div>
           <div>Character ID: {snapshot.characterId ?? 'n/a'}</div>
+          <div>Active Behavior: {snapshot.activeBehavior ?? 'n/a'}</div>
+          {snapshot.lastBehaviorError ? <pre>{snapshot.lastBehaviorError}</pre> : null}
           {snapshot.lastError ? <pre>{snapshot.lastError}</pre> : null}
         </aside>
       ) : null}

@@ -1,147 +1,208 @@
-# Phase 4 Requirements: Autonomous Behavior MVP
+# Phase 4 Requirements: Behavior Architecture Foundation
 
 ## Goal
 
-Make the pet feel alive while the user is not interacting with it. Phase 4
-adds a local, bounded behavior scheduler that can rest, sit, sleep, and roam on
-the current monitor. All behavior remains deterministic under test, immediately
-interruptible, and independent of network services or AI APIs.
+Establish an extensible behavior architecture before adding autonomous pet
+features. Phase 4 separates behavior definitions, selection, execution,
+platform effects, and diagnostics so future walking, sitting, sleeping,
+notifications, or local integrations can be added without expanding
+`PetRuntime` into a monolith.
 
-## Scope
+This phase is architecture-first. It does not enable random roaming, sleeping,
+AI decisions, cloud services, third-party APIs, or a public plugin system.
 
-- Add autonomous behavior states for walking, sitting, and sleeping.
-- Use the existing Spine animations `Move`, `Sit`, `Sleep`, and `Relax`.
-- Move the native pet window smoothly during autonomous walking.
-- Use Phase 3 facing rules so walking direction matches horizontal movement.
-- Keep the pet inside the current monitor's usable work area.
-- Interrupt autonomous behavior immediately for click, drag, settings, hide,
-  reload, or quit actions.
-- Add a persisted `Autonomous behavior` setting, enabled by default.
-- Pause scheduling while the pet is hidden or the settings panel is open.
-- Resume from idle after an interruption rather than continuing a stale action.
+## Design principles
 
-Phase 4 does not add path finding around application windows, cross-monitor
-travel, speech, notifications, AI decisions, cloud services, or new assets.
+- Core behavior code is independent of React, Pixi, Spine, Tauri, and browser
+  globals.
+- Dependencies point inward through explicit ports; behavior code never imports
+  a concrete renderer or native window implementation.
+- One engine owns the active behavior and its lifecycle.
+- Behavior definitions are registered rather than hard-coded into engine
+  conditionals.
+- Priority and interruption rules are data, not scattered event-handler logic.
+- Time and randomness are injected so future policies are deterministic in
+  tests.
+- Cancellation and cleanup are mandatory parts of every behavior lifecycle.
+- A behavior failure is contained and reported without crashing the pet.
+- Existing Phase 1–3 behavior remains the compatibility baseline.
 
-## Behavior model
+## Target dependency direction
 
-### States
-
-The runtime state model expands to:
-
-- `idle`: loop the manifest idle animation and wait for the next behavior.
-- `walking`: loop the walk animation and move toward a bounded destination.
-- `sitting`: play or loop the sit animation for a bounded duration.
-- `sleeping`: loop the sleep animation after extended user inactivity.
-- Existing `loading`, `interacting`, `dragging`, and `error` states remain.
-
-### Priority
-
-Behavior priority, highest first:
-
-1. shutdown and runtime cleanup;
-2. user dragging;
-3. user interaction;
-4. settings, hide, show, and character reload commands;
-5. autonomous behavior;
-6. idle animation.
-
-A higher-priority event cancels the active autonomous action and all of its
-timers or animation-frame callbacks before transitioning.
-
-### Timing defaults
-
-- Begin an ambient action after 20–45 seconds without user input.
-- Choose between a short walk and sitting using a weighted local random source.
-- Walk 120–320 physical pixels at 60–90 physical pixels per second.
-- Sit for 8–20 seconds, then return to idle.
-- Enter sleep after 3 minutes without user input.
-- Sleep continues until user input or a runtime command wakes the pet.
-
-The scheduler must accept injected clock and random functions so timing and
-behavior selection can be tested without real waits or flaky randomness.
-
-## Motion and screen safety
-
-- Query the current monitor and use its work area rather than total screen size.
-- Compute destinations in physical screen coordinates, matching Tauri window
-  positions and cursor positions.
-- Account for the native window size when clamping a destination.
-- Never teleport the window as part of autonomous movement.
-- Animate window position from elapsed time, not frame count.
-- Clamp large frame gaps so suspend/resume cannot cause a large jump.
-- Cancel movement when the monitor cannot be resolved instead of guessing.
-- Preserve the last valid facing direction for vertical or negligible movement.
-
-## Animation contract
-
-Character manifests add optional autonomous animation names:
-
-```json
-{
-  "animations": {
-    "idle": "Relax",
-    "interact": "Interact",
-    "drag": "Move",
-    "walk": "Move",
-    "sit": "Sit",
-    "sleep": "Sleep"
-  }
-}
+```text
+React / Tray
+    -> PetRuntime (composition root)
+        -> BehaviorEngine
+            -> BehaviorRegistry
+            -> BehaviorPolicy
+            -> BehaviorDefinition
+            -> BehaviorPorts (interfaces)
+                <- Pixi/Spine adapter
+                <- Tauri window adapter
+                <- diagnostics adapter
 ```
 
-Fallback rules:
+The behavior layer must not import from `src/app`, `pixi.js`,
+`@pixi-spine/*`, or `@tauri-apps/*`.
 
-- `walk` falls back to `drag`, then `idle`.
-- Missing `sit` skips the sitting behavior.
-- Missing `sleep` keeps the pet idle instead of entering a false sleeping state.
-- A missing optional animation must never put the runtime into `error`.
+## Core contracts
 
-## Settings contract
+### Behavior definition
 
-Phase 4 extends persisted settings with:
+Each behavior declares:
 
-```ts
-{
-  autonomousBehavior: boolean
-}
+- stable string `id`;
+- numeric `priority`;
+- optional tags such as `manual`, `ambient`, or `blocking`;
+- a synchronous eligibility predicate over an immutable context snapshot;
+- an `enter` lifecycle hook;
+- an optional `update` hook driven by the single engine tick;
+- an `exit` lifecycle hook that receives a typed cancellation reason.
+
+Definitions must not retain mutable engine state between activations. Per-run
+state belongs to a behavior instance created for that activation.
+
+### Registry
+
+The registry:
+
+- rejects duplicate IDs;
+- exposes immutable lookup and listing;
+- preserves no runtime activation state;
+- allows future feature modules to contribute definitions at the composition
+  root without modifying `BehaviorEngine`.
+
+### Engine
+
+The engine:
+
+- owns zero or one active behavior;
+- evaluates priority before replacement;
+- gives explicit manual requests precedence over ambient requests;
+- guarantees `exit` is invoked at most once for an entered behavior;
+- uses an activation generation to ignore stale asynchronous completions;
+- contains hook failures and returns to a safe idle state;
+- exposes a read-only snapshot for debug UI and tests;
+- is idempotently destroyable.
+
+The engine must not create independent animation loops. `PetRuntime` forwards
+one existing ticker or frame callback to `engine.update(now)`.
+
+### Policy
+
+A policy selects a behavior ID from registered eligible candidates. It does not
+execute behaviors or call platform APIs. Future ambient policy can use injected
+clock and random ports without changing the engine.
+
+Phase 4 includes a deterministic no-random policy sufficient to verify the
+contract. Weighted autonomous selection is deferred.
+
+### Ports
+
+The behavior layer defines narrow capability interfaces, initially:
+
+- `AnimationPort`: play an animation and query availability;
+- `WindowMotionPort`: read and move the native window;
+- `BehaviorDiagnosticsPort`: publish engine snapshots and contained errors;
+- `ClockPort`: monotonic time only;
+- `RandomPort`: normalized random value for future policies.
+
+Ports may be grouped into a runtime context, but definitions must request only
+the capabilities they use.
+
+## Lifecycle and interruption model
+
+Typed exit reasons:
+
+- `completed`;
+- `replaced`;
+- `user-input`;
+- `paused`;
+- `reload`;
+- `hidden`;
+- `disabled`;
+- `destroyed`;
+- `failed`.
+
+Minimum priority order:
+
+1. destroy and reload cleanup;
+2. manual dragging;
+3. manual interaction;
+4. runtime commands and settings UI;
+5. future autonomous behavior;
+6. idle.
+
+Opening settings, hiding, or reloading pauses/cancels the active behavior at the
+engine boundary. Closing settings or showing the pet returns through a fresh
+idle request rather than resuming stale behavior state.
+
+## Phase 4 implementation slice
+
+Phase 4 implements and verifies:
+
+1. behavior types and typed lifecycle reasons;
+2. duplicate-safe registry;
+3. single-active-behavior engine with priority, replacement, cancellation,
+   stale-completion protection, snapshots, and failure containment;
+4. injected clock and deterministic policy contracts;
+5. a small runtime adapter that maps existing idle, interaction, and drag
+   lifecycle signals into the engine without changing their visible behavior;
+6. debug snapshot fields for active behavior and last behavior error;
+7. focused unit tests using fake definitions and ports.
+8. a maintenance-oriented architecture document, public-contract TSDoc, and
+   reason-focused comments for concurrency and cleanup invariants.
+
+Autonomous walking, sitting, sleeping, monitor bounds, and persisted autonomous
+settings are deferred to Phase 5. They must be implemented as registered
+behavior modules and policies on top of this foundation.
+
+## File boundaries
+
+Expected structure:
+
+```text
+src/pet/behavior/
+  types.ts
+  BehaviorRegistry.ts
+  BehaviorEngine.ts
+  policies/
+    DeterministicPolicy.ts
+  adapters/
+    RuntimeBehaviorAdapter.ts
 ```
 
-- Default: `true`.
-- Turning it off cancels the current autonomous action immediately and returns
-  to idle.
-- Turning it on schedules a fresh idle delay; it does not start walking at once.
-- Older Phase 2 settings must migrate without losing scale, FPS,
-  always-on-top, or debug visibility values.
+Exact filenames may change, but contracts, engine, policy, and concrete
+platform adapters must remain separable.
 
-## Lifecycle and cleanup
+## Compatibility constraints
 
-- At most one autonomous action and one scheduler timer may be active.
-- Character reload cancels behavior before destroying the current Spine object.
-- Hide pauses behavior and show begins a fresh idle delay.
-- Opening settings pauses behavior and closing it begins a fresh idle delay.
-- Runtime destruction removes every timeout and animation-frame callback.
-- Repeated enable/disable and hide/show cycles must not multiply callbacks.
+- Keep Tauri 2, React/TypeScript/Vite, PixiJS 7.4.3, and Spine 3.8 runtime.
+- Do not migrate renderer or Spine major versions.
+- Do not remount React or reload Spine to switch behavior.
+- Do not add network or Wiki API dependencies.
+- Preserve local settings format unless an actual new persisted setting exists.
+- Preserve smooth physical-coordinate dragging and Phase 3 facing behavior.
 
 ## Acceptance criteria
 
-1. With autonomous behavior enabled, an idle pet selects a valid ambient action
-   after the configured delay.
-2. Autonomous walking uses `Move`, faces the destination, moves smoothly, and
-   stays inside the current monitor work area.
-3. Sitting uses `Sit` and returns to idle after its bounded duration.
-4. Three minutes of inactivity enters `Sleep`; click or drag wakes immediately.
-5. Dragging during any autonomous action cancels it before drag movement starts.
-6. Opening settings or hiding the pet stops movement and pauses scheduling.
-7. Disabling autonomous behavior immediately returns the pet to idle and
-   prevents new autonomous actions.
-8. Existing settings migrate with their previous values intact.
-9. Missing optional animations fall back or skip without entering `error`.
-10. Fake-clock tests cover selection, interruption, sleep, pause/resume, and
-    cleanup without real-time waits.
-11. Repeated scheduler cycles leave one Spine canvas, one character instance,
-    and no accumulating timers or ticker callbacks.
-12. Phase 1–3 reload, tray, settings, drag smoothness, direction, passthrough,
-    and cleanup behavior remains intact.
-13. TypeScript build, lint, native Tauri build, and a real runtime smoke test
-    pass.
+1. The behavior core has no imports from React, Pixi, Spine, Tauri, or browser
+   APIs.
+2. Duplicate behavior registration fails with a clear error.
+3. An eligible higher-priority request replaces the active behavior exactly
+   once and provides `replaced` to its exit hook.
+4. A lower-priority ambient request cannot interrupt manual interaction.
+5. Cancellation, pause, reload, hide, and destroy invoke cleanup at most once.
+6. A stale asynchronous enter completion cannot mutate the current activation.
+7. An enter, update, or exit failure is reported through diagnostics and does
+   not leave the engine active or unusable.
+8. Engine destroy is idempotent and rejects future activation.
+9. Fake-clock tests require no real waits and contain no randomness.
+10. Existing idle, click interaction, dragging, direction, tray, settings,
+    passthrough, reload, and cleanup behavior remains visually unchanged.
+11. Debug output identifies the active behavior and the last contained behavior
+    error.
+12. TypeScript build, lint, unit tests, native Tauri build, and a real runtime
+    smoke test pass.
+13. README links to the architecture entry point, and a future maintainer can
+    add a behavior by following the documented extension steps.

@@ -5,6 +5,7 @@ import type { PetSettings } from '../settings/PetSettings'
 import { NativeWindowService } from '../services/tauri'
 import { PetController } from './PetController'
 import { PetStateMachine } from './PetStateMachine'
+import { RuntimeBehaviorAdapter } from './behavior/adapters/RuntimeBehaviorAdapter'
 import { CharacterManager } from './character/CharacterManager'
 import { DragController } from './interaction/DragController'
 import { HitTestController } from './interaction/HitTestController'
@@ -25,6 +26,7 @@ export class PetRuntime {
     this.nativeWindowService,
     (direction) => this.setFacing(direction),
   )
+  private readonly behaviorAdapter: RuntimeBehaviorAdapter
   private readonly hitTestController = new HitTestController(
     () => this.getCharacterBounds(),
     async (passthroughEnabled) => {
@@ -43,6 +45,7 @@ export class PetRuntime {
   private fpsSampleAt = 0
   private settings: PetSettings
   private uiInteractionActive = false
+  private hidden = false
   private facing: FacingDirection = 'right'
   private readonly host: HTMLElement
   private readonly debugStore: DebugStore
@@ -58,9 +61,28 @@ export class PetRuntime {
     this.debugStore = debugStore
     this.settings = settings
     this.onSettingsRequested = onSettingsRequested
+    this.behaviorAdapter = new RuntimeBehaviorAdapter(
+      {
+        enterIdle: () => this.applyIdleBehavior(),
+        enterInteraction: () => this.applyInteractionBehavior(),
+        enterDrag: () => this.applyDragBehavior(),
+      },
+      {
+        publish: (snapshot) => {
+          this.debugStore.patch({
+            activeBehavior: snapshot.activeBehaviorId,
+            lastBehaviorError: snapshot.lastError,
+          })
+        },
+        reportError: (behaviorId, phase, error) => {
+          console.error(`[BehaviorEngine] ${behaviorId}:${phase}`, error)
+        },
+      },
+    )
   }
 
   private readonly updateDebugSnapshot = () => {
+    this.behaviorAdapter.update(performance.now())
     const app = this.renderer.getApplication()
     const now = performance.now()
     if (now - this.fpsSampleAt > 250) {
@@ -112,14 +134,23 @@ export class PetRuntime {
   async show() {
     await this.nativeWindowService.show()
     this.renderer.resumeTicker()
+    if (this.hidden) {
+      this.hidden = false
+      void this.behaviorAdapter.requestIdle('completed')
+    }
   }
 
   async hide() {
+    this.cancelPointerSession()
+    await this.behaviorAdapter.cancel('hidden')
+    this.hidden = true
     this.renderer.pauseTicker()
     await this.nativeWindowService.hide()
   }
 
   async reloadCharacter() {
+    this.cancelPointerSession()
+    await this.behaviorAdapter.cancel('reload')
     await this.loadCharacter(this.currentManifest?.id ?? 'demo')
   }
 
@@ -146,12 +177,20 @@ export class PetRuntime {
     this.hitTestController.reset()
 
     if (active) {
+      this.cancelPointerSession()
+      await this.behaviorAdapter.cancel('paused')
       await this.nativeWindowService.setIgnoreCursorEvents(false)
       this.debugStore.patch({ mousePassthrough: false, hitTest: false })
+    } else {
+      void this.behaviorAdapter.requestIdle('completed')
     }
   }
 
-  destroy() {
+  async destroy() {
+    // Behavior cleanup owns future timers and motion subscriptions, so it must
+    // finish before the renderer and native ports it may reference disappear.
+    await this.behaviorAdapter.destroy()
+    this.cancelPointerSession()
     this.animationCompleteCleanup?.()
     this.windowMoveCleanup?.()
     if (this.cursorPollId !== null) {
@@ -200,6 +239,7 @@ export class PetRuntime {
   private readonly handlePointerDown = async (event: PointerEvent) => {
     const result = await this.evaluatePointer(event.clientX, event.clientY)
     if (!result.hit) return
+    await this.behaviorAdapter.cancel('user-input')
     this.pointerDown = { x: event.clientX, y: event.clientY }
   }
 
@@ -215,16 +255,21 @@ export class PetRuntime {
     const result = await this.evaluatePointer(event.clientX, event.clientY)
     if (this.pointerDown && result.hit) {
       this.enterInteracting()
+    } else if (this.pointerDown) {
+      this.enterIdle()
     }
 
     this.pointerDown = null
   }
 
   private readonly handlePointerCancel = () => {
-    if (this.dragController.isDragging()) {
-      this.dragController.stop()
-      this.enterIdle()
-    }
+    const hadPointerSession = this.pointerDown !== null
+    this.cancelPointerSession()
+    if (hadPointerSession) this.enterIdle()
+  }
+
+  private cancelPointerSession() {
+    this.dragController.stop()
     this.pointerDown = null
   }
 
@@ -243,6 +288,7 @@ export class PetRuntime {
   }
 
   private async loadCharacter(characterId: string) {
+    await this.behaviorAdapter.cancel('reload')
     this.controller.enterLoading()
     this.debugStore.patch({
       petState: 'loading',
@@ -300,6 +346,10 @@ export class PetRuntime {
   }
 
   private enterIdle() {
+    void this.behaviorAdapter.requestIdle('completed')
+  }
+
+  private applyIdleBehavior() {
     const character = this.characterManager.getCurrentCharacter()
     if (!character || !this.currentManifest) return
 
@@ -313,6 +363,10 @@ export class PetRuntime {
   }
 
   private enterInteracting() {
+    void this.behaviorAdapter.requestInteraction()
+  }
+
+  private applyInteractionBehavior() {
     const character = this.characterManager.getCurrentCharacter()
     if (!character || !this.currentManifest) return
 
@@ -326,6 +380,10 @@ export class PetRuntime {
   }
 
   private enterDragging() {
+    void this.behaviorAdapter.requestDrag()
+  }
+
+  private applyDragBehavior() {
     const character = this.characterManager.getCurrentCharacter()
     if (!character || !this.currentManifest) return
 

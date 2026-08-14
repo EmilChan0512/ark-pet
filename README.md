@@ -70,6 +70,13 @@ Tauri
 - `src/services/tauri.ts`: Tauri JS API boundary
 - `src-tauri/src`: minimal native bootstrap and plugin registration
 
+Architecture maintenance guides:
+
+- [Behavior engine](docs/architecture/behavior-engine.md): lifecycle
+  invariants, dependency boundaries, extension steps, and testing strategy.
+- [Phase 4 requirements](docs/phase-4-requirements.md): architecture-first
+  acceptance scope before autonomous features are enabled.
+
 React does not own Pixi or Spine lifecycle. `PetRuntime` runs independently and React only mounts the host element plus UI panels.
 
 ## Character Format
@@ -97,6 +104,7 @@ Example manifest:
   "skeleton": "character.json",
   "atlas": "character.atlas",
   "scale": 0.5,
+  "nativeFacing": "right",
   "animations": {
     "idle": "Idle",
     "interact": "Touch",
@@ -115,8 +123,12 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 - Attempts to validate and load real Spine 3.8 assets
 - Includes the provided Pepe package from `char_4058_pepe/默认-基建/package`
 - Falls back to a Pixi placeholder pet with explicit error details when assets are missing or invalid
-- Shows a debug panel in development only
-- Provides tray actions for show, hide, reload, settings placeholder, and quit
+- Provides persisted scale, FPS, always-on-top, and debug visibility settings
+- Matches the `Move` animation facing to physical drag direction
+- Routes idle, interaction, and drag lifecycles through the documented behavior
+  engine foundation
+- Shows an optional debug panel in development
+- Provides tray actions for show, hide, reload, settings, and quit
 
 ## Notes
 
@@ -127,4 +139,5 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 
 ## Status
 
-Real 3.8 assets integrated and routed through the 3.8-compatible runtime stack.
+Phase 1–3 runtime behavior is integrated. Phase 4 establishes the documented,
+tested behavior-engine architecture before autonomous features are enabled.
