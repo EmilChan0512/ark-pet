@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import type { DebugSnapshot, DebugStore } from '../types/pet'
 import { PetRuntime } from '../pet/PetRuntime'
 import { createPetRuntimeCommandHandler } from '../pet/runtime/PetRuntimeCommandHandler'
@@ -8,6 +8,12 @@ import {
 } from '../pet/runtime/RuntimeCommandCoordinator'
 import { createPetSettingsStore } from '../settings/PetSettings'
 import { ensureTray, quitApplication } from '../services/tauri'
+import {
+  CharacterPackageService,
+  builtInCharacter,
+  type PackageInspection,
+} from '../services/characterPackages'
+import type { CharacterCatalogEntry } from '../types/character'
 import './App.css'
 
 const DEV_AI_VOICE_SAMPLES = [
@@ -22,6 +28,17 @@ const DEV_AI_VOICE_SAMPLES = [
     text: '晚上好，博士，来和我一块看看这本古籍吧。',
   },
 ] as const
+
+function formatPackageError(error: unknown) {
+  if (typeof error === 'object' && error && 'code' in error && 'message' in error) {
+    return `${String(error.code)}: ${String(error.message)}`
+  }
+  return error instanceof Error ? error.message : String(error)
+}
+
+function formatBytes(bytes: number) {
+  return bytes < 1024 * 1024 ? `${Math.ceil(bytes / 1024)} KiB` : `${(bytes / 1024 / 1024).toFixed(1)} MiB`
+}
 
 function createDebugStore(): DebugStore {
   let snapshot: DebugSnapshot = {
@@ -85,7 +102,12 @@ export default function App() {
   const runtimeGenerationRef = useRef(0)
   const debugStore = useMemo(() => createDebugStore(), [])
   const settingsStore = useMemo(() => createPetSettingsStore(), [])
+  const characterPackageService = useMemo(() => new CharacterPackageService(), [])
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [characterCatalog, setCharacterCatalog] = useState<CharacterCatalogEntry[]>([builtInCharacter()])
+  const [packageInspection, setPackageInspection] = useState<PackageInspection | null>(null)
+  const [packageBusy, setPackageBusy] = useState(false)
+  const [packageOutcome, setPackageOutcome] = useState('Catalog not loaded')
   const snapshot = useSyncExternalStore(
     debugStore.subscribe,
     debugStore.getSnapshot,
@@ -96,6 +118,63 @@ export default function App() {
     settingsStore.getSnapshot,
     settingsStore.getSnapshot,
   )
+
+  const refreshCharacterCatalog = useCallback(async () => {
+    try {
+      const catalog = await characterPackageService.loadCatalog()
+      setCharacterCatalog(catalog)
+      setPackageOutcome(`Catalog ready: ${catalog.length} character(s)`)
+    } catch (error) {
+      setPackageOutcome(`Catalog error: ${formatPackageError(error)}`)
+    }
+  }, [characterPackageService])
+
+  const inspectCharacterPackage = async () => {
+    setPackageBusy(true)
+    try {
+      const inspection = await characterPackageService.chooseAndInspect()
+      if (inspection) {
+        setPackageInspection(inspection)
+        setPackageOutcome(`Inspection passed: ${inspection.packageId}@${inspection.packageVersion}`)
+      }
+    } catch (error) {
+      setPackageOutcome(`Inspection failed: ${formatPackageError(error)}`)
+    } finally {
+      setPackageBusy(false)
+    }
+  }
+
+  const installInspectedPackage = async () => {
+    if (!packageInspection) return
+    setPackageBusy(true)
+    const outcome = await commandCoordinatorRef.current?.dispatch({
+      type: 'install-character-package', inspectionToken: packageInspection.inspectionToken,
+    })
+    if (outcome === 'executed') {
+      setPackageOutcome(`Installed ${packageInspection.packageId}@${packageInspection.packageVersion}`)
+      setPackageInspection(null)
+      await refreshCharacterCatalog()
+    } else setPackageOutcome(`Install ${outcome ?? 'unavailable'}`)
+    setPackageBusy(false)
+  }
+
+  const selectCharacter = async (characterId: string) => {
+    setPackageBusy(true)
+    const outcome = await commandCoordinatorRef.current?.dispatch({ type: 'select-character', characterId })
+    setPackageOutcome(outcome === 'executed' ? `Selected ${characterId}` : `Selection ${outcome ?? 'unavailable'}`)
+    setPackageBusy(false)
+  }
+
+  const removeCharacter = async (entry: CharacterCatalogEntry) => {
+    if (!entry.packageId || !window.confirm(`Remove ${entry.displayName}?`)) return
+    setPackageBusy(true)
+    const outcome = await commandCoordinatorRef.current?.dispatch({
+      type: 'remove-character-package', packageId: entry.packageId, characterId: entry.id,
+    })
+    if (outcome === 'executed') await refreshCharacterCatalog()
+    setPackageOutcome(outcome === 'executed' ? `Removed ${entry.packageId}` : `Removal ${outcome ?? 'unavailable'}`)
+    setPackageBusy(false)
+  }
 
   const testDynamicCharacterVoice = (text: string, sampleKey = 'default') => {
     const voiceSettings = {
@@ -148,6 +227,7 @@ export default function App() {
       settingsStore.getSnapshot(),
       () => setSettingsOpen(true),
       () => debugPanelRef.current?.getBoundingClientRect() ?? null,
+      (characterId) => settingsStore.update({ activeCharacterId: characterId }),
     )
     const coordinator = new RuntimeCommandCoordinator(
       createPetRuntimeCommandHandler(runtime),
@@ -175,6 +255,8 @@ export default function App() {
       .then(async (outcome) => {
         if (disposed) return
         if (outcome !== 'executed') return
+
+        await refreshCharacterCatalog()
 
         const cleanup = await ensureTray({
           onShow: async () => {
@@ -213,7 +295,7 @@ export default function App() {
       void trayCleanup?.()
       commandCoordinatorRef.current = null
     }
-  }, [debugStore, settingsStore])
+  }, [debugStore, refreshCharacterCatalog, settingsStore])
 
   useEffect(() => {
     void commandCoordinatorRef.current?.dispatch({ type: 'apply-settings', settings })
@@ -276,6 +358,58 @@ export default function App() {
               ×
             </button>
           </div>
+
+          <label className="settings-field">
+            <span>Active character</span>
+            <select
+              value={settings.activeCharacterId}
+              disabled={packageBusy}
+              onChange={(event) => void selectCharacter(event.target.value)}
+            >
+              {characterCatalog.map((entry) => (
+                <option key={entry.id} value={entry.id}>
+                  {entry.displayName}{entry.source === 'built-in' ? ' · Built-in' : ` · ${entry.packageVersion}`}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <section className="character-manager" aria-label="Character packages">
+            <div className="character-manager__actions">
+              <button type="button" disabled={packageBusy} onClick={() => void inspectCharacterPackage()}>
+                Import Character Package
+              </button>
+              {characterCatalog.find((entry) => entry.id === settings.activeCharacterId)?.source === 'installed' ? (
+                <button
+                  type="button"
+                  disabled={packageBusy}
+                  onClick={() => {
+                    const entry = characterCatalog.find((item) => item.id === settings.activeCharacterId)
+                    if (entry) void removeCharacter(entry)
+                  }}
+                >
+                  Remove active character
+                </button>
+              ) : null}
+            </div>
+            {packageInspection ? (
+              <div className="character-package-review" role="status">
+                {packageInspection.previewDataUrl ? <img src={packageInspection.previewDataUrl} alt="Character package preview" /> : null}
+                <strong>{packageInspection.displayName}</strong>
+                <span>{packageInspection.packageId} · v{packageInspection.packageVersion}</span>
+                <span>{packageInspection.author ?? 'Unknown author'} · {formatBytes(packageInspection.installedSize)}</span>
+                <span>{packageInspection.capabilities.join(', ')}</span>
+                {packageInspection.description ? <p>{packageInspection.description}</p> : null}
+                <div className="character-manager__actions">
+                  <button type="button" disabled={packageInspection.updateKind === 'conflict' || packageBusy} onClick={() => void installInspectedPackage()}>
+                    Confirm {packageInspection.updateKind === 'upgrade' ? 'update' : 'installation'}
+                  </button>
+                  <button type="button" onClick={() => setPackageInspection(null)}>Cancel</button>
+                </div>
+              </div>
+            ) : null}
+            <small>{packageOutcome}</small>
+          </section>
 
           <label className="settings-field">
             <span>
@@ -440,6 +574,8 @@ export default function App() {
           <div>Hit Test: {String(snapshot.hitTest)}</div>
           <div>Mouse Passthrough: {String(snapshot.mousePassthrough)}</div>
           <div>Character ID: {snapshot.characterId ?? 'n/a'}</div>
+          <div>Character Catalog: {characterCatalog.length} ({characterCatalog.filter((entry) => entry.source === 'installed').length} installed)</div>
+          <div>Package Outcome: {packageOutcome}</div>
           <div>Active Behavior: {snapshot.activeBehavior ?? 'n/a'}</div>
           <div>Ambient Scheduler: {snapshot.ambientSchedulerStatus}</div>
           <div>Runtime Command: {snapshot.activeRuntimeCommand ?? 'n/a'}</div>

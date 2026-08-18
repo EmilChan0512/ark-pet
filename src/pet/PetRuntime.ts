@@ -3,6 +3,7 @@ import type { CharacterManifestWithPaths, FacingDirection } from '../types/chara
 import type { DebugStore } from '../types/pet'
 import type { PetSettings } from '../settings/PetSettings'
 import { NativeWindowService } from '../services/tauri'
+import { CharacterPackageService } from '../services/characterPackages'
 import { PetController } from './PetController'
 import { PetStateMachine } from './PetStateMachine'
 import { RuntimeBehaviorAdapter } from './behavior/adapters/RuntimeBehaviorAdapter'
@@ -36,6 +37,7 @@ export class PetRuntime {
   private readonly stateMachine = new PetStateMachine()
   private readonly controller = new PetController(this.stateMachine)
   private readonly characterManager = new CharacterManager()
+  private readonly characterPackageService = new CharacterPackageService()
   private readonly nativeWindowService = new NativeWindowService()
   private readonly windowMotionAdapter = new TauriWindowMotionAdapter(
     this.nativeWindowService,
@@ -80,6 +82,7 @@ export class PetRuntime {
   private readonly host: HTMLElement
   private readonly debugStore: DebugStore
   private readonly onSettingsRequested: () => void
+  private readonly onActiveCharacterChanged: (characterId: string) => void
   private readonly getInteractiveUiBounds: () => DOMRect | null
 
   constructor(
@@ -88,11 +91,13 @@ export class PetRuntime {
     settings: PetSettings,
     onSettingsRequested: () => void,
     getInteractiveUiBounds: () => DOMRect | null = () => null,
+    onActiveCharacterChanged: (characterId: string) => void = () => {},
   ) {
     this.host = host
     this.debugStore = debugStore
     this.settings = settings
     this.onSettingsRequested = onSettingsRequested
+    this.onActiveCharacterChanged = onActiveCharacterChanged
     this.getInteractiveUiBounds = getInteractiveUiBounds
     this.speechCoordinator = new SpeechSessionCoordinator(
       new DomSpeechBubbleRenderer(host, () => this.getCharacterBounds()),
@@ -209,7 +214,9 @@ export class PetRuntime {
 
       this.renderer.setMaxFPS(this.settings.fps)
       await this.nativeWindowService.setAlwaysOnTop(this.settings.alwaysOnTop)
-      await this.characterManager.init()
+      await this.characterPackageService.cleanupStaging()
+      const catalog = await this.characterPackageService.loadCatalog()
+      await this.characterManager.init(catalog)
 
       this.windowMoveCleanup = await this.nativeWindowService.onMoved((position) => {
         this.debugStore.patch({
@@ -221,7 +228,11 @@ export class PetRuntime {
 
       this.attachPointerEvents()
       this.startCursorMonitor()
-      await this.loadCharacter('demo')
+      const requestedCharacter = catalog.some((entry) => entry.id === this.settings.activeCharacterId)
+        ? this.settings.activeCharacterId
+        : 'demo'
+      if (requestedCharacter !== this.settings.activeCharacterId) this.onActiveCharacterChanged('demo')
+      await this.loadCharacter(requestedCharacter)
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       this.controller.enterError()
@@ -284,6 +295,24 @@ export class PetRuntime {
 
   clearFirstMeetingMarker() {
     this.sessionContextSource.clearFirstMeetingMarker()
+  }
+
+  async selectCharacter(characterId: string) {
+    if (this.currentManifest?.id === characterId) return
+    await this.loadCharacter(characterId)
+    this.settings = { ...this.settings, activeCharacterId: characterId }
+    this.onActiveCharacterChanged(characterId)
+  }
+
+  async installCharacterPackage(inspectionToken: string) {
+    await this.characterPackageService.install(inspectionToken)
+    this.characterManager.setCatalog(await this.characterPackageService.loadCatalog())
+  }
+
+  async removeCharacterPackage(packageId: string, characterId: string) {
+    if (this.currentManifest?.id === characterId) await this.selectCharacter('demo')
+    await this.characterPackageService.remove(packageId)
+    this.characterManager.setCatalog(await this.characterPackageService.loadCatalog())
   }
 
   clearReactionCooldowns() {
@@ -490,6 +519,7 @@ export class PetRuntime {
   }
 
   private async loadCharacter(characterId: string) {
+    const previousCharacterId = this.currentManifest?.id ?? null
     this.cancelReactions('character-reload')
     this.sessionContextSource.reset()
     this.timeContextSource.setReady(false)
@@ -502,16 +532,22 @@ export class PetRuntime {
       lastError: null,
     })
 
-    this.animationCompleteCleanup?.()
-    this.animationCompleteCleanup = null
     this.placeholder?.destroy({ children: true })
     this.placeholder = null
 
     try {
+      const catalogEntry = this.characterManager.getEntry(characterId)
+      if (!catalogEntry) throw new Error(`Character not found: ${characterId}`)
+      const persona = await loadCharacterPersona(characterId, catalogEntry.personaPath)
+      if (persona.characterId !== characterId) {
+        throw new Error(`Character Persona Error: expected ${characterId}, received ${persona.characterId}`)
+      }
       const character = await this.characterManager.loadCharacter(
         characterId,
         this.renderer.getRoot(),
       )
+      this.animationCompleteCleanup?.()
+      this.animationCompleteCleanup = null
       this.currentManifest = this.characterManager.getCurrentManifest()
       this.characterGeneration += 1
       if (this.currentManifest) {
@@ -522,47 +558,39 @@ export class PetRuntime {
       this.layoutCharacter()
       this.behaviorAdapter.refreshAmbientCapabilities()
 
-      try {
-        const persona = await loadCharacterPersona(characterId)
-        if (persona.characterId !== characterId) throw new Error(`Character Persona Error: expected ${characterId}, received ${persona.characterId}`)
-        if (this.reactionEngine) this.reactionEngine.setPersona(persona)
-        else {
-          this.reactionEngine = new ReactionEngine(
-            persona,
-            { now: () => performance.now() },
-            { next: () => Math.random() },
-            this.reactionAdapter,
-            {
-              publish: (snapshot) => this.debugStore.patch({
-                lastContextEvent: snapshot.lastEvent,
-                selectedReactionId: snapshot.selectedReactionId,
-                activeReactionId: snapshot.activeReactionId,
-                reactionState: snapshot.activeState,
-                reactionBlockedReason: snapshot.blockedReason,
-                reactionDecisionLog: snapshot.decisionLog,
-              }),
-              reportError: (reactionId, error) => {
-                const message = `[${reactionId}] ${error instanceof Error ? error.message : String(error)}`
-                console.error('[ReactionEngine]', message)
-                this.debugStore.patch({ lastReactionError: message })
-              },
+      if (this.reactionEngine) this.reactionEngine.setPersona(persona)
+      else {
+        this.reactionEngine = new ReactionEngine(
+          persona,
+          { now: () => performance.now() },
+          { next: () => Math.random() },
+          this.reactionAdapter,
+          {
+            publish: (snapshot) => this.debugStore.patch({
+              lastContextEvent: snapshot.lastEvent,
+              selectedReactionId: snapshot.selectedReactionId,
+              activeReactionId: snapshot.activeReactionId,
+              reactionState: snapshot.activeState,
+              reactionBlockedReason: snapshot.blockedReason,
+              reactionDecisionLog: snapshot.decisionLog,
+            }),
+            reportError: (reactionId, error) => {
+              const message = `[${reactionId}] ${error instanceof Error ? error.message : String(error)}`
+              console.error('[ReactionEngine]', message)
+              this.debugStore.patch({ lastReactionError: message })
             },
-            undefined,
-            {
-              currentDate: () => this.localDateKey(),
-              getDate: (key) => {
-                try { return window.localStorage.getItem(`ark-pet.personality.daily.${key}`) } catch { return null }
-              },
-              setDate: (key, date) => window.localStorage.setItem(`ark-pet.personality.daily.${key}`, date),
+          },
+          undefined,
+          {
+            currentDate: () => this.localDateKey(),
+            getDate: (key) => {
+              try { return window.localStorage.getItem(`ark-pet.personality.daily.${key}`) } catch { return null }
             },
-          )
-        }
-        this.reactionEngine.setEnabled(this.settings.personalityEnabled)
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error)
-        console.error(message)
-        this.debugStore.patch({ lastReactionError: message })
+            setDate: (key, date) => window.localStorage.setItem(`ark-pet.personality.daily.${key}`, date),
+          },
+        )
       }
+      this.reactionEngine.setEnabled(this.settings.personalityEnabled)
 
       this.animationCompleteCleanup = character.onAnimationComplete(() => {
         if (this.stateMachine.getState() === 'interacting') {
@@ -592,15 +620,25 @@ export class PetRuntime {
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       console.error(message)
-      this.controller.enterError()
-      this.createPlaceholder(message)
-      this.debugStore.patch({
-        petState: 'error',
-        characterId,
-        characterManifest: this.currentManifest,
-        currentAnimation: null,
-        lastError: message,
-      })
+      const previousCharacter = this.characterManager.getCurrentCharacter()
+      const previousManifest = this.characterManager.getCurrentManifest()
+      if (previousCharacterId && previousCharacter && previousManifest?.id === previousCharacterId) {
+        this.currentManifest = previousManifest
+        this.enterIdle()
+        if (!this.hidden && !this.uiInteractionActive) void this.behaviorAdapter.resume(performance.now())
+        if (this.settings.personalityEnabled) {
+          const now = performance.now()
+          this.sessionContextSource.characterReady(now, this.localDateKey())
+          this.timeContextSource.setReady(true)
+          this.timeContextSource.update(now)
+        }
+        this.debugStore.patch({ petState: 'idle', characterId: previousCharacterId, characterManifest: previousManifest, lastError: message })
+      } else {
+        this.controller.enterError()
+        this.createPlaceholder(message)
+        this.debugStore.patch({ petState: 'error', characterId, characterManifest: this.currentManifest, currentAnimation: null, lastError: message })
+      }
+      throw error
     }
   }
 

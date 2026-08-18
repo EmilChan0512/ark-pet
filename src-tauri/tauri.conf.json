@@ -13,6 +13,10 @@
     "macOSPrivateApi": true,
     "security": {
       "csp": null,
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$APPDATA/com.ark.pet.desktop/characters/**"]
+      },
       "capabilities": [
         "default"
       ]

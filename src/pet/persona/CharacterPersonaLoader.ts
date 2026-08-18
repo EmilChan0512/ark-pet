@@ -56,8 +56,11 @@ export function parseCharacterPersona(value: unknown): CharacterPersona {
   return result.data
 }
 
-export async function loadCharacterPersona(characterId: string): Promise<CharacterPersona> {
-  const response = await fetch(`/characters/${encodeURIComponent(characterId)}/persona.json`)
+export async function loadCharacterPersona(
+  characterId: string,
+  personaPath = `/characters/${encodeURIComponent(characterId)}/persona.json`,
+): Promise<CharacterPersona> {
+  const response = await fetch(personaPath)
   if (!response.ok) throw new Error(`Character Persona Error: ${response.status} ${response.statusText}`)
   return parseCharacterPersona(await response.json())
 }

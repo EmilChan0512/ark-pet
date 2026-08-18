@@ -3,10 +3,7 @@ import type {
   CharacterCatalogEntry,
   CharacterManifestWithPaths,
 } from '../../types/character'
-import {
-  loadAndValidateManifest,
-  loadCharacterCatalog,
-} from './CharacterManifest'
+import { loadAndValidateManifest } from './CharacterManifest'
 import { SpineCharacter } from './SpineCharacter'
 
 export class CharacterManager {
@@ -14,10 +11,12 @@ export class CharacterManager {
   private currentManifest: CharacterManifestWithPaths | null = null
   private currentCharacter: SpineCharacter | null = null
 
-  async init() {
-    this.catalog = await loadCharacterCatalog()
+  async init(catalog: CharacterCatalogEntry[]) {
+    this.catalog = [...catalog]
     return this.catalog
   }
+
+  setCatalog(catalog: CharacterCatalogEntry[]) { this.catalog = [...catalog] }
 
   getCatalog() {
     return this.catalog
@@ -31,8 +30,16 @@ export class CharacterManager {
     return this.currentCharacter
   }
 
+  getEntry(characterId: string) {
+    return this.catalog.find((item) => item.id === characterId) ?? null
+  }
+
+  getCurrentEntry() {
+    return this.currentManifest ? this.catalog.find((item) => item.id === this.currentManifest?.id) ?? null : null
+  }
+
   async loadCharacter(characterId: string, parent: Container) {
-    const entry = this.catalog.find((item) => item.id === characterId)
+    const entry = this.getEntry(characterId)
     if (!entry) {
       throw new Error(`Character not found: ${characterId}`)
     }

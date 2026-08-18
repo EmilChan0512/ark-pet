@@ -22,6 +22,7 @@ describe('parsePetSettings', () => {
       characterVoiceVolume: DEFAULT_PET_SETTINGS.characterVoiceVolume,
       characterVoiceFallback: DEFAULT_PET_SETTINGS.characterVoiceFallback,
       personalityEnabled: DEFAULT_PET_SETTINGS.personalityEnabled,
+      activeCharacterId: DEFAULT_PET_SETTINGS.activeCharacterId,
     })
   })
 
@@ -33,12 +34,18 @@ describe('parsePetSettings', () => {
       characterVoiceVolume: DEFAULT_PET_SETTINGS.characterVoiceVolume,
       characterVoiceFallback: DEFAULT_PET_SETTINGS.characterVoiceFallback,
       personalityEnabled: DEFAULT_PET_SETTINGS.personalityEnabled,
+      activeCharacterId: DEFAULT_PET_SETTINGS.activeCharacterId,
     })
   })
 
   it('migrates Phase 7 v3 settings to the personality default', () => {
-    const { personalityEnabled: _removed, ...v3 } = DEFAULT_PET_SETTINGS
-    expect(parsePetSettings(v3)).toEqual({ ...v3, personalityEnabled: true })
+    const { personalityEnabled: _personality, activeCharacterId: _character, ...v3 } = DEFAULT_PET_SETTINGS
+    expect(parsePetSettings(v3)).toEqual({ ...v3, personalityEnabled: true, activeCharacterId: 'demo' })
+  })
+
+  it('migrates Phase 8 v4 settings to the built-in character', () => {
+    const { activeCharacterId: _removed, ...v4 } = DEFAULT_PET_SETTINGS
+    expect(parsePetSettings(v4)).toEqual({ ...v4, activeCharacterId: 'demo' })
   })
 
   it('rejects corrupt, incomplete, and unknown settings', () => {

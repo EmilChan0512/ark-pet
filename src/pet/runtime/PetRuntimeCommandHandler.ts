@@ -17,6 +17,12 @@ export function createPetRuntimeCommandHandler(runtime: PetRuntime): RuntimeComm
           return runtime.hide()
         case 'reload-character':
           return runtime.reloadCharacter()
+        case 'select-character':
+          return runtime.selectCharacter(command.characterId)
+        case 'install-character-package':
+          return runtime.installCharacterPackage(command.inspectionToken)
+        case 'remove-character-package':
+          return runtime.removeCharacterPackage(command.packageId, command.characterId)
         case 'request-settings':
           return runtime.openSettings()
         case 'apply-settings':

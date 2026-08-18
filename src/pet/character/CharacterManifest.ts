@@ -1,8 +1,5 @@
 import { z } from 'zod'
-import type {
-  CharacterCatalogEntry,
-  CharacterManifestWithPaths,
-} from '../../types/character'
+import type { CharacterManifestWithPaths } from '../../types/character'
 
 const manifestSchema = z.object({
   id: z.string().min(1),
@@ -29,10 +26,6 @@ const manifestSchema = z.object({
     })
     .optional(),
 })
-
-export async function loadCharacterCatalog(): Promise<CharacterCatalogEntry[]> {
-  return [{ id: 'demo', manifestPath: '/characters/demo/manifest.json' }]
-}
 
 export async function loadAndValidateManifest(
   manifestPath: string,

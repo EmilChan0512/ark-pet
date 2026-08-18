@@ -45,5 +45,13 @@ export interface CharacterManifestWithPaths extends CharacterManifest {
 
 export interface CharacterCatalogEntry {
   id: string
+  displayName: string
   manifestPath: string
+  personaPath: string
+  source: 'built-in' | 'installed'
+  packageId: string | null
+  packageVersion: string | null
+  author?: string
+  description?: string
+  previewPath?: string
 }
