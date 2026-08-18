@@ -183,11 +183,7 @@
 }
 
 .debug-panel {
-  left: clamp(
-    16px,
-    var(--pet-debug-panel-left, calc(50% + 120px)),
-    calc(100vw - 296px)
-  );
+  right: 16px;
   bottom: 16px;
   box-sizing: border-box;
   width: 280px;
@@ -195,6 +191,20 @@
   font-size: 12px;
   line-height: 1.55;
   color: #f8fafc;
+}
+
+.debug-panel__voice-log,
+.debug-panel__decision-log {
+  margin: 8px 0 0;
+  max-height: 112px;
+  overflow-y: auto;
+  color: #c4b5fd;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10px;
+}
+
+.debug-panel__decision-log {
+  color: #bae6fd;
 }
 
 .debug-panel pre {

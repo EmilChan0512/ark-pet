@@ -114,6 +114,8 @@ export class PetRuntime {
             speechQueueDepth: snapshot.queueDepth,
             speechAudioSource: snapshot.activeAudioSource,
             speechVoiceEnabled: snapshot.voiceEnabled,
+            voiceProgressStatus: snapshot.voiceProgressStatus,
+            voiceProgressLog: snapshot.voiceProgressLog,
             lastSpeechError: snapshot.lastError,
           })
         },
@@ -187,16 +189,6 @@ export class PetRuntime {
     const app = this.renderer.getApplication()
     if (now - this.fpsSampleAt > 250) {
       this.fpsSampleAt = now
-      const characterBounds = this.getCharacterBounds()
-      if (characterBounds) {
-        // React's debug panel is a sibling of the render host and inherits this
-        // property. Use actual animated Spine bounds instead of assuming the
-        // character remains at the viewport midpoint.
-        this.host.parentElement?.style.setProperty(
-          '--pet-debug-panel-left',
-          `${Math.ceil(characterBounds.right + 16)}px`,
-        )
-      }
       this.debugStore.patch({
         fps: Math.round(app.ticker.FPS),
         petState: this.stateMachine.getState(),
@@ -292,6 +284,20 @@ export class PetRuntime {
 
   clearFirstMeetingMarker() {
     this.sessionContextSource.clearFirstMeetingMarker()
+  }
+
+  clearReactionCooldowns() {
+    this.reactionEngine?.clearCooldowns()
+    try {
+      const keys: string[] = []
+      for (let index = 0; index < window.localStorage.length; index += 1) {
+        const key = window.localStorage.key(index)
+        if (key?.startsWith('ark-pet.personality.daily.')) keys.push(key)
+      }
+      for (const key of keys) window.localStorage.removeItem(key)
+    } catch (error) {
+      console.warn('[ReactionEngine] Could not clear daily cooldowns', error)
+    }
   }
 
   /** Explicit preflight for development tools that must not race cold startup. */
@@ -533,6 +539,7 @@ export class PetRuntime {
                 activeReactionId: snapshot.activeReactionId,
                 reactionState: snapshot.activeState,
                 reactionBlockedReason: snapshot.blockedReason,
+                reactionDecisionLog: snapshot.decisionLog,
               }),
               reportError: (reactionId, error) => {
                 const message = `[${reactionId}] ${error instanceof Error ? error.message : String(error)}`

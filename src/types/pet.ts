@@ -1,6 +1,6 @@
 import type { CharacterManifestWithPaths, PetState } from './character'
 import type { AmbientSchedulerStatus } from '../pet/behavior/ambient/AmbientScheduler'
-import type { SpeechAudioSource } from '../pet/speech/types'
+import type { SpeechAudioSource, VoiceProgressStatus } from '../pet/speech/types'
 import type { ContextEvent, LocalTimePeriod } from '../pet/reaction/types'
 
 export interface WindowPoint {
@@ -30,12 +30,15 @@ export interface DebugSnapshot {
   speechQueueDepth: number
   speechAudioSource: SpeechAudioSource | null
   speechVoiceEnabled: boolean
+  voiceProgressStatus: VoiceProgressStatus
+  voiceProgressLog: readonly string[]
   lastSpeechError: string | null
   lastContextEvent: ContextEvent | null
   selectedReactionId: string | null
   activeReactionId: string | null
   reactionState: 'idle' | 'running' | 'blocked' | 'disabled' | 'destroyed'
   reactionBlockedReason: string | null
+  reactionDecisionLog: readonly string[]
   currentLocalTimePeriod: LocalTimePeriod | null
   lastReactionError: string | null
   lastError: string | null

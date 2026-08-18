@@ -46,12 +46,15 @@ function createDebugStore(): DebugStore {
     speechQueueDepth: 0,
     speechAudioSource: null,
     speechVoiceEnabled: false,
+    voiceProgressStatus: 'disabled',
+    voiceProgressLog: [],
     lastSpeechError: null,
     lastContextEvent: null,
     selectedReactionId: null,
     activeReactionId: null,
     reactionState: 'idle',
     reactionBlockedReason: null,
+    reactionDecisionLog: [],
     currentLocalTimePeriod: null,
     lastReactionError: null,
     lastError: null,
@@ -445,11 +448,18 @@ export default function App() {
           <div>Speech Queue: {snapshot.speechQueueDepth}</div>
           <div>Speech Audio: {snapshot.speechAudioSource ?? 'text-only'}</div>
           <div>Character Voice: {snapshot.speechVoiceEnabled ? 'enabled' : 'disabled'}</div>
+          <div>Voice Progress: {snapshot.voiceProgressStatus}</div>
+          {snapshot.voiceProgressLog.length > 0 ? (
+            <pre className="debug-panel__voice-log">{snapshot.voiceProgressLog.join('\n')}</pre>
+          ) : null}
           <div>Time Period: {snapshot.currentLocalTimePeriod ?? 'n/a'}</div>
           <div>Last Context: {snapshot.lastContextEvent?.type ?? 'n/a'}</div>
           <div>Selected Reaction: {snapshot.selectedReactionId ?? 'n/a'}</div>
           <div>Active Reaction: {snapshot.activeReactionId ?? 'n/a'} ({snapshot.reactionState})</div>
           {snapshot.reactionBlockedReason ? <div>Reaction Blocked: {snapshot.reactionBlockedReason}</div> : null}
+          {snapshot.reactionDecisionLog.length > 0 ? (
+            <pre className="debug-panel__decision-log">{snapshot.reactionDecisionLog.join('\n')}</pre>
+          ) : null}
           {snapshot.lastRuntimeCommandError ? (
             <pre>{snapshot.lastRuntimeCommandError}</pre>
           ) : null}
@@ -482,6 +492,9 @@ export default function App() {
             ))}
             <button type="button" onClick={() => void commandCoordinatorRef.current?.dispatch({ type: 'clear-first-meeting-marker' })}>
               Clear daily greeting
+            </button>
+            <button type="button" onClick={() => void commandCoordinatorRef.current?.dispatch({ type: 'clear-reaction-cooldowns' })}>
+              Clear reaction cooldowns
             </button>
           </div>
         </aside>

@@ -131,6 +131,45 @@ describe('SpeechSessionCoordinator', () => {
     await expect(outcome).resolves.toBe('completed')
   })
 
+  it('reports bounded voice preparation, synthesis, and playback progress', async () => {
+    const playback = deferred<void>()
+    const artifact: CharacterVoiceArtifact = {
+      characterId: 'char_4058_pepe',
+      characterGeneration: 1,
+      voiceIdentity: 'pepe.zh-CN.cn_012',
+      transcript: '进度测试',
+      source: 'character-ai',
+      audioUri: 'memory://progress',
+    }
+    const { coordinator } = harness(
+      { prepare: async () => {}, resolve: async () => artifact },
+      { play: () => playback.promise, stop: vi.fn(), destroy: vi.fn() },
+    )
+
+    coordinator.setVoiceEnabled(true)
+    await Promise.resolve()
+    expect(coordinator.getSnapshot().voiceProgressStatus).toBe('ready')
+
+    const outcome = coordinator.enqueue({ id: 'progress', source: 'interaction', text: '进度测试' }, 0)
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(coordinator.getSnapshot()).toMatchObject({
+      voiceProgressStatus: 'playing',
+      activeAudioSource: 'character-ai',
+    })
+    expect(coordinator.getSnapshot().voiceProgressLog).toEqual(expect.arrayContaining([
+      expect.stringContaining('Preparing local Pepe voice runtime'),
+      expect.stringContaining('Synthesizing progress'),
+      expect.stringContaining('Playing character-ai for progress'),
+    ]))
+
+    playback.resolve()
+    await Promise.resolve()
+    coordinator.update(350)
+    await expect(outcome).resolves.toBe('completed')
+    expect(coordinator.getSnapshot().voiceProgressStatus).toBe('ready')
+  })
+
   it('rejects a mismatched voice identity and safely remains text-only', async () => {
     const reportError = vi.fn()
     const presentation: TextPresentationPort = {

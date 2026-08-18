@@ -81,5 +81,6 @@ describe('ReactionEngine', () => {
     expect(engine.handle(event)).toBe('night')
     expect(engine.handle(event)).toBeNull()
     expect(engine.getSnapshot().blockedReason).toBe('daily cooldown')
+    expect(engine.getSnapshot().decisionLog.at(-1)).toContain('Blocked time.period-entered: daily cooldown')
   })
 })

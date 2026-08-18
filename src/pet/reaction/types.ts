@@ -77,6 +77,7 @@ export interface ReactionEngineSnapshot {
   readonly activeReactionId: string | null
   readonly activeState: 'idle' | 'running' | 'blocked' | 'disabled' | 'destroyed'
   readonly blockedReason: string | null
+  readonly decisionLog: readonly string[]
   readonly generation: number
 }
 

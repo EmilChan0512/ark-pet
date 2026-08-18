@@ -11,6 +11,7 @@ import type {
   SpeechPresentation,
   SpeechSource,
   TextPresentationPort,
+  VoiceProgressStatus,
 } from './types'
 
 interface QueueEntry {
@@ -30,6 +31,7 @@ interface ActiveSession extends QueueEntry {
   hardDeadline: number
   playbackStarted: boolean
   playbackFinished: boolean
+  synthesisTimedOut: boolean
   settled: boolean
 }
 
@@ -101,6 +103,8 @@ export class SpeechSessionCoordinator {
   private paused = true
   private destroyed = false
   private voiceEnabled = false
+  private voiceProgressStatus: VoiceProgressStatus = 'disabled'
+  private voiceProgressLog: string[] = []
   private volume: number
   private lastError: string | null = null
 
@@ -132,6 +136,8 @@ export class SpeechSessionCoordinator {
       paused: this.paused,
       destroyed: this.destroyed,
       voiceEnabled: this.voiceEnabled,
+      voiceProgressStatus: this.voiceProgressStatus,
+      voiceProgressLog: [...this.voiceProgressLog],
       generation: this.generation,
       lastError: this.lastError,
     }
@@ -185,8 +191,10 @@ export class SpeechSessionCoordinator {
       return
     }
 
-    if (!active.playbackStarted && now >= active.synthesisDeadline) {
+    if (!active.playbackStarted && !active.synthesisTimedOut && now >= active.synthesisDeadline) {
+      active.synthesisTimedOut = true
       active.voiceController.abort()
+      this.recordVoiceProgress('ready', `Synthesis timed out for ${active.request.id}; using text`)
     }
     if (now >= active.hardDeadline) {
       this.cancelActive('failed', 'completed')
@@ -212,9 +220,10 @@ export class SpeechSessionCoordinator {
       this.active.audio = null
     }
     if (enabled) {
-      void this.prepareVoice().catch((error: unknown) => {
-        this.reportError('voice-runtime', 'prepare', error)
-      })
+      this.recordVoiceProgress('idle', 'Character voice enabled')
+      void this.prepareVoice().catch(() => {})
+    } else {
+      this.recordVoiceProgress('disabled', 'Character voice disabled')
     }
     this.publishSnapshot()
   }
@@ -222,7 +231,14 @@ export class SpeechSessionCoordinator {
   /** Completes only when the configured character resolver is ready to serve. */
   async prepareVoice() {
     if (this.destroyed || !this.voiceEnabled) return
-    await this.voiceResolver.prepare?.()
+    this.recordVoiceProgress('preparing', 'Preparing local Pepe voice runtime')
+    try {
+      await this.voiceResolver.prepare?.()
+      this.recordVoiceProgress('ready', 'Local Pepe voice runtime ready')
+    } catch (error) {
+      this.reportError('voice-runtime', 'prepare', error)
+      throw error
+    }
   }
 
   setVolume(volume: number) {
@@ -282,12 +298,19 @@ export class SpeechSessionCoordinator {
       hardDeadline: now + this.options.hardTimeoutMs,
       playbackStarted: false,
       playbackFinished: false,
+      synthesisTimedOut: false,
       settled: false,
     }
     this.active = active
     this.show(active)
 
-    if (voiceContext) void this.resolveAndPlay(active, voiceContext)
+    if (voiceContext) {
+      this.recordVoiceProgress('synthesizing', `Synthesizing ${entry.request.id}`)
+      void this.resolveAndPlay(active, voiceContext)
+    } else {
+      const reason = this.voiceEnabled ? 'voice context unavailable' : 'character voice disabled'
+      this.recordVoiceProgress(this.voiceEnabled ? 'ready' : 'disabled', `Showing text for ${entry.request.id}: ${reason}`)
+    }
     this.publishSnapshot()
   }
 
@@ -304,7 +327,12 @@ export class SpeechSessionCoordinator {
       return
     }
 
-    if (!artifact || !this.isCurrent(active) || active.voiceController.signal.aborted) return
+    if (!artifact || !this.isCurrent(active) || active.voiceController.signal.aborted) {
+      if (this.isCurrent(active) && !active.voiceController.signal.aborted) {
+        this.recordVoiceProgress('ready', `No voice artifact for ${active.request.id}; using text`)
+      }
+      return
+    }
     if (
       artifact.characterId !== context.characterId ||
       artifact.characterGeneration !== context.characterGeneration ||
@@ -317,6 +345,7 @@ export class SpeechSessionCoordinator {
     active.audio = artifact
     active.text = normalizedText(artifact.transcript)
     active.playbackStarted = true
+    this.recordVoiceProgress('playing', `Playing ${artifact.source} for ${active.request.id}`)
     this.show(active)
     this.publishSnapshot()
 
@@ -338,6 +367,7 @@ export class SpeechSessionCoordinator {
 
     if (!this.isCurrent(active) || active.voiceController.signal.aborted) return
     active.playbackFinished = true
+    this.recordVoiceProgress('ready', `Playback complete for ${active.request.id}`)
     active.displayDeadline = Math.min(
       active.hardDeadline,
       this.lastNow + this.options.audioTailMs,
@@ -385,6 +415,10 @@ export class SpeechSessionCoordinator {
   ) {
     const active = this.active
     if (!active) return
+    this.recordVoiceProgress(
+      this.voiceEnabled ? 'ready' : 'disabled',
+      `Cancelled ${active.request.id}: ${reason}`,
+    )
     this.player.stop(reason)
     this.finishActive(outcome, startNext)
   }
@@ -443,11 +477,19 @@ export class SpeechSessionCoordinator {
 
   private reportError(sessionId: string, phase: string, error: unknown) {
     this.lastError = `[${sessionId}:${phase}] ${error instanceof Error ? error.message : String(error)}`
+    this.recordVoiceProgress('error', this.lastError)
     try {
       this.diagnostics.reportError(sessionId, phase, error)
     } catch {
       // Observability cannot become a second speech failure.
     }
+    this.publishSnapshot()
+  }
+
+  private recordVoiceProgress(status: VoiceProgressStatus, message: string) {
+    this.voiceProgressStatus = status
+    this.voiceProgressLog.push(`[${Math.round(this.lastNow)}ms] ${message}`)
+    if (this.voiceProgressLog.length > 8) this.voiceProgressLog.splice(0, this.voiceProgressLog.length - 8)
     this.publishSnapshot()
   }
 

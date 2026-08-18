@@ -24,6 +24,15 @@ export type SpeechCancellationReason =
 
 export type SpeechAudioSource = 'character-original' | 'character-ai'
 
+export type VoiceProgressStatus =
+  | 'disabled'
+  | 'idle'
+  | 'preparing'
+  | 'ready'
+  | 'synthesizing'
+  | 'playing'
+  | 'error'
+
 export interface SpeakRequest {
   readonly id: string
   readonly source: SpeechSource
@@ -97,6 +106,8 @@ export interface SpeechCoordinatorSnapshot {
   readonly paused: boolean
   readonly destroyed: boolean
   readonly voiceEnabled: boolean
+  readonly voiceProgressStatus: VoiceProgressStatus
+  readonly voiceProgressLog: readonly string[]
   readonly generation: number
   readonly lastError: string | null
 }

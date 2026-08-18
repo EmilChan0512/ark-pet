@@ -15,6 +15,7 @@ export type RuntimeCommand =
   | { readonly type: 'cancel-speech'; readonly reason: SpeechCancellationReason }
   | { readonly type: 'simulate-context'; readonly event: ContextEvent }
   | { readonly type: 'clear-first-meeting-marker' }
+  | { readonly type: 'clear-reaction-cooldowns' }
   | { readonly type: 'destroy' }
 
 export type RuntimeCommandOutcome =
@@ -65,6 +66,7 @@ function coalescingKey(command: RuntimeCommand): string | null {
     case 'cancel-speech':
     case 'simulate-context':
     case 'clear-first-meeting-marker':
+    case 'clear-reaction-cooldowns':
       return command.type
     default:
       return null

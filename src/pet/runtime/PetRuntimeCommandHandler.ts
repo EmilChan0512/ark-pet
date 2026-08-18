@@ -33,6 +33,8 @@ export function createPetRuntimeCommandHandler(runtime: PetRuntime): RuntimeComm
           return runtime.simulateContextEvent(command.event)
         case 'clear-first-meeting-marker':
           return runtime.clearFirstMeetingMarker()
+        case 'clear-reaction-cooldowns':
+          return runtime.clearReactionCooldowns()
         case 'destroy':
           return runtime.destroy()
       }
