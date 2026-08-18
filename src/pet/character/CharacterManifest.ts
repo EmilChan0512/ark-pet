@@ -27,6 +27,28 @@ const manifestSchema = z.object({
     .optional(),
 })
 
+function pathSeparator(path: string) {
+  if (/%5c/i.test(path)) return '%5C'
+  if (path.includes('\\')) return '\\'
+  return '/'
+}
+
+export function characterAssetBasePath(manifestPath: string) {
+  const separator = pathSeparator(manifestPath)
+  const normalizedPath = separator === '%5C' ? manifestPath.toUpperCase() : manifestPath
+  const separatorIndex = normalizedPath.lastIndexOf(separator)
+  return separatorIndex >= 0 ? manifestPath.slice(0, separatorIndex) : manifestPath
+}
+
+export function resolveCharacterAssetPath(basePath: string, relative: string) {
+  const separator = pathSeparator(basePath)
+  const encodedRelative = relative
+    .split(/[\\/]/)
+    .map((segment) => encodeURIComponent(segment))
+    .join(separator)
+  return `${basePath.replace(/(?:\/|\\|%5C)$/i, '')}${separator}${encodedRelative}`
+}
+
 export async function loadAndValidateManifest(
   manifestPath: string,
 ): Promise<CharacterManifestWithPaths> {
@@ -44,12 +66,12 @@ export async function loadAndValidateManifest(
     )
   }
 
-  const basePath = manifestPath.slice(0, manifestPath.lastIndexOf('/'))
+  const basePath = characterAssetBasePath(manifestPath)
 
   return {
     ...parsed.data,
     basePath,
-    skeletonPath: `${basePath}/${parsed.data.skeleton}`,
-    atlasPath: `${basePath}/${parsed.data.atlas}`,
+    skeletonPath: resolveCharacterAssetPath(basePath, parsed.data.skeleton),
+    atlasPath: resolveCharacterAssetPath(basePath, parsed.data.atlas),
   }
 }

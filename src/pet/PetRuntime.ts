@@ -79,6 +79,7 @@ export class PetRuntime {
   private hidden = false
   private facing: FacingDirection = 'right'
   private characterGeneration = 0
+  private characterLoadLog: string[] = []
   private readonly host: HTMLElement
   private readonly debugStore: DebugStore
   private readonly onSettingsRequested: () => void
@@ -530,7 +531,9 @@ export class PetRuntime {
       currentAnimation: null,
       characterId: characterId,
       lastError: null,
+      characterLoadLog: [],
     })
+    this.characterLoadLog = []
 
     this.placeholder?.destroy({ children: true })
     this.placeholder = null
@@ -545,6 +548,7 @@ export class PetRuntime {
       const character = await this.characterManager.loadCharacter(
         characterId,
         this.renderer.getRoot(),
+        (message) => this.recordCharacterLoadProgress(message),
       )
       this.animationCompleteCleanup?.()
       this.animationCompleteCleanup = null
@@ -640,6 +644,12 @@ export class PetRuntime {
       }
       throw error
     }
+  }
+
+  private recordCharacterLoadProgress(message: string) {
+    const elapsed = Math.round(performance.now())
+    this.characterLoadLog = [...this.characterLoadLog.slice(-11), `[${elapsed}ms] ${message}`]
+    this.debugStore.patch({ characterLoadLog: this.characterLoadLog })
   }
 
   private enterIdle() {

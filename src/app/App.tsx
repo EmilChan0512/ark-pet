@@ -52,6 +52,7 @@ function createDebugStore(): DebugStore {
     characterId: null,
     rendererStatus: 'idle',
     characterManifest: null,
+    characterLoadLog: [],
     activeBehavior: null,
     lastBehaviorError: null,
     ambientSchedulerStatus: 'paused',
@@ -160,8 +161,14 @@ export default function App() {
 
   const selectCharacter = async (characterId: string) => {
     setPackageBusy(true)
-    const outcome = await commandCoordinatorRef.current?.dispatch({ type: 'select-character', characterId })
-    setPackageOutcome(outcome === 'executed' ? `Selected ${characterId}` : `Selection ${outcome ?? 'unavailable'}`)
+    const coordinator = commandCoordinatorRef.current
+    const outcome = await coordinator?.dispatch({ type: 'select-character', characterId })
+    const failure = coordinator?.getSnapshot().lastError
+    setPackageOutcome(
+      outcome === 'executed'
+        ? `Selected ${characterId}`
+        : `Selection ${outcome ?? 'unavailable'}${failure ? `: ${failure}` : ''}`,
+    )
     setPackageBusy(false)
   }
 
@@ -576,6 +583,10 @@ export default function App() {
           <div>Character ID: {snapshot.characterId ?? 'n/a'}</div>
           <div>Character Catalog: {characterCatalog.length} ({characterCatalog.filter((entry) => entry.source === 'installed').length} installed)</div>
           <div>Package Outcome: {packageOutcome}</div>
+          <div>Character Load:</div>
+          {snapshot.characterLoadLog.length > 0 ? (
+            <pre className="debug-panel__character-load-log">{snapshot.characterLoadLog.join('\n')}</pre>
+          ) : null}
           <div>Active Behavior: {snapshot.activeBehavior ?? 'n/a'}</div>
           <div>Ambient Scheduler: {snapshot.ambientSchedulerStatus}</div>
           <div>Runtime Command: {snapshot.activeRuntimeCommand ?? 'n/a'}</div>

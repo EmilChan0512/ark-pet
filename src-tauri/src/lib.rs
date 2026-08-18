@@ -4,6 +4,8 @@ pub mod speech;
 pub mod tray;
 pub mod window;
 
+use tauri::Manager;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -25,6 +27,8 @@ pub fn run() {
             character_packages::cleanup_character_staging,
         ])
         .setup(|app| {
+            let character_root = app.path().app_data_dir()?.join("characters");
+            app.asset_protocol_scope().allow_directory(character_root, true)?;
             window::configure_main_window(app);
             tray::log_strategy();
             Ok(())

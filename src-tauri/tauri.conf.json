@@ -15,7 +15,7 @@
       "csp": null,
       "assetProtocol": {
         "enable": true,
-        "scope": ["$APPDATA/com.ark.pet.desktop/characters/**"]
+        "scope": ["$APPDATA/characters/**"]
       },
       "capabilities": [
         "default"

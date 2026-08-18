@@ -38,17 +38,23 @@ export class CharacterManager {
     return this.currentManifest ? this.catalog.find((item) => item.id === this.currentManifest?.id) ?? null : null
   }
 
-  async loadCharacter(characterId: string, parent: Container) {
+  async loadCharacter(
+    characterId: string,
+    parent: Container,
+    reportProgress: (message: string) => void = () => {},
+  ) {
     const entry = this.getEntry(characterId)
     if (!entry) {
       throw new Error(`Character not found: ${characterId}`)
     }
 
+    reportProgress('Loading character manifest')
     const manifest = await loadAndValidateManifest(entry.manifestPath)
+    reportProgress('Character manifest validated')
 
     const character = new SpineCharacter()
     try {
-      const view = await character.load(manifest)
+      const view = await character.load(manifest, reportProgress)
       parent.addChild(view)
     } catch (error) {
       character.destroy()
