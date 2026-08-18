@@ -84,6 +84,10 @@ Architecture maintenance guides:
   ordering, coalescing, shutdown, and extension rules for external commands.
 - [Phase 6 requirements](docs/phase-6-requirements.md): typed orchestration for
   tray, React, settings, visibility, reload, and runtime cleanup.
+- [Speech system](docs/architecture/speech-system.md): text ownership, voice
+  identity, queueing, cancellation, native adapters, and resource cleanup.
+- [Phase 7 requirements](docs/phase-7-requirements.md): offline Pepe text and
+  character-voice scope, acceptance criteria, and deferred release work.
 
 React does not own Pixi or Spine lifecycle. `PetRuntime` runs independently and React only mounts the host element plus UI panels.
 
@@ -139,6 +143,10 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
   registered ambient modules
 - Serializes tray and React runtime commands through a documented, testable
   lifecycle boundary
+- Presents bounded speech bubbles/subtitles with deterministic priority,
+  timeout, replacement, and cleanup semantics
+- Supports verified Pepe original cues and a repository-external Windows/CUDA
+  development model while degrading every unavailable voice path to text
 - Shows an optional debug panel in development
 - Provides tray actions for show, hide, reload, settings, and quit
 
@@ -153,4 +161,7 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 
 Phase 1–3 runtime behavior is integrated. Phase 4 establishes the documented,
 tested behavior engine, Phase 5 adds the first modular ambient behaviors, and
-Phase 6 establishes the runtime command and shutdown boundary.
+Phase 6 establishes the runtime command and shutdown boundary. Phase 7 adds the
+offline character-speech boundary, verified Pepe original cues, and the pinned
+Windows/CUDA development voice path. Release packaging and macOS AI synthesis
+remain deferred.

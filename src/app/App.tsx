@@ -10,6 +10,19 @@ import { createPetSettingsStore } from '../settings/PetSettings'
 import { ensureTray, quitApplication } from '../services/tauri'
 import './App.css'
 
+const DEV_AI_VOICE_SAMPLES = [
+  {
+    key: 'walk-return',
+    label: 'AI 1 · 散步归来',
+    text: 'Dr.Stardust，你和欣特莱雅小姐散步回来了啊，唔，今天天气不错？',
+  },
+  {
+    key: 'evening-book',
+    label: 'AI 2 · 晚上读古籍',
+    text: '晚上好，博士，来和我一块看看这本古籍吧。',
+  },
+] as const
+
 function createDebugStore(): DebugStore {
   let snapshot: DebugSnapshot = {
     fps: 0,
@@ -29,6 +42,11 @@ function createDebugStore(): DebugStore {
     activeRuntimeCommand: null,
     runtimeCommandQueueDepth: 0,
     lastRuntimeCommandError: null,
+    activeSpeechSession: null,
+    speechQueueDepth: 0,
+    speechAudioSource: null,
+    speechVoiceEnabled: false,
+    lastSpeechError: null,
     lastError: null,
   }
   const listeners = new Set<() => void>()
@@ -52,7 +70,9 @@ function createDebugStore(): DebugStore {
 
 export default function App() {
   const hostRef = useRef<HTMLDivElement | null>(null)
+  const debugPanelRef = useRef<HTMLElement | null>(null)
   const commandCoordinatorRef = useRef<RuntimeCommandCoordinator | null>(null)
+  const runtimeGenerationRef = useRef(0)
   const debugStore = useMemo(() => createDebugStore(), [])
   const settingsStore = useMemo(() => createPetSettingsStore(), [])
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -67,20 +87,63 @@ export default function App() {
     settingsStore.getSnapshot,
   )
 
+  const testDynamicCharacterVoice = (text: string, sampleKey = 'default') => {
+    const voiceSettings = {
+      ...settingsStore.getSnapshot(),
+      speechMode: 'character-voice' as const,
+    }
+    settingsStore.update({ speechMode: 'character-voice' })
+    void commandCoordinatorRef.current
+      ?.dispatch({ type: 'apply-settings', settings: voiceSettings })
+      .then(async () => {
+        const prepared = await commandCoordinatorRef.current?.dispatch({
+          type: 'prepare-character-voice',
+        })
+        if (prepared !== 'executed') return prepared
+        const now = performance.now()
+        return commandCoordinatorRef.current?.dispatch({
+          type: 'speak',
+          request: {
+            id: `dev-voice-test-${Date.now()}`,
+            source: 'local-integration',
+            text,
+            locale: 'zh-CN',
+            dedupeKey: `dev.voice-test.${sampleKey}`,
+            expiresAt: now + 5_000,
+          },
+        })
+      })
+  }
+
   useEffect(() => {
     if (!hostRef.current) return
 
+    const runtimeGeneration = ++runtimeGenerationRef.current
+    // React Strict Mode intentionally overlaps a disposed first mount with the
+    // replacement mount. Gate diagnostics so the old runtime cannot publish a
+    // late "destroyed" snapshot into the new runtime's debug view.
+    const runtimeDebugStore: DebugStore = {
+      getSnapshot: debugStore.getSnapshot,
+      subscribe: debugStore.subscribe,
+      patch(partial) {
+        if (runtimeGenerationRef.current === runtimeGeneration) {
+          debugStore.patch(partial)
+        }
+      },
+    }
+
     const runtime = new PetRuntime(
       hostRef.current,
-      debugStore,
+      runtimeDebugStore,
       settingsStore.getSnapshot(),
       () => setSettingsOpen(true),
+      () => debugPanelRef.current?.getBoundingClientRect() ?? null,
     )
     const coordinator = new RuntimeCommandCoordinator(
       createPetRuntimeCommandHandler(runtime),
       {
         publish: (commandSnapshot) => {
-          debugStore.patch({
+          runtimeDebugStore.patch({
             activeRuntimeCommand: commandSnapshot.activeCommand,
             runtimeCommandQueueDepth: commandSnapshot.queueDepth,
             lastRuntimeCommandError: commandSnapshot.lastError,
@@ -133,6 +196,9 @@ export default function App() {
 
     return () => {
       disposed = true
+      if (runtimeGenerationRef.current === runtimeGeneration) {
+        runtimeGenerationRef.current += 1
+      }
       void coordinator.dispatch({ type: 'destroy' })
       void trayCleanup?.()
       commandCoordinatorRef.current = null
@@ -149,6 +215,36 @@ export default function App() {
       active: settingsOpen,
     })
   }, [settingsOpen])
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) return
+    const handleDevelopmentShortcut = (event: KeyboardEvent) => {
+      if (event.key === 'F10') setSettingsOpen(true)
+      if (event.key === 'Escape') setSettingsOpen(false)
+      if (event.key !== 'F8' && event.key !== 'F9') return
+      settingsStore.update({ speechMode: 'character-voice' })
+      const originalClip = event.key === 'F8'
+      window.setTimeout(() => {
+        const now = performance.now()
+        void commandCoordinatorRef.current?.dispatch({
+          type: 'speak',
+          request: {
+            id: `dev-shortcut-${Date.now()}`,
+            source: 'local-integration',
+            text: originalClip
+              ? '不许拆我背后的蝴蝶结！'
+              : '博士，今天要先整理哪份记录？',
+            cue: originalClip ? '戳一下' : undefined,
+            locale: 'zh-CN',
+            dedupeKey: originalClip ? 'dev.original-test' : 'dev.ai-test',
+            expiresAt: now + 5_000,
+          },
+        })
+      }, 100)
+    }
+    window.addEventListener('keydown', handleDevelopmentShortcut)
+    return () => window.removeEventListener('keydown', handleDevelopmentShortcut)
+  }, [settingsStore])
 
   return (
     <div className="app-shell">
@@ -224,6 +320,43 @@ export default function App() {
             />
           </label>
 
+          <label className="settings-field">
+            <span>Dialogue and character voice</span>
+            <select
+              value={settings.speechMode}
+              onChange={(event) =>
+                settingsStore.update({
+                  speechMode: event.target.value as typeof settings.speechMode,
+                })
+              }
+            >
+              <option value="off">Off</option>
+              <option value="text">Text only</option>
+              <option value="character-voice">Pepe character voice</option>
+            </select>
+          </label>
+
+          {settings.speechMode === 'character-voice' ? (
+            <label className="settings-field">
+              <span>
+                Character voice volume{' '}
+                <output>{Math.round(settings.characterVoiceVolume * 100)}%</output>
+              </span>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={settings.characterVoiceVolume}
+                onChange={(event) =>
+                  settingsStore.update({
+                    characterVoiceVolume: Number(event.target.value),
+                  })
+                }
+              />
+            </label>
+          ) : null}
+
           {import.meta.env.DEV ? (
             <label className="settings-toggle">
               <span>
@@ -241,6 +374,20 @@ export default function App() {
           ) : null}
 
           <div className="settings-panel__actions">
+            {import.meta.env.DEV && settings.speechMode === 'character-voice' ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setSettingsOpen(false)
+                  window.setTimeout(
+                    () => testDynamicCharacterVoice('博士，今天要先整理哪份记录？'),
+                    50,
+                  )
+                }}
+              >
+                Test Pepe voice
+              </button>
+            ) : null}
             <button type="button" onClick={() => settingsStore.reset()}>
               Reset defaults
             </button>
@@ -251,8 +398,8 @@ export default function App() {
         </aside>
       ) : null}
 
-      {import.meta.env.DEV && settings.showDebugPanel ? (
-        <aside className="debug-panel">
+      {import.meta.env.DEV && settings.showDebugPanel && !settingsOpen ? (
+        <aside ref={debugPanelRef} className="debug-panel">
           <div>FPS: {snapshot.fps}</div>
           <div>Pet State: {snapshot.petState}</div>
           <div>Current Animation: {snapshot.currentAnimation ?? 'n/a'}</div>
@@ -275,11 +422,28 @@ export default function App() {
           <div>Ambient Scheduler: {snapshot.ambientSchedulerStatus}</div>
           <div>Runtime Command: {snapshot.activeRuntimeCommand ?? 'n/a'}</div>
           <div>Command Queue: {snapshot.runtimeCommandQueueDepth}</div>
+          <div>Speech Session: {snapshot.activeSpeechSession ?? 'n/a'}</div>
+          <div>Speech Queue: {snapshot.speechQueueDepth}</div>
+          <div>Speech Audio: {snapshot.speechAudioSource ?? 'text-only'}</div>
+          <div>Character Voice: {snapshot.speechVoiceEnabled ? 'enabled' : 'disabled'}</div>
           {snapshot.lastRuntimeCommandError ? (
             <pre>{snapshot.lastRuntimeCommandError}</pre>
           ) : null}
           {snapshot.lastBehaviorError ? <pre>{snapshot.lastBehaviorError}</pre> : null}
+          {snapshot.lastSpeechError ? <pre>{snapshot.lastSpeechError}</pre> : null}
           {snapshot.lastError ? <pre>{snapshot.lastError}</pre> : null}
+          <div className="debug-panel__voice-actions" aria-label="Pepe AI voice samples">
+            {DEV_AI_VOICE_SAMPLES.map((sample) => (
+              <button
+                key={sample.key}
+                type="button"
+                title={sample.text}
+                onClick={() => testDynamicCharacterVoice(sample.text, sample.key)}
+              >
+                {sample.label}
+              </button>
+            ))}
+          </div>
         </aside>
       ) : null}
     </div>

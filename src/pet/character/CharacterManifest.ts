@@ -21,6 +21,13 @@ const manifestSchema = z.object({
     sit: z.string().min(1).optional(),
     sleep: z.string().min(1).optional(),
   }),
+  voice: z
+    .object({
+      characterId: z.string().min(1),
+      voiceIdentity: z.string().min(1),
+      locale: z.string().min(2),
+    })
+    .optional(),
 })
 
 export async function loadCharacterCatalog(): Promise<CharacterCatalogEntry[]> {

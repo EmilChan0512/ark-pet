@@ -81,6 +81,14 @@ describe('RuntimeCommandCoordinator', () => {
       { type: 'set-ui-interaction', active: true } as const,
       { type: 'set-ui-interaction', active: false } as const,
     ],
+    [
+      { type: 'cancel-speech', reason: 'replaced' } as const,
+      { type: 'cancel-speech', reason: 'hidden' } as const,
+    ],
+    [
+      { type: 'prepare-character-voice' } as const,
+      { type: 'prepare-character-voice' } as const,
+    ],
   ])('coalesces queued latest-wins command %#', async (older, latest) => {
     const gate = deferred()
     const executed: RuntimeCommand[] = []

@@ -28,6 +28,13 @@ export interface CharacterManifest {
   spineVersion?: string
   defaultSkin?: string
   animations: CharacterAnimationMap
+  voice?: CharacterVoiceProfile
+}
+
+export interface CharacterVoiceProfile {
+  characterId: string
+  voiceIdentity: string
+  locale: string
 }
 
 export interface CharacterManifestWithPaths extends CharacterManifest {

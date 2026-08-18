@@ -1,4 +1,5 @@
 import type { PetSettings } from '../../settings/PetSettings'
+import type { SpeakRequest, SpeechCancellationReason } from '../speech/types'
 
 export type RuntimeCommand =
   | { readonly type: 'initialize' }
@@ -8,6 +9,9 @@ export type RuntimeCommand =
   | { readonly type: 'request-settings' }
   | { readonly type: 'apply-settings'; readonly settings: PetSettings }
   | { readonly type: 'set-ui-interaction'; readonly active: boolean }
+  | { readonly type: 'prepare-character-voice' }
+  | { readonly type: 'speak'; readonly request: SpeakRequest }
+  | { readonly type: 'cancel-speech'; readonly reason: SpeechCancellationReason }
   | { readonly type: 'destroy' }
 
 export type RuntimeCommandOutcome =
@@ -53,6 +57,9 @@ function coalescingKey(command: RuntimeCommand): string | null {
     case 'request-settings':
     case 'apply-settings':
     case 'set-ui-interaction':
+    case 'prepare-character-voice':
+      return command.type
+    case 'cancel-speech':
       return command.type
     default:
       return null

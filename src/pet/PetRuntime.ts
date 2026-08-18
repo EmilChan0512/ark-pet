@@ -12,6 +12,11 @@ import { CharacterManager } from './character/CharacterManager'
 import { DragController } from './interaction/DragController'
 import { HitTestController } from './interaction/HitTestController'
 import { PixiRenderer } from './renderer/PixiRenderer'
+import { SpeechSessionCoordinator } from './speech/SpeechSessionCoordinator'
+import { DomSpeechBubbleRenderer } from './speech/adapters/DomSpeechBubbleRenderer'
+import { HtmlAudioPlaybackAdapter } from './speech/adapters/HtmlAudioPlaybackAdapter'
+import { TauriCharacterVoiceResolver } from './speech/adapters/TauriCharacterVoiceResolver'
+import type { SpeakRequest, SpeechCancellationReason } from './speech/types'
 
 interface PointerSession {
   x: number
@@ -32,6 +37,7 @@ export class PetRuntime {
     (direction) => this.setFacing(direction),
   )
   private readonly behaviorAdapter: RuntimeBehaviorAdapter
+  private readonly speechCoordinator: SpeechSessionCoordinator
   private readonly hitTestController = new HitTestController(
     () => this.getCharacterBounds(),
     async (passthroughEnabled) => {
@@ -50,22 +56,60 @@ export class PetRuntime {
   private fpsSampleAt = 0
   private settings: PetSettings
   private uiInteractionActive = false
+  private pointerOverInteractiveUi = false
+  private debugPanelWindowExpanded: boolean | null = null
   private hidden = false
   private facing: FacingDirection = 'right'
+  private characterGeneration = 0
+  private speechSequence = 0
   private readonly host: HTMLElement
   private readonly debugStore: DebugStore
   private readonly onSettingsRequested: () => void
+  private readonly getInteractiveUiBounds: () => DOMRect | null
 
   constructor(
     host: HTMLElement,
     debugStore: DebugStore,
     settings: PetSettings,
     onSettingsRequested: () => void,
+    getInteractiveUiBounds: () => DOMRect | null = () => null,
   ) {
     this.host = host
     this.debugStore = debugStore
     this.settings = settings
     this.onSettingsRequested = onSettingsRequested
+    this.getInteractiveUiBounds = getInteractiveUiBounds
+    this.speechCoordinator = new SpeechSessionCoordinator(
+      new DomSpeechBubbleRenderer(host, () => this.getCharacterBounds()),
+      new TauriCharacterVoiceResolver(() => this.settings.characterVoiceFallback),
+      new HtmlAudioPlaybackAdapter(),
+      () => {
+        const voice = this.currentManifest?.voice
+        if (!voice) return null
+        return {
+          characterId: voice.characterId,
+          characterGeneration: this.characterGeneration,
+          voiceIdentity: voice.voiceIdentity,
+        }
+      },
+      {
+        publish: (snapshot) => {
+          this.debugStore.patch({
+            activeSpeechSession: snapshot.activeSessionId,
+            speechQueueDepth: snapshot.queueDepth,
+            speechAudioSource: snapshot.activeAudioSource,
+            speechVoiceEnabled: snapshot.voiceEnabled,
+            lastSpeechError: snapshot.lastError,
+          })
+        },
+        reportError: (sessionId, phase, error) => {
+          console.error(`[SpeechSession] ${sessionId}:${phase}`, error)
+        },
+      },
+      { volume: settings.characterVoiceVolume },
+    )
+    this.speechCoordinator.setVoiceEnabled(settings.speechMode === 'character-voice')
+    if (settings.speechMode !== 'off') this.speechCoordinator.resume()
     this.behaviorAdapter = new RuntimeBehaviorAdapter(
       {
         enterIdle: () => this.applyIdleBehavior(),
@@ -101,11 +145,22 @@ export class PetRuntime {
   }
 
   private readonly updateDebugSnapshot = () => {
-    this.behaviorAdapter.update(performance.now())
-    const app = this.renderer.getApplication()
     const now = performance.now()
+    this.behaviorAdapter.update(now)
+    this.speechCoordinator.update(now)
+    const app = this.renderer.getApplication()
     if (now - this.fpsSampleAt > 250) {
       this.fpsSampleAt = now
+      const characterBounds = this.getCharacterBounds()
+      if (characterBounds) {
+        // React's debug panel is a sibling of the render host and inherits this
+        // property. Use actual animated Spine bounds instead of assuming the
+        // character remains at the viewport midpoint.
+        this.host.parentElement?.style.setProperty(
+          '--pet-debug-panel-left',
+          `${Math.ceil(characterBounds.right + 16)}px`,
+        )
+      }
       this.debugStore.patch({
         fps: Math.round(app.ticker.FPS),
         petState: this.stateMachine.getState(),
@@ -147,6 +202,7 @@ export class PetRuntime {
         rendererStatus: 'error',
         lastError: message,
       })
+      this.resumeSpeechIfAllowed()
     }
   }
 
@@ -156,11 +212,13 @@ export class PetRuntime {
     if (this.hidden) {
       this.hidden = false
       void this.behaviorAdapter.resume(performance.now())
+      this.resumeSpeechIfAllowed()
     }
   }
 
   async hide() {
     this.cancelPointerSession()
+    this.speechCoordinator.pause('hidden')
     await this.behaviorAdapter.pause('hidden')
     this.hidden = true
     this.renderer.pauseTicker()
@@ -169,6 +227,7 @@ export class PetRuntime {
 
   async reloadCharacter() {
     this.cancelPointerSession()
+    this.speechCoordinator.pause('reload')
     await this.behaviorAdapter.pause('reload')
     await this.loadCharacter(this.currentManifest?.id ?? 'demo')
   }
@@ -178,14 +237,46 @@ export class PetRuntime {
     this.onSettingsRequested()
   }
 
+  /** Hands external text to the speech-owned queue without blocking runtime commands. */
+  enqueueSpeech(request: SpeakRequest) {
+    if (this.settings.speechMode === 'off') return
+    void this.speechCoordinator.enqueue(request, performance.now())
+  }
+
+  cancelSpeech(reason: SpeechCancellationReason) {
+    this.speechCoordinator.cancelAll(reason)
+  }
+
+  /** Explicit preflight for development tools that must not race cold startup. */
+  prepareCharacterVoice() {
+    return this.speechCoordinator.prepareVoice()
+  }
+
   async applySettings(settings: PetSettings) {
     this.settings = settings
+    if (
+      import.meta.env.DEV &&
+      this.debugPanelWindowExpanded !== settings.showDebugPanel
+    ) {
+      this.debugPanelWindowExpanded = settings.showDebugPanel
+      // A 400 px pet window cannot contain both the character and a 280 px
+      // diagnostics panel side by side. Expand only in development while the
+      // panel is visible; production and panel-off geometry stay unchanged.
+      await this.nativeWindowService.setWindowSize(
+        settings.showDebugPanel ? 800 : 400,
+        500,
+      )
+    }
     this.renderer.setMaxFPS(settings.fps)
     await this.nativeWindowService.setAlwaysOnTop(settings.alwaysOnTop)
     await this.behaviorAdapter.setAutonomousEnabled(
       settings.autonomousBehavior,
       performance.now(),
     )
+    this.speechCoordinator.setVolume(settings.characterVoiceVolume)
+    this.speechCoordinator.setVoiceEnabled(settings.speechMode === 'character-voice')
+    if (settings.speechMode === 'off') this.speechCoordinator.pause('disabled')
+    else this.resumeSpeechIfAllowed()
 
     const character = this.characterManager.getCurrentCharacter()
     if (character && this.currentManifest) {
@@ -201,17 +292,23 @@ export class PetRuntime {
 
     if (active) {
       this.cancelPointerSession()
-      await this.behaviorAdapter.pause('paused')
+      this.speechCoordinator.pause('ui-interaction')
+      // Acquire UI input before awaiting behavior cancellation. Otherwise a
+      // concurrent ticker transition can leave a visible settings panel under
+      // native mouse passthrough until the behavior exit barrier settles.
       await this.nativeWindowService.setIgnoreCursorEvents(false)
       this.debugStore.patch({ mousePassthrough: false, hitTest: false })
+      await this.behaviorAdapter.pause('paused')
     } else {
       void this.behaviorAdapter.resume(performance.now())
+      this.resumeSpeechIfAllowed()
     }
   }
 
   async destroy() {
     // Behavior cleanup owns future timers and motion subscriptions, so it must
     // finish before the renderer and native ports it may reference disappear.
+    await this.speechCoordinator.destroy()
     await this.behaviorAdapter.destroy()
     this.cancelPointerSession()
     this.animationCompleteCleanup?.()
@@ -262,6 +359,7 @@ export class PetRuntime {
   private readonly handlePointerDown = async (event: PointerEvent) => {
     const result = await this.evaluatePointer(event.clientX, event.clientY)
     if (!result.hit) return
+    this.speechCoordinator.cancelAll('replaced')
     await this.behaviorAdapter.interruptForUser(performance.now())
     this.pointerDown = { x: event.clientX, y: event.clientY }
   }
@@ -331,6 +429,7 @@ export class PetRuntime {
         this.renderer.getRoot(),
       )
       this.currentManifest = this.characterManager.getCurrentManifest()
+      this.characterGeneration += 1
       if (this.currentManifest) {
         this.facing = this.currentManifest.nativeFacing ?? 'right'
         character.setScale(this.currentManifest.scale * this.settings.scale)
@@ -348,6 +447,7 @@ export class PetRuntime {
       this.enterIdle()
       if (!this.hidden && !this.uiInteractionActive) {
         void this.behaviorAdapter.resume(performance.now())
+        this.resumeSpeechIfAllowed()
       }
 
       this.debugStore.patch({
@@ -404,6 +504,34 @@ export class PetRuntime {
       petState: 'interacting',
       currentAnimation: this.currentAnimation,
     })
+    this.speakInteractionCue()
+  }
+
+  private speakInteractionCue() {
+    if (this.settings.speechMode === 'off') return
+    const now = performance.now()
+    void this.speechCoordinator.enqueue(
+      {
+        id: `interaction-${++this.speechSequence}`,
+        source: 'interaction',
+        text: '不许拆我背后的蝴蝶结！',
+        cue: '戳一下',
+        locale: this.currentManifest?.voice?.locale ?? 'zh-CN',
+        dedupeKey: 'interaction.click',
+        expiresAt: now + 3_000,
+      },
+      now,
+    )
+  }
+
+  private resumeSpeechIfAllowed() {
+    if (
+      this.settings.speechMode !== 'off' &&
+      !this.hidden &&
+      !this.uiInteractionActive
+    ) {
+      this.speechCoordinator.resume()
+    }
   }
 
   private enterDragging() {
@@ -531,6 +659,30 @@ export class PetRuntime {
   private async evaluatePointer(clientX: number, clientY: number) {
     if (this.uiInteractionActive) {
       return { hit: false, pointer: { x: clientX, y: clientY } }
+    }
+    const uiBounds = this.getInteractiveUiBounds()
+    const overInteractiveUi = Boolean(
+      uiBounds &&
+        clientX >= uiBounds.left &&
+        clientX <= uiBounds.right &&
+        clientY >= uiBounds.top &&
+        clientY <= uiBounds.bottom,
+    )
+    if (overInteractiveUi) {
+      if (!this.pointerOverInteractiveUi) {
+        this.pointerOverInteractiveUi = true
+        // Native cursor passthrough is window-wide. Acquire input only while
+        // the global cursor monitor sees the pointer over a registered DOM UI
+        // region, then reset pet hit-test state so leaving restores passthrough.
+        this.hitTestController.reset()
+        await this.nativeWindowService.setIgnoreCursorEvents(false)
+        this.debugStore.patch({ mousePassthrough: false, hitTest: false })
+      }
+      return { hit: false, pointer: { x: clientX, y: clientY } }
+    }
+    if (this.pointerOverInteractiveUi) {
+      this.pointerOverInteractiveUi = false
+      this.hitTestController.reset()
     }
     if (this.dragController.isDragging()) {
       this.debugStore.patch({

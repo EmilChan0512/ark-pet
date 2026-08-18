@@ -23,6 +23,12 @@ export function createPetRuntimeCommandHandler(runtime: PetRuntime): RuntimeComm
           return runtime.applySettings(command.settings)
         case 'set-ui-interaction':
           return runtime.setUiInteractionActive(command.active)
+        case 'prepare-character-voice':
+          return runtime.prepareCharacterVoice()
+        case 'speak':
+          return runtime.enqueueSpeech(command.request)
+        case 'cancel-speech':
+          return runtime.cancelSpeech(command.reason)
         case 'destroy':
           return runtime.destroy()
       }

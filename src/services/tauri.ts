@@ -1,6 +1,6 @@
 import { defaultWindowIcon } from '@tauri-apps/api/app'
 import { isTauri } from '@tauri-apps/api/core'
-import { PhysicalPosition } from '@tauri-apps/api/dpi'
+import { LogicalSize, PhysicalPosition } from '@tauri-apps/api/dpi'
 import { Menu } from '@tauri-apps/api/menu'
 import { TrayIcon } from '@tauri-apps/api/tray'
 import { currentMonitor, cursorPosition, getCurrentWindow } from '@tauri-apps/api/window'
@@ -74,6 +74,11 @@ export class NativeWindowService {
   async setAlwaysOnTop(alwaysOnTop: boolean) {
     if (!this.appWindow) return
     await this.appWindow.setAlwaysOnTop(alwaysOnTop)
+  }
+
+  async setWindowSize(width: number, height: number) {
+    if (!this.appWindow) return
+    await this.appWindow.setSize(new LogicalSize(width, height))
   }
 
   async show() {

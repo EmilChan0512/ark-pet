@@ -10,7 +10,7 @@ const legacySettings = {
 
 describe('parsePetSettings', () => {
   it('preserves current settings', () => {
-    const current = { ...legacySettings, autonomousBehavior: false }
+    const current = { ...DEFAULT_PET_SETTINGS, ...legacySettings, autonomousBehavior: false }
     expect(parsePetSettings(current)).toEqual(current)
   })
 
@@ -18,6 +18,19 @@ describe('parsePetSettings', () => {
     expect(parsePetSettings(legacySettings)).toEqual({
       ...legacySettings,
       autonomousBehavior: DEFAULT_PET_SETTINGS.autonomousBehavior,
+      speechMode: DEFAULT_PET_SETTINGS.speechMode,
+      characterVoiceVolume: DEFAULT_PET_SETTINGS.characterVoiceVolume,
+      characterVoiceFallback: DEFAULT_PET_SETTINGS.characterVoiceFallback,
+    })
+  })
+
+  it('migrates v2 settings to v3 speech defaults', () => {
+    const v2 = { ...legacySettings, autonomousBehavior: false }
+    expect(parsePetSettings(v2)).toEqual({
+      ...v2,
+      speechMode: DEFAULT_PET_SETTINGS.speechMode,
+      characterVoiceVolume: DEFAULT_PET_SETTINGS.characterVoiceVolume,
+      characterVoiceFallback: DEFAULT_PET_SETTINGS.characterVoiceFallback,
     })
   })
 

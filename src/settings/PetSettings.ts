@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-export const PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v2'
+export const PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v3'
+export const LEGACY_V2_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v2'
 export const LEGACY_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v1'
 
 const petSettingsSchema = z
@@ -10,10 +11,18 @@ const petSettingsSchema = z
     alwaysOnTop: z.boolean(),
     showDebugPanel: z.boolean(),
     autonomousBehavior: z.boolean(),
+    speechMode: z.enum(['off', 'text', 'character-voice']),
+    characterVoiceVolume: z.number().min(0).max(1),
+    characterVoiceFallback: z.enum(['exact-clip-only', 'cue-and-text-replacement']),
   })
   .strict()
 
-const legacyPetSettingsSchema = petSettingsSchema.omit({ autonomousBehavior: true })
+const v2PetSettingsSchema = petSettingsSchema.omit({
+  speechMode: true,
+  characterVoiceVolume: true,
+  characterVoiceFallback: true,
+})
+const legacyPetSettingsSchema = v2PetSettingsSchema.omit({ autonomousBehavior: true })
 
 export type PetSettings = z.infer<typeof petSettingsSchema>
 
@@ -23,6 +32,9 @@ export const DEFAULT_PET_SETTINGS: PetSettings = Object.freeze({
   alwaysOnTop: true,
   showDebugPanel: import.meta.env.DEV,
   autonomousBehavior: true,
+  speechMode: 'text',
+  characterVoiceVolume: 0.8,
+  characterVoiceFallback: 'cue-and-text-replacement',
 })
 
 export interface PetSettingsStore {
@@ -40,9 +52,25 @@ export function parsePetSettings(
   const current = petSettingsSchema.safeParse(value)
   if (current.success) return current.data
 
+  const v2 = v2PetSettingsSchema.safeParse(value)
+  if (v2.success) {
+    return {
+      ...v2.data,
+      speechMode: defaults.speechMode,
+      characterVoiceVolume: defaults.characterVoiceVolume,
+      characterVoiceFallback: defaults.characterVoiceFallback,
+    }
+  }
+
   const legacy = legacyPetSettingsSchema.safeParse(value)
   if (legacy.success) {
-    return { ...legacy.data, autonomousBehavior: defaults.autonomousBehavior }
+    return {
+      ...legacy.data,
+      autonomousBehavior: defaults.autonomousBehavior,
+      speechMode: defaults.speechMode,
+      characterVoiceVolume: defaults.characterVoiceVolume,
+      characterVoiceFallback: defaults.characterVoiceFallback,
+    }
   }
 
   return null
@@ -60,13 +88,14 @@ function parseStoredValue(raw: string | null) {
 function loadSettings(): PetSettings {
   try {
     const currentRaw = window.localStorage.getItem(PET_SETTINGS_STORAGE_KEY)
+    const v2Raw = window.localStorage.getItem(LEGACY_V2_PET_SETTINGS_STORAGE_KEY)
     const legacyRaw = window.localStorage.getItem(LEGACY_PET_SETTINGS_STORAGE_KEY)
-    if (!currentRaw && !legacyRaw) return DEFAULT_PET_SETTINGS
+    if (!currentRaw && !v2Raw && !legacyRaw) return DEFAULT_PET_SETTINGS
 
     const current = parseStoredValue(currentRaw)
     if (current) return current
 
-    const migrated = parseStoredValue(legacyRaw)
+    const migrated = parseStoredValue(v2Raw) ?? parseStoredValue(legacyRaw)
     if (migrated) {
       window.localStorage.setItem(PET_SETTINGS_STORAGE_KEY, JSON.stringify(migrated))
       return migrated

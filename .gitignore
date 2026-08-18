@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
+__pycache__/
+*.py[cod]
+src-tauri/voice-package.local.json
+src-tauri/.voice-debug/
 
 # Editor directories and files
 .vscode/*
