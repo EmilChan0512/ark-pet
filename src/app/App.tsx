@@ -47,6 +47,13 @@ function createDebugStore(): DebugStore {
     speechAudioSource: null,
     speechVoiceEnabled: false,
     lastSpeechError: null,
+    lastContextEvent: null,
+    selectedReactionId: null,
+    activeReactionId: null,
+    reactionState: 'idle',
+    reactionBlockedReason: null,
+    currentLocalTimePeriod: null,
+    lastReactionError: null,
     lastError: null,
   }
   const listeners = new Set<() => void>()
@@ -308,6 +315,18 @@ export default function App() {
 
           <label className="settings-toggle">
             <span>
+              <strong>Contextual personality</strong>
+              <small>React to clicks, returns, session time, and late nights</small>
+            </span>
+            <input
+              type="checkbox"
+              checked={settings.personalityEnabled}
+              onChange={(event) => settingsStore.update({ personalityEnabled: event.target.checked })}
+            />
+          </label>
+
+          <label className="settings-toggle">
+            <span>
               <strong>Autonomous behavior</strong>
               <small>Allow local walking, sitting, and sleeping</small>
             </span>
@@ -426,11 +445,17 @@ export default function App() {
           <div>Speech Queue: {snapshot.speechQueueDepth}</div>
           <div>Speech Audio: {snapshot.speechAudioSource ?? 'text-only'}</div>
           <div>Character Voice: {snapshot.speechVoiceEnabled ? 'enabled' : 'disabled'}</div>
+          <div>Time Period: {snapshot.currentLocalTimePeriod ?? 'n/a'}</div>
+          <div>Last Context: {snapshot.lastContextEvent?.type ?? 'n/a'}</div>
+          <div>Selected Reaction: {snapshot.selectedReactionId ?? 'n/a'}</div>
+          <div>Active Reaction: {snapshot.activeReactionId ?? 'n/a'} ({snapshot.reactionState})</div>
+          {snapshot.reactionBlockedReason ? <div>Reaction Blocked: {snapshot.reactionBlockedReason}</div> : null}
           {snapshot.lastRuntimeCommandError ? (
             <pre>{snapshot.lastRuntimeCommandError}</pre>
           ) : null}
           {snapshot.lastBehaviorError ? <pre>{snapshot.lastBehaviorError}</pre> : null}
           {snapshot.lastSpeechError ? <pre>{snapshot.lastSpeechError}</pre> : null}
+          {snapshot.lastReactionError ? <pre>{snapshot.lastReactionError}</pre> : null}
           {snapshot.lastError ? <pre>{snapshot.lastError}</pre> : null}
           <div className="debug-panel__voice-actions" aria-label="Pepe AI voice samples">
             {DEV_AI_VOICE_SAMPLES.map((sample) => (
@@ -443,6 +468,21 @@ export default function App() {
                 {sample.label}
               </button>
             ))}
+          </div>
+          <div className="debug-panel__voice-actions" aria-label="Personality event simulations">
+            {([
+              ['First meeting', { type: 'session.first-meeting-today', at: performance.now() }],
+              ['Returned', { type: 'session.user-returned', at: performance.now(), idleMs: 600_000 }],
+              ['Long active', { type: 'session.long-active', at: performance.now(), activeMs: 7_200_000 }],
+              ['Late night', { type: 'time.period-entered', at: performance.now(), period: 'late-night' }],
+            ] as const).map(([label, event]) => (
+              <button key={label} type="button" onClick={() => void commandCoordinatorRef.current?.dispatch({ type: 'simulate-context', event })}>
+                {label}
+              </button>
+            ))}
+            <button type="button" onClick={() => void commandCoordinatorRef.current?.dispatch({ type: 'clear-first-meeting-marker' })}>
+              Clear daily greeting
+            </button>
           </div>
         </aside>
       ) : null}

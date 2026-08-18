@@ -106,6 +106,18 @@ export class RuntimeBehaviorAdapter {
     return this.engine.request(RUNTIME_BEHAVIOR_IDS.drag, this.context)
   }
 
+  hasBehavior(id: string) {
+    return this.registry.get(id) !== null
+  }
+
+  requestReaction(id: string, now: number) {
+    if (!this.registry.get(id)) return Promise.resolve(false)
+    return this.engine.request(id, this.context, { replaceReason: 'replaced' }).then((accepted) => {
+      if (accepted) this.scheduler.recordActivity(now)
+      return accepted
+    })
+  }
+
   async interruptForUser(now: number) {
     this.scheduler.recordActivity(now)
     await this.engine.cancel('user-input')

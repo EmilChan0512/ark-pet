@@ -88,6 +88,17 @@ Architecture maintenance guides:
   identity, queueing, cancellation, native adapters, and resource cleanup.
 - [Phase 7 requirements](docs/phase-7-requirements.md): offline Pepe text and
   character-voice scope, acceptance criteria, and deferred release work.
+- [Contextual reaction system](docs/architecture/reaction-system.md): typed
+  events, persona policy, priority translation, cooldowns, and cancellation.
+- [Phase 8 requirements](docs/phase-8-requirements.md): deterministic local
+  personality reactions and product acceptance criteria.
+
+Planned phase execution contracts (not yet implemented):
+
+- [Phase 9 requirements](docs/phase-9-requirements.md): safe local Character
+  Package v1, atomic installation, catalog management, and character switching.
+- [Phase 10 requirements](docs/phase-10-requirements.md): opt-in,
+  privacy-preserving desktop awareness with coarse local context only.
 
 React does not own Pixi or Spine lifecycle. `PetRuntime` runs independently and React only mounts the host element plus UI panels.
 
@@ -148,6 +159,8 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 - Supports verified Pepe original cues and a repository-external Windows/CUDA
   development model while degrading every unavailable voice path to text
 - Shows an optional debug panel in development
+- Reacts locally to normal/repeated clicks, the first meeting of the day, user
+  return, long sessions, and late-night entry through a character persona
 - Provides tray actions for show, hide, reload, settings, and quit
 
 ## Notes
@@ -159,9 +172,9 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 
 ## Status
 
-Phase 1–3 runtime behavior is integrated. Phase 4 establishes the documented,
-tested behavior engine, Phase 5 adds the first modular ambient behaviors, and
-Phase 6 establishes the runtime command and shutdown boundary. Phase 7 adds the
-offline character-speech boundary, verified Pepe original cues, and the pinned
-Windows/CUDA development voice path. Release packaging and macOS AI synthesis
-remain deferred.
+Phase 1–8 are integrated. Phase 4 establishes the behavior engine, Phase 5 adds
+modular ambient behaviors, Phase 6 establishes the runtime command boundary,
+and Phase 7 adds offline character speech. Phase 8 adds a deterministic local
+context-event path, validated character personas, weighted/cooldown reaction
+policy, and cancellation-safe composition of behavior, animation, and speech.
+Release packaging and macOS AI synthesis remain deferred.

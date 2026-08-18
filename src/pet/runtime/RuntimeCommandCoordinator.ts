@@ -1,5 +1,6 @@
 import type { PetSettings } from '../../settings/PetSettings'
 import type { SpeakRequest, SpeechCancellationReason } from '../speech/types'
+import type { ContextEvent } from '../reaction/types'
 
 export type RuntimeCommand =
   | { readonly type: 'initialize' }
@@ -12,6 +13,8 @@ export type RuntimeCommand =
   | { readonly type: 'prepare-character-voice' }
   | { readonly type: 'speak'; readonly request: SpeakRequest }
   | { readonly type: 'cancel-speech'; readonly reason: SpeechCancellationReason }
+  | { readonly type: 'simulate-context'; readonly event: ContextEvent }
+  | { readonly type: 'clear-first-meeting-marker' }
   | { readonly type: 'destroy' }
 
 export type RuntimeCommandOutcome =
@@ -60,6 +63,8 @@ function coalescingKey(command: RuntimeCommand): string | null {
     case 'prepare-character-voice':
       return command.type
     case 'cancel-speech':
+    case 'simulate-context':
+    case 'clear-first-meeting-marker':
       return command.type
     default:
       return null

@@ -17,6 +17,14 @@ import { DomSpeechBubbleRenderer } from './speech/adapters/DomSpeechBubbleRender
 import { HtmlAudioPlaybackAdapter } from './speech/adapters/HtmlAudioPlaybackAdapter'
 import { TauriCharacterVoiceResolver } from './speech/adapters/TauriCharacterVoiceResolver'
 import type { SpeakRequest, SpeechCancellationReason } from './speech/types'
+import { ContextEventBus } from './reaction/ContextEventBus'
+import { ReactionEngine } from './reaction/ReactionEngine'
+import { RuntimeReactionAdapter } from './reaction/adapters/RuntimeReactionAdapter'
+import { InteractionContextSource } from './reaction/sources/InteractionContextSource'
+import { SessionContextSource } from './reaction/sources/SessionContextSource'
+import { TimeContextSource } from './reaction/sources/TimeContextSource'
+import { loadCharacterPersona } from './persona/CharacterPersonaLoader'
+import type { ContextEvent } from './reaction/types'
 
 interface PointerSession {
   x: number
@@ -38,6 +46,14 @@ export class PetRuntime {
   )
   private readonly behaviorAdapter: RuntimeBehaviorAdapter
   private readonly speechCoordinator: SpeechSessionCoordinator
+  private readonly contextEventBus = new ContextEventBus({
+    reportSubscriberError: (event, error) => console.error(`[ContextEventBus] ${event.type}`, error),
+  })
+  private readonly reactionAdapter: RuntimeReactionAdapter
+  private readonly interactionContextSource: InteractionContextSource
+  private readonly sessionContextSource: SessionContextSource
+  private readonly timeContextSource: TimeContextSource
+  private reactionEngine: ReactionEngine | null = null
   private readonly hitTestController = new HitTestController(
     () => this.getCharacterBounds(),
     async (passthroughEnabled) => {
@@ -61,7 +77,6 @@ export class PetRuntime {
   private hidden = false
   private facing: FacingDirection = 'right'
   private characterGeneration = 0
-  private speechSequence = 0
   private readonly host: HTMLElement
   private readonly debugStore: DebugStore
   private readonly onSettingsRequested: () => void
@@ -142,12 +157,33 @@ export class PetRuntime {
         })
       },
     )
+    this.reactionAdapter = new RuntimeReactionAdapter({
+      hasAnimation: (name) => Boolean(this.characterManager.getCurrentCharacter()?.hasAnimation(name)),
+      hasBehavior: (id) => this.behaviorAdapter.hasBehavior(id),
+      requestAnimation: (name) => this.requestReactionAnimation(name),
+      requestBehavior: (id) => this.behaviorAdapter.requestReaction(id, performance.now()),
+      enqueueSpeech: (request) => this.enqueueSpeech(request),
+    })
+    this.interactionContextSource = new InteractionContextSource(this.contextEventBus)
+    this.sessionContextSource = new SessionContextSource(this.contextEventBus, {
+      getLastDate: () => {
+        try { return window.localStorage.getItem('ark-pet.personality.first-meeting-date') } catch { return null }
+      },
+      setLastDate: (date) => window.localStorage.setItem('ark-pet.personality.first-meeting-date', date),
+      clear: () => window.localStorage.removeItem('ark-pet.personality.first-meeting-date'),
+    })
+    this.timeContextSource = new TimeContextSource(this.contextEventBus)
+    this.contextEventBus.subscribe((event) => this.reactionEngine?.handle(event))
   }
 
   private readonly updateDebugSnapshot = () => {
     const now = performance.now()
     this.behaviorAdapter.update(now)
     this.speechCoordinator.update(now)
+    this.reactionAdapter.update(now)
+    this.interactionContextSource.update(now)
+    this.sessionContextSource.update(now)
+    this.timeContextSource.update(now)
     const app = this.renderer.getApplication()
     if (now - this.fpsSampleAt > 250) {
       this.fpsSampleAt = now
@@ -166,6 +202,7 @@ export class PetRuntime {
         petState: this.stateMachine.getState(),
         currentAnimation: this.currentAnimation,
         characterManifest: this.currentManifest,
+        currentLocalTimePeriod: this.timeContextSource.getPeriod(),
       })
     }
   }
@@ -218,6 +255,7 @@ export class PetRuntime {
 
   async hide() {
     this.cancelPointerSession()
+    this.cancelReactions('hidden')
     this.speechCoordinator.pause('hidden')
     await this.behaviorAdapter.pause('hidden')
     this.hidden = true
@@ -227,6 +265,7 @@ export class PetRuntime {
 
   async reloadCharacter() {
     this.cancelPointerSession()
+    this.cancelReactions('reload')
     this.speechCoordinator.pause('reload')
     await this.behaviorAdapter.pause('reload')
     await this.loadCharacter(this.currentManifest?.id ?? 'demo')
@@ -247,12 +286,21 @@ export class PetRuntime {
     this.speechCoordinator.cancelAll(reason)
   }
 
+  simulateContextEvent(event: ContextEvent) {
+    this.contextEventBus.publish(event)
+  }
+
+  clearFirstMeetingMarker() {
+    this.sessionContextSource.clearFirstMeetingMarker()
+  }
+
   /** Explicit preflight for development tools that must not race cold startup. */
   prepareCharacterVoice() {
     return this.speechCoordinator.prepareVoice()
   }
 
   async applySettings(settings: PetSettings) {
+    const personalityChanged = this.settings.personalityEnabled !== settings.personalityEnabled
     this.settings = settings
     if (
       import.meta.env.DEV &&
@@ -277,6 +325,17 @@ export class PetRuntime {
     this.speechCoordinator.setVoiceEnabled(settings.speechMode === 'character-voice')
     if (settings.speechMode === 'off') this.speechCoordinator.pause('disabled')
     else this.resumeSpeechIfAllowed()
+    this.reactionEngine?.setEnabled(settings.personalityEnabled)
+    if (personalityChanged && !settings.personalityEnabled) {
+      this.reactionAdapter.cancel('disabled')
+      this.sessionContextSource.reset()
+      this.timeContextSource.setReady(false)
+    } else if (personalityChanged && settings.personalityEnabled && this.currentManifest) {
+      const now = performance.now()
+      this.sessionContextSource.characterReady(now, this.localDateKey())
+      this.timeContextSource.setReady(true)
+      this.timeContextSource.update(now)
+    }
 
     const character = this.characterManager.getCurrentCharacter()
     if (character && this.currentManifest) {
@@ -292,6 +351,7 @@ export class PetRuntime {
 
     if (active) {
       this.cancelPointerSession()
+      this.cancelReactions('ui-interaction')
       this.speechCoordinator.pause('ui-interaction')
       // Acquire UI input before awaiting behavior cancellation. Otherwise a
       // concurrent ticker transition can leave a visible settings panel under
@@ -308,6 +368,9 @@ export class PetRuntime {
   async destroy() {
     // Behavior cleanup owns future timers and motion subscriptions, so it must
     // finish before the renderer and native ports it may reference disappear.
+    this.reactionEngine?.destroy()
+    this.reactionAdapter.cancel('destroyed')
+    this.contextEventBus.destroy()
     await this.speechCoordinator.destroy()
     await this.behaviorAdapter.destroy()
     this.cancelPointerSession()
@@ -326,6 +389,7 @@ export class PetRuntime {
   }
 
   private readonly handlePointerMove = async (event: PointerEvent) => {
+    this.sessionContextSource.recordActivity(performance.now())
     this.debugStore.patch({
       pointerPosition: { x: event.clientX, y: event.clientY },
     })
@@ -342,6 +406,9 @@ export class PetRuntime {
     if (moved && !this.dragController.isDragging()) {
       const started = await this.dragController.start()
       if (started) {
+        const now = performance.now()
+        this.cancelReactions('drag-started')
+        this.interactionContextSource.dragStarted(now)
         await this.nativeWindowService.setIgnoreCursorEvents(false)
         this.debugStore.patch({ mousePassthrough: false, hitTest: true })
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
@@ -359,13 +426,19 @@ export class PetRuntime {
   private readonly handlePointerDown = async (event: PointerEvent) => {
     const result = await this.evaluatePointer(event.clientX, event.clientY)
     if (!result.hit) return
+    const now = performance.now()
+    this.sessionContextSource.recordActivity(now)
+    // Preserve pending clicks across pointer sequences so the interaction
+    // source can distinguish a repeated click from unrelated single clicks.
+    this.cancelReactions('manual-interaction', false)
     this.speechCoordinator.cancelAll('replaced')
-    await this.behaviorAdapter.interruptForUser(performance.now())
+    await this.behaviorAdapter.interruptForUser(now)
     this.pointerDown = { x: event.clientX, y: event.clientY }
   }
 
   private readonly handlePointerUp = async (event: PointerEvent) => {
     if (this.dragController.isDragging()) {
+      this.interactionContextSource.dragEnded(performance.now())
       this.dragController.stop()
       this.enterIdle()
       this.pointerDown = null
@@ -376,6 +449,7 @@ export class PetRuntime {
     const result = await this.evaluatePointer(event.clientX, event.clientY)
     if (this.pointerDown && result.hit) {
       this.enterInteracting()
+      this.interactionContextSource.recordClick(performance.now())
     } else if (this.pointerDown) {
       this.enterIdle()
     }
@@ -386,6 +460,7 @@ export class PetRuntime {
   private readonly handlePointerCancel = () => {
     const hadPointerSession = this.pointerDown !== null
     this.cancelPointerSession()
+    this.interactionContextSource.cancel()
     if (hadPointerSession) this.enterIdle()
   }
 
@@ -409,6 +484,9 @@ export class PetRuntime {
   }
 
   private async loadCharacter(characterId: string) {
+    this.cancelReactions('character-reload')
+    this.sessionContextSource.reset()
+    this.timeContextSource.setReady(false)
     await this.behaviorAdapter.pause('reload')
     this.controller.enterLoading()
     this.debugStore.patch({
@@ -438,6 +516,47 @@ export class PetRuntime {
       this.layoutCharacter()
       this.behaviorAdapter.refreshAmbientCapabilities()
 
+      try {
+        const persona = await loadCharacterPersona(characterId)
+        if (persona.characterId !== characterId) throw new Error(`Character Persona Error: expected ${characterId}, received ${persona.characterId}`)
+        if (this.reactionEngine) this.reactionEngine.setPersona(persona)
+        else {
+          this.reactionEngine = new ReactionEngine(
+            persona,
+            { now: () => performance.now() },
+            { next: () => Math.random() },
+            this.reactionAdapter,
+            {
+              publish: (snapshot) => this.debugStore.patch({
+                lastContextEvent: snapshot.lastEvent,
+                selectedReactionId: snapshot.selectedReactionId,
+                activeReactionId: snapshot.activeReactionId,
+                reactionState: snapshot.activeState,
+                reactionBlockedReason: snapshot.blockedReason,
+              }),
+              reportError: (reactionId, error) => {
+                const message = `[${reactionId}] ${error instanceof Error ? error.message : String(error)}`
+                console.error('[ReactionEngine]', message)
+                this.debugStore.patch({ lastReactionError: message })
+              },
+            },
+            undefined,
+            {
+              currentDate: () => this.localDateKey(),
+              getDate: (key) => {
+                try { return window.localStorage.getItem(`ark-pet.personality.daily.${key}`) } catch { return null }
+              },
+              setDate: (key, date) => window.localStorage.setItem(`ark-pet.personality.daily.${key}`, date),
+            },
+          )
+        }
+        this.reactionEngine.setEnabled(this.settings.personalityEnabled)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        console.error(message)
+        this.debugStore.patch({ lastReactionError: message })
+      }
+
       this.animationCompleteCleanup = character.onAnimationComplete(() => {
         if (this.stateMachine.getState() === 'interacting') {
           this.enterIdle()
@@ -448,6 +567,12 @@ export class PetRuntime {
       if (!this.hidden && !this.uiInteractionActive) {
         void this.behaviorAdapter.resume(performance.now())
         this.resumeSpeechIfAllowed()
+      }
+      if (this.settings.personalityEnabled) {
+        const now = performance.now()
+        this.sessionContextSource.characterReady(now, this.localDateKey())
+        this.timeContextSource.setReady(true)
+        this.timeContextSource.update(now)
       }
 
       this.debugStore.patch({
@@ -504,24 +629,6 @@ export class PetRuntime {
       petState: 'interacting',
       currentAnimation: this.currentAnimation,
     })
-    this.speakInteractionCue()
-  }
-
-  private speakInteractionCue() {
-    if (this.settings.speechMode === 'off') return
-    const now = performance.now()
-    void this.speechCoordinator.enqueue(
-      {
-        id: `interaction-${++this.speechSequence}`,
-        source: 'interaction',
-        text: '不许拆我背后的蝴蝶结！',
-        cue: '戳一下',
-        locale: this.currentManifest?.voice?.locale ?? 'zh-CN',
-        dedupeKey: 'interaction.click',
-        expiresAt: now + 3_000,
-      },
-      now,
-    )
   }
 
   private resumeSpeechIfAllowed() {
@@ -549,6 +656,25 @@ export class PetRuntime {
       petState: 'dragging',
       currentAnimation: this.currentAnimation,
     })
+  }
+
+  private requestReactionAnimation(name: string) {
+    const character = this.characterManager.getCurrentCharacter()
+    if (!character?.hasAnimation(name)) return
+    character.play(name, false, this.currentManifest?.animations.idle)
+    this.currentAnimation = name
+    this.debugStore.patch({ currentAnimation: name })
+  }
+
+  private cancelReactions(reason: string, resetInteractionSource = true) {
+    this.reactionEngine?.cancel(reason)
+    this.reactionAdapter.cancel(reason)
+    if (resetInteractionSource) this.interactionContextSource.cancel()
+  }
+
+  private localDateKey() {
+    const date = new Date()
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
   }
 
   private hasAmbientAnimation(kind: AmbientAnimationKind) {

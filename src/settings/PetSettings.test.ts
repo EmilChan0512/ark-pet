@@ -21,6 +21,7 @@ describe('parsePetSettings', () => {
       speechMode: DEFAULT_PET_SETTINGS.speechMode,
       characterVoiceVolume: DEFAULT_PET_SETTINGS.characterVoiceVolume,
       characterVoiceFallback: DEFAULT_PET_SETTINGS.characterVoiceFallback,
+      personalityEnabled: DEFAULT_PET_SETTINGS.personalityEnabled,
     })
   })
 
@@ -31,7 +32,13 @@ describe('parsePetSettings', () => {
       speechMode: DEFAULT_PET_SETTINGS.speechMode,
       characterVoiceVolume: DEFAULT_PET_SETTINGS.characterVoiceVolume,
       characterVoiceFallback: DEFAULT_PET_SETTINGS.characterVoiceFallback,
+      personalityEnabled: DEFAULT_PET_SETTINGS.personalityEnabled,
     })
+  })
+
+  it('migrates Phase 7 v3 settings to the personality default', () => {
+    const { personalityEnabled: _removed, ...v3 } = DEFAULT_PET_SETTINGS
+    expect(parsePetSettings(v3)).toEqual({ ...v3, personalityEnabled: true })
   })
 
   it('rejects corrupt, incomplete, and unknown settings', () => {

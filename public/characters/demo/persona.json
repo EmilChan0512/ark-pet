@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "characterId": "demo",
+  "displayName": "佩佩",
+  "metadata": {
+    "temperament": "calm, attentive, lightly playful",
+    "locale": "zh-CN"
+  },
+  "reactions": [
+    {
+      "id": "pepe.click.doctor",
+      "event": "pet.clicked",
+      "priority": 200,
+      "weight": 3,
+      "cooldownMs": 7000,
+      "cooldownGroup": "pepe.click.normal",
+      "conditions": [{ "type": "click-count", "min": 1, "max": 1 }],
+      "plan": [
+        { "type": "animation", "name": "Interact" },
+        { "type": "speak", "text": "博士？", "source": "interaction", "dedupeKey": "personality.click" }
+      ]
+    },
+    {
+      "id": "pepe.click.question",
+      "event": "pet.clicked",
+      "priority": 200,
+      "weight": 2,
+      "cooldownMs": 7000,
+      "cooldownGroup": "pepe.click.normal",
+      "conditions": [{ "type": "click-count", "min": 1, "max": 1 }],
+      "plan": [
+        { "type": "animation", "name": "Interact" },
+        { "type": "speak", "text": "有什么事吗？", "source": "interaction", "dedupeKey": "personality.click" }
+      ]
+    },
+    {
+      "id": "pepe.click.here",
+      "event": "pet.clicked",
+      "priority": 200,
+      "weight": 2,
+      "cooldownMs": 7000,
+      "cooldownGroup": "pepe.click.normal",
+      "conditions": [{ "type": "click-count", "min": 1, "max": 1 }],
+      "plan": [
+        { "type": "animation", "name": "Interact" },
+        { "type": "speak", "text": "我在哦。", "source": "interaction", "dedupeKey": "personality.click" }
+      ]
+    },
+    {
+      "id": "pepe.click.repeated",
+      "event": "pet.clicked",
+      "priority": 220,
+      "weight": 1,
+      "cooldownMs": 20000,
+      "cooldownGroup": "pepe.click.repeated",
+      "conditions": [{ "type": "click-count", "min": 2 }],
+      "plan": [
+        { "type": "animation", "name": "Interact" },
+        { "type": "speak", "text": "博士，我听见啦。", "source": "interaction", "dedupeKey": "personality.click.repeated" }
+      ]
+    },
+    {
+      "id": "pepe.first-meeting",
+      "event": "session.first-meeting-today",
+      "priority": 150,
+      "cooldownMs": 60000,
+      "plan": [{ "type": "speak", "text": "今天也见到博士了。", "source": "ambient", "dedupeKey": "personality.first-meeting" }]
+    },
+    {
+      "id": "pepe.user-returned",
+      "event": "session.user-returned",
+      "priority": 160,
+      "cooldownMs": 300000,
+      "conditions": [{ "type": "idle-ms", "min": 300000 }],
+      "plan": [{ "type": "speak", "text": "欢迎回来，博士。", "source": "ambient", "dedupeKey": "personality.returned" }]
+    },
+    {
+      "id": "pepe.long-active",
+      "event": "session.long-active",
+      "priority": 60,
+      "cooldownMs": 3600000,
+      "conditions": [{ "type": "active-ms", "min": 5400000 }],
+      "plan": [{ "type": "speak", "text": "休息一会儿吧，博士。", "source": "ambient", "dedupeKey": "personality.long-active" }]
+    },
+    {
+      "id": "pepe.late-night",
+      "event": "time.period-entered",
+      "priority": 50,
+      "cooldownMs": 72000000,
+      "oncePerLocalDay": true,
+      "conditions": [{ "type": "period", "value": "late-night" }],
+      "plan": [
+        { "type": "behavior", "id": "ambient.sleep" },
+        { "type": "speak", "text": "夜深了，博士也该休息了。", "source": "ambient", "dedupeKey": "personality.late-night" }
+      ]
+    }
+  ]
+}

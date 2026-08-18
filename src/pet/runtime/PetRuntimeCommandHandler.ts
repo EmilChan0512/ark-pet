@@ -29,6 +29,10 @@ export function createPetRuntimeCommandHandler(runtime: PetRuntime): RuntimeComm
           return runtime.enqueueSpeech(command.request)
         case 'cancel-speech':
           return runtime.cancelSpeech(command.reason)
+        case 'simulate-context':
+          return runtime.simulateContextEvent(command.event)
+        case 'clear-first-meeting-marker':
+          return runtime.clearFirstMeetingMarker()
         case 'destroy':
           return runtime.destroy()
       }
