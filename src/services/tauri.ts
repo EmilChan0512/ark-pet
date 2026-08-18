@@ -1,9 +1,9 @@
 import { defaultWindowIcon } from '@tauri-apps/api/app'
 import { isTauri } from '@tauri-apps/api/core'
-import { LogicalPosition, type PhysicalPosition } from '@tauri-apps/api/dpi'
+import { LogicalSize, PhysicalPosition } from '@tauri-apps/api/dpi'
 import { Menu } from '@tauri-apps/api/menu'
 import { TrayIcon } from '@tauri-apps/api/tray'
-import { cursorPosition, getCurrentWindow } from '@tauri-apps/api/window'
+import { currentMonitor, cursorPosition, getCurrentWindow } from '@tauri-apps/api/window'
 import { exit } from '@tauri-apps/plugin-process'
 
 export interface TrayCallbacks {
@@ -31,9 +31,33 @@ export class NativeWindowService {
     return cursorPosition()
   }
 
+  async getScaleFactor() {
+    if (!this.appWindow) return 1
+    return this.appWindow.scaleFactor()
+  }
+
+  async getWindowGeometry() {
+    if (!this.appWindow) return null
+    const [position, size, monitor] = await Promise.all([
+      this.appWindow.innerPosition(),
+      this.appWindow.innerSize(),
+      currentMonitor(),
+    ])
+    if (!monitor) return null
+
+    return {
+      position: { x: position.x, y: position.y },
+      size: { width: size.width, height: size.height },
+      workArea: {
+        position: { x: monitor.workArea.position.x, y: monitor.workArea.position.y },
+        size: { width: monitor.workArea.size.width, height: monitor.workArea.size.height },
+      },
+    }
+  }
+
   async moveWindow(x: number, y: number) {
     if (!this.appWindow) return
-    await this.appWindow.setPosition(new LogicalPosition(x, y))
+    await this.appWindow.setPosition(new PhysicalPosition(Math.round(x), Math.round(y)))
   }
 
   async moveWindowBy(deltaX: number, deltaY: number) {
@@ -50,6 +74,11 @@ export class NativeWindowService {
   async setAlwaysOnTop(alwaysOnTop: boolean) {
     if (!this.appWindow) return
     await this.appWindow.setAlwaysOnTop(alwaysOnTop)
+  }
+
+  async setWindowSize(width: number, height: number) {
+    if (!this.appWindow) return
+    await this.appWindow.setSize(new LogicalSize(width, height))
   }
 
   async show() {

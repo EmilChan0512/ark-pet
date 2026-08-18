@@ -39,15 +39,18 @@ export class CharacterManager {
 
     const manifest = await loadAndValidateManifest(entry.manifestPath)
 
-    this.currentCharacter?.destroy()
-    this.currentCharacter = null
-    this.currentManifest = manifest
-
     const character = new SpineCharacter()
-    const view = await character.load(manifest)
-    parent.addChild(view)
+    try {
+      const view = await character.load(manifest)
+      parent.addChild(view)
+    } catch (error) {
+      character.destroy()
+      throw error
+    }
 
+    this.currentCharacter?.destroy()
     this.currentCharacter = character
+    this.currentManifest = manifest
     return character
   }
 

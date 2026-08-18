@@ -4,10 +4,19 @@
   "skeleton": "build_char_4058_pepe.skel",
   "atlas": "build_char_4058_pepe.atlas",
   "scale": 0.5,
+  "nativeFacing": "right",
   "spineVersion": "3.8.99",
+  "voice": {
+    "characterId": "char_4058_pepe",
+    "voiceIdentity": "pepe.zh-CN.cn_012",
+    "locale": "zh-CN"
+  },
   "animations": {
     "idle": "Relax",
     "interact": "Interact",
-    "drag": "Move"
+    "drag": "Move",
+    "walk": "Move",
+    "sit": "Sit",
+    "sleep": "Sleep"
   }
 }

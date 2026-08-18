@@ -1,196 +1,208 @@
-lockfileVersion: 5.4
+lockfileVersion: '9.0'
 
-specifiers:
-  '@pixi-spine/all-3.8': 4.0.6
-  '@pixi/assets': 7.4.3
-  '@pixi/core': 7.4.3
-  '@pixi/display': 7.4.3
-  '@pixi/graphics': 7.4.3
-  '@pixi/mesh': 7.4.3
-  '@pixi/mesh-extras': 7.4.3
-  '@pixi/sprite': 7.4.3
-  '@tauri-apps/api': 2.11.1
-  '@tauri-apps/cli': 2.11.4
-  '@tauri-apps/plugin-process': 2.3.1
-  '@types/node': ^24.13.2
-  '@types/react': ^19.2.17
-  '@types/react-dom': ^19.2.3
-  '@vitejs/plugin-react': ^6.0.3
-  oxlint: ^1.71.0
-  pixi.js: 7.4.3
-  react: ^19.2.7
-  react-dom: ^19.2.7
-  typescript: ~6.0.2
-  vite: ^8.1.1
-  zod: ^4.1.5
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
-dependencies:
-  '@pixi-spine/all-3.8': 4.0.6_j3atrtjmrdzd4xnywbrn5wgvmm
-  '@pixi/assets': 7.4.3_@pixi+core@7.4.3
-  '@pixi/core': 7.4.3
-  '@pixi/display': 7.4.3_@pixi+core@7.4.3
-  '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
-  '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-  '@pixi/mesh-extras': 7.4.3_7l2wkaqppxg7auqtzi6tsdukoe
-  '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-  '@tauri-apps/api': 2.11.1
-  '@tauri-apps/plugin-process': 2.3.1
-  pixi.js: 7.4.3
-  react: 19.2.8
-  react-dom: 19.2.8_react@19.2.8
-  zod: 4.4.3
+importers:
 
-devDependencies:
-  '@tauri-apps/cli': 2.11.4
-  '@types/node': 24.13.3
-  '@types/react': 19.2.18
-  '@types/react-dom': 19.2.4_@types+react@19.2.18
-  '@vitejs/plugin-react': 6.0.5_vite@8.2.1
-  oxlint: 1.78.0
-  typescript: 6.0.3
-  vite: 8.2.1_@types+node@24.13.3
+  .:
+    dependencies:
+      '@pixi-spine/all-3.8':
+        specifier: 4.0.6
+        version: 4.0.6(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/assets':
+        specifier: 7.4.3
+        version: 7.4.3(@pixi/core@7.4.3)
+      '@pixi/core':
+        specifier: 7.4.3
+        version: 7.4.3
+      '@pixi/display':
+        specifier: 7.4.3
+        version: 7.4.3(@pixi/core@7.4.3)
+      '@pixi/graphics':
+        specifier: 7.4.3
+        version: 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/mesh':
+        specifier: 7.4.3
+        version: 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/mesh-extras':
+        specifier: 7.4.3
+        version: 7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/sprite':
+        specifier: 7.4.3
+        version: 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@tauri-apps/api':
+        specifier: 2.11.1
+        version: 2.11.1
+      '@tauri-apps/plugin-process':
+        specifier: 2.3.1
+        version: 2.3.1
+      pixi.js:
+        specifier: 7.4.3
+        version: 7.4.3
+      react:
+        specifier: ^19.2.7
+        version: 19.2.8
+      react-dom:
+        specifier: ^19.2.7
+        version: 19.2.8(react@19.2.8)
+      zod:
+        specifier: ^4.1.5
+        version: 4.4.3
+    devDependencies:
+      '@tauri-apps/cli':
+        specifier: 2.11.4
+        version: 2.11.4
+      '@types/node':
+        specifier: ^24.13.2
+        version: 24.13.3
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.4(@types/react@19.2.18)
+      '@vitejs/plugin-react':
+        specifier: ^6.0.3
+        version: 6.0.5(vite@8.2.1(@types/node@24.13.3))
+      oxlint:
+        specifier: ^1.71.0
+        version: 1.78.0
+      typescript:
+        specifier: ~6.0.2
+        version: 6.0.3
+      vite:
+        specifier: ^8.1.1
+        version: 8.2.1(@types/node@24.13.3)
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@types/node@24.13.3)(vite@8.2.1(@types/node@24.13.3))
 
 packages:
 
-  /@oxc-project/types/0.143.0:
-    resolution: {integrity: sha1-w+TzF4t7VOTdGU6sbUUlimDwCSs=, tarball: '@oxc-project/types/download/@oxc-project/types-0.143.0.tgz'}
-    dev: true
+  '@jridgewell/sourcemap-codec@1.5.5':
+    resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
 
-  /@oxlint/binding-android-arm-eabi/1.78.0:
-    resolution: {integrity: sha1-WZfR0v5dZMqVvDzC6ZCiGNE1c7w=, tarball: '@oxlint/binding-android-arm-eabi/download/@oxlint/binding-android-arm-eabi-1.78.0.tgz'}
+  '@oxc-project/types@0.144.0':
+    resolution: {integrity: sha512-nuhZIOLuI6TFQ32I/WnUx+SCPY7SdSKwgnFHydAuoS1+Z4BRcaP+RRJmGzl9lw+0OFF7UmaESf7KQRXaNLHypg==}
+
+  '@oxlint/binding-android-arm-eabi@1.78.0':
+    resolution: {integrity: sha512-Bu819lmAfZMUHErrpe0cEWj3iaefuUODHSU8+UbXy67V/r7/7f4K3FL0NmbD85E+wiFLDYuhP8Zlv0XnVeXshw==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm]
+    os: [android]
 
-  /@oxlint/binding-android-arm64/1.78.0:
-    resolution: {integrity: sha1-VYsyL9FBp0zaAiv7Zw9gjKORCUQ=, tarball: '@oxlint/binding-android-arm64/download/@oxlint/binding-android-arm64-1.78.0.tgz'}
+  '@oxlint/binding-android-arm64@1.78.0':
+    resolution: {integrity: sha512-CDfxZgB61B7buRdY2FJoAYYPPXCZ1EoC1LKscnC5dg3kjobdxiconvAvvN1BmHyW4PyFT3jRLDag/BY/roSNBQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [android]
 
-  /@oxlint/binding-darwin-arm64/1.78.0:
-    resolution: {integrity: sha1-auuzefROZM1rhO/j0o5Rkjw4jHo=, tarball: '@oxlint/binding-darwin-arm64/download/@oxlint/binding-darwin-arm64-1.78.0.tgz'}
+  '@oxlint/binding-darwin-arm64@1.78.0':
+    resolution: {integrity: sha512-2Y2U9Ahrz+OO0Ej88f9SJYq51/jUBp1Mc7iZu0ukrbeeZ3gpRGfzIFnoqfHDY96xr0GEfNrPUBFEy0nN5aD7HA==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [darwin]
 
-  /@oxlint/binding-darwin-x64/1.78.0:
-    resolution: {integrity: sha1-+MQcp8xwJC5oRi2yKRQqkxbSAnw=, tarball: '@oxlint/binding-darwin-x64/download/@oxlint/binding-darwin-x64-1.78.0.tgz'}
+  '@oxlint/binding-darwin-x64@1.78.0':
+    resolution: {integrity: sha512-rpych6eJq6m9jDRypTEaPD1xysaEW5h9+xuxhGK/QhOg+/xaqPZrCrTNoIl/f3nEjuJeCEmstNDlrE9rJi/3/g==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [darwin]
 
-  /@oxlint/binding-freebsd-x64/1.78.0:
-    resolution: {integrity: sha1-mciu9/nP7b5dJdMrIoJM1Q+gF70=, tarball: '@oxlint/binding-freebsd-x64/download/@oxlint/binding-freebsd-x64-1.78.0.tgz'}
+  '@oxlint/binding-freebsd-x64@1.78.0':
+    resolution: {integrity: sha512-IcMGrQT3QizkOESUJd5et+rOhVqSkNDfNik1cvrKDqIbzqx9KMtRswpFgkCuNTSwylCFLKhGUu8KmqY1ZnC0Dg==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [freebsd]
 
-  /@oxlint/binding-linux-arm-gnueabihf/1.78.0:
-    resolution: {integrity: sha1-Fu0PZ/AqOOh1S5AB0PZyiWeIfgU=, tarball: '@oxlint/binding-linux-arm-gnueabihf/download/@oxlint/binding-linux-arm-gnueabihf-1.78.0.tgz'}
+  '@oxlint/binding-linux-arm-gnueabihf@1.78.0':
+    resolution: {integrity: sha512-/uLdoJ0IXE6vo/0f0LKjinQAp+re+VMaCWaNT8ENIv2EOCkSsc8SGaflXAuW0Jua2dq5+GLVWm1NQK7P3UFSNQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm]
+    os: [linux]
 
-  /@oxlint/binding-linux-arm-musleabihf/1.78.0:
-    resolution: {integrity: sha1-YPxuJBMSrwUvRZ658ay0zxbLWNQ=, tarball: '@oxlint/binding-linux-arm-musleabihf/download/@oxlint/binding-linux-arm-musleabihf-1.78.0.tgz'}
+  '@oxlint/binding-linux-arm-musleabihf@1.78.0':
+    resolution: {integrity: sha512-7xi4Wb/O8NRJhLoUXmDJMUVpNYvB5kefdhFU1Jb8rtae4QoXlTiLwI14X4YvAXVZLNZChP8m5qO9SQAlWQTbkQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm]
+    os: [linux]
 
-  /@oxlint/binding-linux-arm64-gnu/1.78.0:
-    resolution: {integrity: sha1-y9GepwaAafIREv7lfUqelqy3Bw4=, tarball: '@oxlint/binding-linux-arm64-gnu/download/@oxlint/binding-linux-arm64-gnu-1.78.0.tgz'}
+  '@oxlint/binding-linux-arm64-gnu@1.78.0':
+    resolution: {integrity: sha512-4hFW0+fVXa3OIh1Y4A5SPkmvI4wuuBSrCVKzOyE7PTjhc7yEqZ1pmvEEeS5Lj/MaqvegFxXyF33N+6jkehxdyg==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [linux]
 
-  /@oxlint/binding-linux-arm64-musl/1.78.0:
-    resolution: {integrity: sha1-jW/tI8T1QGfIjDs/QRDIxP2aykA=, tarball: '@oxlint/binding-linux-arm64-musl/download/@oxlint/binding-linux-arm64-musl-1.78.0.tgz'}
+  '@oxlint/binding-linux-arm64-musl@1.78.0':
+    resolution: {integrity: sha512-oC0mvsgBJjlMijSDEhx9KuvR9zYeHXceA9MjbuXB1F8NSR78Yj2unOBrstEvTVaq+pko+kuue6DajC00eqvTdg==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [linux]
 
-  /@oxlint/binding-linux-ppc64-gnu/1.78.0:
-    resolution: {integrity: sha1-obQn7gOdZH/n4NsCO1ghtNYJnMg=, tarball: '@oxlint/binding-linux-ppc64-gnu/download/@oxlint/binding-linux-ppc64-gnu-1.78.0.tgz'}
+  '@oxlint/binding-linux-ppc64-gnu@1.78.0':
+    resolution: {integrity: sha512-XAllT5SUZS+ohjuZ3/5S0cwe0r7eboiuigeStCZ5DXRYx/2KVM2UvQXvAfyzXEimtQjAB7cDQ2YxDe2Zl2WNQQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [ppc64]
+    os: [linux]
 
-  /@oxlint/binding-linux-riscv64-gnu/1.78.0:
-    resolution: {integrity: sha1-GEF15gMva7tGIUBbI08NL3hL848=, tarball: '@oxlint/binding-linux-riscv64-gnu/download/@oxlint/binding-linux-riscv64-gnu-1.78.0.tgz'}
+  '@oxlint/binding-linux-riscv64-gnu@1.78.0':
+    resolution: {integrity: sha512-trucMER/0QtecoXvc1y/UVqE3kwJipDwrx4oHfj+nNm3dq2zjP44WT0CfHNDPM3G1DXIkx/gY6lAD21NSCZVhA==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [riscv64]
+    os: [linux]
 
-  /@oxlint/binding-linux-riscv64-musl/1.78.0:
-    resolution: {integrity: sha1-4QrP+7M0DEg48mmee7GFEDepgLM=, tarball: '@oxlint/binding-linux-riscv64-musl/download/@oxlint/binding-linux-riscv64-musl-1.78.0.tgz'}
+  '@oxlint/binding-linux-riscv64-musl@1.78.0':
+    resolution: {integrity: sha512-cm3O4F/HQbdzOUX5mKHqG5KDL6E5w0pnlZ+fbBy2rmLryPOowkuLagFHTopQsEIpjcaZoPOrL+BmmAytAG9HFg==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [riscv64]
+    os: [linux]
 
-  /@oxlint/binding-linux-s390x-gnu/1.78.0:
-    resolution: {integrity: sha1-Hck0Y7F6iLnyUZ6A8MO2GykQCSE=, tarball: '@oxlint/binding-linux-s390x-gnu/download/@oxlint/binding-linux-s390x-gnu-1.78.0.tgz'}
+  '@oxlint/binding-linux-s390x-gnu@1.78.0':
+    resolution: {integrity: sha512-33wRf6HqGNsybJ3qX4cGaQN2ODPxNmc1rMa0mrTmx3eFq1VzOnvQooi9bIGVYakW8a/wmqVx1mgsUm8R2xfTiw==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [s390x]
+    os: [linux]
 
-  /@oxlint/binding-linux-x64-gnu/1.78.0:
-    resolution: {integrity: sha1-b8w6nJUnREYJgoMyaIpX9Gx+FoE=, tarball: '@oxlint/binding-linux-x64-gnu/download/@oxlint/binding-linux-x64-gnu-1.78.0.tgz'}
+  '@oxlint/binding-linux-x64-gnu@1.78.0':
+    resolution: {integrity: sha512-rRdISSYegj6VganMZ9tjRjijowfHJ09IZU01i0toBAqr6n5LEtwHq2IeS4FjW2RoskOHlb6efB26H5izYb3GEQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [linux]
 
-  /@oxlint/binding-linux-x64-musl/1.78.0:
-    resolution: {integrity: sha1-Eb1JA56XM3Odfnf8OOGuzvrbtco=, tarball: '@oxlint/binding-linux-x64-musl/download/@oxlint/binding-linux-x64-musl-1.78.0.tgz'}
+  '@oxlint/binding-linux-x64-musl@1.78.0':
+    resolution: {integrity: sha512-GmsP4rW0xTL6u5CVdcDsaN5Fbc7hBc382Wmar1kttbnwSEviM+rSINKOMQ+UQ6iH+AGwC+8gaAiwu134Tgh6Lg==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [linux]
 
-  /@oxlint/binding-openharmony-arm64/1.78.0:
-    resolution: {integrity: sha1-dXdBoXatvixfXJe7T3HYQo12Qe8=, tarball: '@oxlint/binding-openharmony-arm64/download/@oxlint/binding-openharmony-arm64-1.78.0.tgz'}
+  '@oxlint/binding-openharmony-arm64@1.78.0':
+    resolution: {integrity: sha512-sy9yeYuADc8a+n4TLBayzMCZiHPW78DcIFVpOXTmdKHWQeM9xe5uzkqIIZmi326D5hY9XVwacipEB1p7tQjPAg==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [openharmony]
 
-  /@oxlint/binding-win32-arm64-msvc/1.78.0:
-    resolution: {integrity: sha1-QQ3eRDlQng7Jgptiy0m2FJdGobQ=, tarball: '@oxlint/binding-win32-arm64-msvc/download/@oxlint/binding-win32-arm64-msvc-1.78.0.tgz'}
+  '@oxlint/binding-win32-arm64-msvc@1.78.0':
+    resolution: {integrity: sha512-rjc2hF1KfMi8fZj1X/m3AmnHbdsF3rL0v6KQg0Uc880Yb2khjz+3U14sfdZ7jWTpRnN1m1NQa/TT7uU9lJWPrA==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [win32]
 
-  /@oxlint/binding-win32-ia32-msvc/1.78.0:
-    resolution: {integrity: sha1-EJpgt5X1FszdV6+oN97iiAYNi9M=, tarball: '@oxlint/binding-win32-ia32-msvc/download/@oxlint/binding-win32-ia32-msvc-1.78.0.tgz'}
+  '@oxlint/binding-win32-ia32-msvc@1.78.0':
+    resolution: {integrity: sha512-zcuXFVrEFHIafRfkCQT8w/Xe41o07ozl/vwHq7p94vB29xVzsB0sZGYORU1jhcYKv3Lr0J3HbJ2T4fHH5rWmvA==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [ia32]
+    os: [win32]
 
-  /@oxlint/binding-win32-x64-msvc/1.78.0:
-    resolution: {integrity: sha1-5ot7S5mOjh6sltNXzURHG8o3xDA=, tarball: '@oxlint/binding-win32-x64-msvc/download/@oxlint/binding-win32-x64-msvc-1.78.0.tgz'}
+  '@oxlint/binding-win32-x64-msvc@1.78.0':
+    resolution: {integrity: sha512-Sb5ocmLSuYeOuXd+CFOToGKp/gjXUEWDnvIGwhnh8aq8wY4TMmEnKnvbogSW7RdMZv77JSARduS7/gv+khYEjA==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [win32]
 
-  /@pixi-spine/all-3.8/4.0.6_j3atrtjmrdzd4xnywbrn5wgvmm:
-    resolution: {integrity: sha1-WB8OOWXZCeRTrudrunIHk/fnJZU=, tarball: '@pixi-spine/all-3.8/download/@pixi-spine/all-3.8-4.0.6.tgz'}
+  '@pixi-spine/all-3.8@4.0.6':
+    resolution: {integrity: sha512-UnI4MNFmP86Hvrh9ZHjXcof6HAvW/Y1lGw4d0hutCCB/Sl4576QfHmeQFX0xmeuJh70mUHC2O9Tw9rqQZv9svw==}
     peerDependencies:
       '@pixi/assets': ^7.0.0
       '@pixi/core': ^7.0.0
@@ -199,22 +211,9 @@ packages:
       '@pixi/mesh': ^7.0.0
       '@pixi/mesh-extras': ^7.0.0
       '@pixi/sprite': ^7.0.0
-    dependencies:
-      '@pixi-spine/base': 4.0.6_ts2afwzkqjlagdvtqbcn2z23w4
-      '@pixi-spine/loader-3.8': 4.0.6_oa3ils5d4dzocvucr27u4euwhu
-      '@pixi-spine/loader-base': 4.0.6_l4fkdv3vqexjm6oew7ye7keahy
-      '@pixi-spine/runtime-3.8': 4.0.6_qh6fhis5bpaksikkp3n6fjolki
-      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
-      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-      '@pixi/mesh-extras': 7.4.3_7l2wkaqppxg7auqtzi6tsdukoe
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi-spine/base/4.0.6_ts2afwzkqjlagdvtqbcn2z23w4:
-    resolution: {integrity: sha1-maF22MUp96a3+K/sbKuqUEvfL+4=, tarball: '@pixi-spine/base/download/@pixi-spine/base-4.0.6.tgz'}
+  '@pixi-spine/base@4.0.6':
+    resolution: {integrity: sha512-m7tbwGF9LTWoDP3/p1lj7tPYUiZroFGJa3hqCpDT24oP0+qPwm81zhvOddcvKpm9WvyG7EahQfncayXMNm0n7A==}
     peerDependencies:
       '@pixi/core': ^7.0.0
       '@pixi/display': ^7.0.0
@@ -222,636 +221,421 @@ packages:
       '@pixi/mesh': ^7.0.0
       '@pixi/mesh-extras': ^7.0.0
       '@pixi/sprite': ^7.0.0
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
-      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-      '@pixi/mesh-extras': 7.4.3_7l2wkaqppxg7auqtzi6tsdukoe
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi-spine/loader-3.8/4.0.6_oa3ils5d4dzocvucr27u4euwhu:
-    resolution: {integrity: sha1-FZ9o3uqRG/MDU7MLA7YwbyZxlJo=, tarball: '@pixi-spine/loader-3.8/download/@pixi-spine/loader-3.8-4.0.6.tgz'}
+  '@pixi-spine/loader-3.8@4.0.6':
+    resolution: {integrity: sha512-DtZSOCVN3U3+cSua3kUDDcVBILCkKlzS+VWg9kvYjT1erORmfcmsCoF8AExoYad67lL1LBm7d/SMq965IwwI4w==}
     peerDependencies:
       '@pixi-spine/loader-base': ^4.0.0
       '@pixi-spine/runtime-3.8': ^4.0.0
-    dependencies:
-      '@pixi-spine/loader-base': 4.0.6_l4fkdv3vqexjm6oew7ye7keahy
-      '@pixi-spine/runtime-3.8': 4.0.6_qh6fhis5bpaksikkp3n6fjolki
-    dev: false
 
-  /@pixi-spine/loader-base/4.0.6_l4fkdv3vqexjm6oew7ye7keahy:
-    resolution: {integrity: sha1-bcbaA4eEyrQV+978wUOiXHcGYAU=, tarball: '@pixi-spine/loader-base/download/@pixi-spine/loader-base-4.0.6.tgz'}
+  '@pixi-spine/loader-base@4.0.6':
+    resolution: {integrity: sha512-sdbT1fbjHJFxESn8R2vulIyPu6xVBocJhrfs/kdpEWmsGUHTFdh7ANKaCqvXPvQh6wO5tgJNGhuLxtSu8VNzYg==}
     peerDependencies:
       '@pixi-spine/base': ^4.0.0
       '@pixi/assets': ' ^7.0.0'
       '@pixi/core': ^7.0.0
-    dependencies:
-      '@pixi-spine/base': 4.0.6_ts2afwzkqjlagdvtqbcn2z23w4
-      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi-spine/runtime-3.8/4.0.6_qh6fhis5bpaksikkp3n6fjolki:
-    resolution: {integrity: sha1-4CBjWLFRjRsjVTRLsnIkLSCwDMM=, tarball: '@pixi-spine/runtime-3.8/download/@pixi-spine/runtime-3.8-4.0.6.tgz'}
+  '@pixi-spine/runtime-3.8@4.0.6':
+    resolution: {integrity: sha512-caHEFt7Iwzercec5cOI+Sf2tzOT4ejNAn6ZjBurWAEeXZ8YCaj41PTnlnJAh6ex80AP3WWFJcbnqcXV/6G0sMA==}
     peerDependencies:
       '@pixi-spine/base': ^4.0.0
       '@pixi/core': ^7.0.0
-    dependencies:
-      '@pixi-spine/base': 4.0.6_ts2afwzkqjlagdvtqbcn2z23w4
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/accessibility/7.4.3_5xeadyefqngwnxo3jvj2fjgtfy:
-    resolution: {integrity: sha1-WdFKmIboU9Skac89QlbLjoq5KA0=, tarball: '@pixi/accessibility/download/@pixi/accessibility-7.4.3.tgz'}
+  '@pixi/accessibility@7.4.3':
+    resolution: {integrity: sha512-tCr0yeWpMe0yucFvEPidy5a7gVJGpTjqGrDpSEBYT/kbScfUwcoX49RrckCCCiXDlyO4WRh9lVVuHXTvqRLIMg==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
       '@pixi/events': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/events': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi/app/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
-    resolution: {integrity: sha1-LotwDBRnVCE2+i0INvEHVGmq5a4=, tarball: '@pixi/app/download/@pixi/app-7.4.3.tgz'}
+  '@pixi/app@7.4.3':
+    resolution: {integrity: sha512-opyWMuO0Ir8pf1DYUR++wAA6ZfNU+nIX2z95R2OD172HbcdhB4/HD7leLIIAny/LciEdMqlWEBhXK7N93YWbdg==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-    dev: false
 
-  /@pixi/assets/7.4.3_@pixi+core@7.4.3:
-    resolution: {integrity: sha1-eHqxLWTJ1oIjEt+XBYajNhcYu+I=, tarball: '@pixi/assets/download/@pixi/assets-7.4.3.tgz'}
+  '@pixi/assets@7.4.3':
+    resolution: {integrity: sha512-StvjiJBSp/j9hHkGu8AFHNvwYUazXq64WhyhytztyDMRkg/l/cL7EcttY5T0qZNWlIpccdr60LUKrWDOuMpkiw==}
     peerDependencies:
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@types/css-font-loading-module': 0.0.12
-    dev: false
 
-  /@pixi/color/7.4.3:
-    resolution: {integrity: sha1-Vje9wOS/J0v8IWyJnUNnYTvg0Nw=, tarball: '@pixi/color/download/@pixi/color-7.4.3.tgz'}
-    dependencies:
-      '@pixi/colord': 2.9.6
-    dev: false
+  '@pixi/color@7.4.3':
+    resolution: {integrity: sha512-a6R+bXKeXMDcRmjYQoBIK+v2EYqxSX49wcjAY579EYM/WrFKS98nSees6lqVUcLKrcQh2DT9srJHX7XMny3voQ==}
 
-  /@pixi/colord/2.9.6:
-    resolution: {integrity: sha1-fk54UUgNpv08704zHwCNYL5+EgQ=, tarball: '@pixi/colord/download/@pixi/colord-2.9.6.tgz'}
-    dev: false
+  '@pixi/colord@2.9.6':
+    resolution: {integrity: sha512-nezytU2pw587fQstUu1AsJZDVEynjskwOL+kibwcdxsMBFqPsFFNA7xl0ii/gXuDi6M0xj3mfRJj8pBSc2jCfA==}
 
-  /@pixi/compressed-textures/7.4.3_vxedn37wtpnt4ozhh2j5kf7zxi:
-    resolution: {integrity: sha1-PXi5lf4KHvsypuZ5MraiJ8/Jhc0=, tarball: '@pixi/compressed-textures/download/@pixi/compressed-textures-7.4.3.tgz'}
+  '@pixi/compressed-textures@7.4.3':
+    resolution: {integrity: sha512-uJ3CC+lNX4HIxs6IxEESO50/0A1KxSVm6CO9UlkXzTsNj9ynmdy5BkJ1dzii7LCdqGcHIXHO01yvKuUbJBBQtw==}
     peerDependencies:
       '@pixi/assets': 7.4.3
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/constants/7.4.3:
-    resolution: {integrity: sha1-r3WNro+tvtFiM8e98TWOviaNRkY=, tarball: '@pixi/constants/download/@pixi/constants-7.4.3.tgz'}
-    dev: false
+  '@pixi/constants@7.4.3':
+    resolution: {integrity: sha512-QGmwJUNQy/vVEHzL6VGQvnwawLZ1wceZMI8HwJAT4/I2uAzbBeFDdmCS8WsTpSWLZjF/DszDc1D8BFp4pVJ5UQ==}
 
-  /@pixi/core/7.4.3:
-    resolution: {integrity: sha1-gjD6kuADbsD7XB7qJ9wUDHgkftw=, tarball: '@pixi/core/download/@pixi/core-7.4.3.tgz'}
-    dependencies:
-      '@pixi/color': 7.4.3
-      '@pixi/constants': 7.4.3
-      '@pixi/extensions': 7.4.3
-      '@pixi/math': 7.4.3
-      '@pixi/runner': 7.4.3
-      '@pixi/settings': 7.4.3
-      '@pixi/ticker': 7.4.3
-      '@pixi/utils': 7.4.3
-    dev: false
+  '@pixi/core@7.4.3':
+    resolution: {integrity: sha512-5YDs11faWgVVTL8VZtLU05/Fl47vaP5Tnsbf+y/WRR0VSW3KhRRGTBU1J3Gdc2xEWbJhUK07KGP7eSZpvtPVgA==}
 
-  /@pixi/display/7.4.3_@pixi+core@7.4.3:
-    resolution: {integrity: sha1-r4z6Fp0aeMJHBnlBlwc4SwdRI2U=, tarball: '@pixi/display/download/@pixi/display-7.4.3.tgz'}
+  '@pixi/display@7.4.3':
+    resolution: {integrity: sha512-b5m2dAaoNAVdxz1oDaxl3XZ059NEOcNtGkxTOZ4EYCw/jcp9sZXkgSROHRzsGn4k+NugH7+9MP4Id2Z0kkdUhw==}
     peerDependencies:
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/events/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
-    resolution: {integrity: sha1-quXCklyshnxJb3laha1USZ/mvnY=, tarball: '@pixi/events/download/@pixi/events-7.4.3.tgz'}
+  '@pixi/events@7.4.3':
+    resolution: {integrity: sha512-o3j/5Dxq6WDVS6eHfURB/cf/MP+NcsF/eC5PnbSHjXxJmDE7PoTVwLvxexm5uuvNRpFh/6/Fn0V8Vl4gV8sc8w==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-    dev: false
 
-  /@pixi/extensions/7.4.3:
-    resolution: {integrity: sha1-XZ6YS77xDMXPOsFyC8AjtX9jP2Q=, tarball: '@pixi/extensions/download/@pixi/extensions-7.4.3.tgz'}
-    dev: false
+  '@pixi/extensions@7.4.3':
+    resolution: {integrity: sha512-FhoiYkHQEDYHUE7wXhqfsTRz6KxLXjuMbSiAwnLb9uG1vAgp6q6qd6HEsf4X30YaZbLFY8a4KY6hFZWjF+4Fdw==}
 
-  /@pixi/extract/7.4.3_@pixi+core@7.4.3:
-    resolution: {integrity: sha1-ihCU85BCa/nipOx6QHB+dRlpJ/M=, tarball: '@pixi/extract/download/@pixi/extract-7.4.3.tgz'}
+  '@pixi/extract@7.4.3':
+    resolution: {integrity: sha512-HNvGNrEVaeVsbcnIO1MsHpjZbTwo9nIlaOEBzDGcL6JWwzuB1RnzUke7WUCndCUt91sGUdvPnvgCvy9/NNFg3w==}
     peerDependencies:
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/filter-alpha/7.4.3_@pixi+core@7.4.3:
-    resolution: {integrity: sha1-DsGOuGKom4FwN3YL+hGRVVHEBsY=, tarball: '@pixi/filter-alpha/download/@pixi/filter-alpha-7.4.3.tgz'}
+  '@pixi/filter-alpha@7.4.3':
+    resolution: {integrity: sha512-YFdUB1I53USQb+9TEhS849dV2KZhbnNGIoBbOSThUJfXQc4pDguIFWMagVToAQYgmZ4C4AtYfVjaSEELrMcCdA==}
     peerDependencies:
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/filter-blur/7.4.3_@pixi+core@7.4.3:
-    resolution: {integrity: sha1-lDEeDUSUbxqi3xAtU4/Md8lAEeo=, tarball: '@pixi/filter-blur/download/@pixi/filter-blur-7.4.3.tgz'}
+  '@pixi/filter-blur@7.4.3':
+    resolution: {integrity: sha512-ZFzS9L/whdRbs5A/EUgF3yQaBcxNarmbuwaMgrfnpQ84mRczkGByqDLGToadiufyals07ufTrXBGRle9lbtEDA==}
     peerDependencies:
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/filter-color-matrix/7.4.3_@pixi+core@7.4.3:
-    resolution: {integrity: sha1-26NmJi3F+oUMLeyP61udpg5JG/o=, tarball: '@pixi/filter-color-matrix/download/@pixi/filter-color-matrix-7.4.3.tgz'}
+  '@pixi/filter-color-matrix@7.4.3':
+    resolution: {integrity: sha512-TNu0h20SrzjUWIb5v19dAp1vPpqtG0w2XF9kIHN91bMNaf3R1jzhpWG6TtaVO9eo1IolWcEJLw38jIohyC+KNw==}
     peerDependencies:
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/filter-displacement/7.4.3_@pixi+core@7.4.3:
-    resolution: {integrity: sha1-1srY35HY1+fIxlBMp9mnPuqe1DI=, tarball: '@pixi/filter-displacement/download/@pixi/filter-displacement-7.4.3.tgz'}
+  '@pixi/filter-displacement@7.4.3':
+    resolution: {integrity: sha512-ax+cFA2mEnKgqf9F8qInpv09GNWzjwnASLETpwPXzWBtlAlNCeHV2tCv3+SlMdEKUkwG9sA7AmjjjC2JBUyt+Q==}
     peerDependencies:
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/filter-fxaa/7.4.3_@pixi+core@7.4.3:
-    resolution: {integrity: sha1-auiM02T0VGQ4CbLUIwlwDkNuNoM=, tarball: '@pixi/filter-fxaa/download/@pixi/filter-fxaa-7.4.3.tgz'}
+  '@pixi/filter-fxaa@7.4.3':
+    resolution: {integrity: sha512-y9jhho5cCflhEsPtNqqsd+XJHsb+/ysht4rG/VHQ8Z6pScHYpbgiEpowryGq8uSMQQwx6zKNS2DPiXdiOHPZsg==}
     peerDependencies:
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/filter-noise/7.4.3_@pixi+core@7.4.3:
-    resolution: {integrity: sha1-72+0maaRqw4KEWWeaC3nNYjpLUM=, tarball: '@pixi/filter-noise/download/@pixi/filter-noise-7.4.3.tgz'}
+  '@pixi/filter-noise@7.4.3':
+    resolution: {integrity: sha512-rwgSO3BKe1jW/P5CaOcfLKjfpl674aBEo/igi/3QLxA3ORhILNqWRsKkOwP8xF/ejI5NE4rMEkdv0LScbdGFhA==}
     peerDependencies:
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/graphics/7.4.3_qegou4ohxoxx6fjwhsqriswvqy:
-    resolution: {integrity: sha1-Bb+r40dT43R9dJDPemctDH1BcyE=, tarball: '@pixi/graphics/download/@pixi/graphics-7.4.3.tgz'}
+  '@pixi/graphics@7.4.3':
+    resolution: {integrity: sha512-wWLivD8/URb8A7X4TqCZGG39C91IE+aOuWY/z9NCz5Z6WvA/VWnsc5fLTlO+ggjGHgKF0cSucCXZfUe1wm0AOQ==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
       '@pixi/sprite': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi/math/7.4.3:
-    resolution: {integrity: sha1-5B7PfHTalDOBbmYblvtfbXzGNS4=, tarball: '@pixi/math/download/@pixi/math-7.4.3.tgz'}
-    dev: false
+  '@pixi/math@7.4.3':
+    resolution: {integrity: sha512-/uJOVhR2DOZ+zgdI6Bs/CwcXT4bNRKsS+TqX3ekRIxPCwaLra+Qdm7aDxT5cTToDzdxbKL5+rwiLu3Y1egILDw==}
 
-  /@pixi/mesh-extras/7.4.3_7l2wkaqppxg7auqtzi6tsdukoe:
-    resolution: {integrity: sha1-sYbCigPDOM58J6H0T8a854wuJUc=, tarball: '@pixi/mesh-extras/download/@pixi/mesh-extras-7.4.3.tgz'}
+  '@pixi/mesh-extras@7.4.3':
+    resolution: {integrity: sha512-EqpxpVZoTObyupxMSzuUsCGmWPQioW84n9EO9Ajawkk/HYA+qKFZ5viKiEThIUBYgv4Apn/7c0U3Feg7Ez4uQQ==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/mesh': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi/mesh/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
-    resolution: {integrity: sha1-HPrkwyo9XVOpVgUBEyUNF3d58bA=, tarball: '@pixi/mesh/download/@pixi/mesh-7.4.3.tgz'}
+  '@pixi/mesh@7.4.3':
+    resolution: {integrity: sha512-CikqFPtKvU3Zj986/MSoC8X39CWv5CEpiEW/tYp47p4tgQNDSkNWYnDiNYgb+4VX6pNsBrgX4DALLdTR17SlSA==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-    dev: false
 
-  /@pixi/mixin-cache-as-bitmap/7.4.3_qegou4ohxoxx6fjwhsqriswvqy:
-    resolution: {integrity: sha1-TZ3d9HlASP0ppOKG341CZYz5yjU=, tarball: '@pixi/mixin-cache-as-bitmap/download/@pixi/mixin-cache-as-bitmap-7.4.3.tgz'}
+  '@pixi/mixin-cache-as-bitmap@7.4.3':
+    resolution: {integrity: sha512-NgvDdgSgd2tfcTSc+SWF12JJjVVz5ZrkSlhX0idSp/LSako82AiFJlD2xqH9GUsEcA6sqBBlnu7nrGkPTHQdhA==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
       '@pixi/sprite': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi/mixin-get-child-by-name/7.4.3_@pixi+display@7.4.3:
-    resolution: {integrity: sha1-GS9qLcFlVTXwt57gykf8BmRE19I=, tarball: '@pixi/mixin-get-child-by-name/download/@pixi/mixin-get-child-by-name-7.4.3.tgz'}
+  '@pixi/mixin-get-child-by-name@7.4.3':
+    resolution: {integrity: sha512-HLhDxHwafQT+CxbqQx9w9ivJIyAOg9JJ/6m4fNymVuDWeuMGcxDxBD7DukdUYIieT+RD/RlxdPEmq8YoromlFA==}
     peerDependencies:
       '@pixi/display': 7.4.3
-    dependencies:
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-    dev: false
 
-  /@pixi/mixin-get-global-position/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
-    resolution: {integrity: sha1-JuM+DPhb6Ac43Ivqg1kDBIKnObE=, tarball: '@pixi/mixin-get-global-position/download/@pixi/mixin-get-global-position-7.4.3.tgz'}
+  '@pixi/mixin-get-global-position@7.4.3':
+    resolution: {integrity: sha512-k09kvkS379EypCIWgXMY7uiXtWk1BsaJyTYlV16Co0AsmNPdFd+wUozMx1xV6rxcGiWXsxr/1k9fbETuYkcXCQ==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-    dev: false
 
-  /@pixi/particle-container/7.4.3_qegou4ohxoxx6fjwhsqriswvqy:
-    resolution: {integrity: sha1-f2uGKs3mT1jLKcOyGV8YEJ/T730=, tarball: '@pixi/particle-container/download/@pixi/particle-container-7.4.3.tgz'}
+  '@pixi/particle-container@7.4.3':
+    resolution: {integrity: sha512-0DfJF5C0XTfuI2FsLYvMKCOtqWjXWGOWfA6m4l0W/Ke/qw5zKIOEhgjPLw4qNRtOhmEfkVKJUGp66Ap/ya2YzA==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
       '@pixi/sprite': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi/prepare/7.4.3_rq3qs5klubyyxapin3tgdowapu:
-    resolution: {integrity: sha1-dV6ZHJnkUGbvnk1XUxCtdk8PVDQ=, tarball: '@pixi/prepare/download/@pixi/prepare-7.4.3.tgz'}
+  '@pixi/prepare@7.4.3':
+    resolution: {integrity: sha512-OjJHGKXPzwP5OLKxBnTBnKMOktHynLvO0TQPqTYgNtmGQzY109mypCqM4M+s/V+uYmBo/T+sXvBahj98q/f1tA==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
       '@pixi/graphics': 7.4.3
       '@pixi/text': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
-      '@pixi/text': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
-    dev: false
 
-  /@pixi/runner/7.4.3:
-    resolution: {integrity: sha1-GN0m1lb0TGEypiszEB5YcMihhbo=, tarball: '@pixi/runner/download/@pixi/runner-7.4.3.tgz'}
-    dev: false
+  '@pixi/runner@7.4.3':
+    resolution: {integrity: sha512-TJyfp7y23u5vvRAyYhVSa7ytq0PdKSvPLXu4G3meoFh1oxTLHH6g/RIzLuxUAThPG2z7ftthuW3qWq6dRV+dhw==}
 
-  /@pixi/settings/7.4.3:
-    resolution: {integrity: sha1-v4M1ctSLxcdRsEqd9sE4IGjm1fg=, tarball: '@pixi/settings/download/@pixi/settings-7.4.3.tgz'}
-    dependencies:
-      '@pixi/constants': 7.4.3
-      '@types/css-font-loading-module': 0.0.12
-      ismobilejs: 1.1.1
-    dev: false
+  '@pixi/settings@7.4.3':
+    resolution: {integrity: sha512-SmGK8smc0PxRB9nr0UJioEtE9hl4gvj9OedCvZx3bxBwA3omA5BmP3CyhQfN8XJ29+o2OUL01r3zAPVol4l4lA==}
 
-  /@pixi/sprite-animated/7.4.3_7jbw4n67slm5gct6vpsyqfzpte:
-    resolution: {integrity: sha1-ki7D9JSGRZf+1UvJrf1yqcsTJlM=, tarball: '@pixi/sprite-animated/download/@pixi/sprite-animated-7.4.3.tgz'}
+  '@pixi/sprite-animated@7.4.3':
+    resolution: {integrity: sha512-mw5YIec8KfO1Jv9qrDNvGoD7Dlmcgww5YlMtd+ARi7Zzo+6ziNw899LXtoaKX1+3BXdZbYNyJAx3C5r30NtwXA==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/sprite': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi/sprite-tiling/7.4.3_qegou4ohxoxx6fjwhsqriswvqy:
-    resolution: {integrity: sha1-K/cUGS/h41QJ2NOcu1e+eeW+eI4=, tarball: '@pixi/sprite-tiling/download/@pixi/sprite-tiling-7.4.3.tgz'}
+  '@pixi/sprite-tiling@7.4.3':
+    resolution: {integrity: sha512-kUa9cEcMsGXSIZoXA7LhW4oo0eWa30w0KYd7mZ0bqalBMfOcvsGZMN701Lc5lpE8URw+8yu5bnyGLbrxhWBTuw==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
       '@pixi/sprite': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi/sprite/7.4.3_i76xz4su7ydbefnhnxdsoltecy:
-    resolution: {integrity: sha1-7dlzn4fD6qQnoV691YQYpYqXOIg=, tarball: '@pixi/sprite/download/@pixi/sprite-7.4.3.tgz'}
+  '@pixi/sprite@7.4.3':
+    resolution: {integrity: sha512-iNBrpOFF9nXDT6m2jcyYy6l/sRzklLDDck1eFHprHZwvNquY2nzRfh+RGBCecxhBcijiLJ3fsZN33fP0LDXkvw==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-    dev: false
 
-  /@pixi/spritesheet/7.4.3_vxedn37wtpnt4ozhh2j5kf7zxi:
-    resolution: {integrity: sha1-MNyqWZG8jJDD4RnKl9HhJ/9+ugg=, tarball: '@pixi/spritesheet/download/@pixi/spritesheet-7.4.3.tgz'}
+  '@pixi/spritesheet@7.4.3':
+    resolution: {integrity: sha512-Ce4xZzUxUSKfiROUjjVCBYNLuCcDEWKJ822bSV9rkgVHItu3q04VnEww0DXO+9K0hKv4Ukjjk8aP6Pz0LgPm7A==}
     peerDependencies:
       '@pixi/assets': 7.4.3
       '@pixi/core': 7.4.3
-    dependencies:
-      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
-      '@pixi/core': 7.4.3
-    dev: false
 
-  /@pixi/text-bitmap/7.4.3_dperfufo3ym6q22v4uhh3zhfky:
-    resolution: {integrity: sha1-1rEtpgjYYNyIo1la/gcPhq8A6F0=, tarball: '@pixi/text-bitmap/download/@pixi/text-bitmap-7.4.3.tgz'}
+  '@pixi/text-bitmap@7.4.3':
+    resolution: {integrity: sha512-TnBocJm7f5nMAYwYcsojc62uCrOYauAGH26o3pNrlqmHDRDQ7FzPOGvkYZGYFREbUycloLSRlYpSy0FB9ZdV4Q==}
     peerDependencies:
       '@pixi/assets': 7.4.3
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
       '@pixi/mesh': 7.4.3
       '@pixi/text': 7.4.3
-    dependencies:
-      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-      '@pixi/text': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
-    dev: false
 
-  /@pixi/text-html/7.4.3_domgap63ib46s4q7earsfybkce:
-    resolution: {integrity: sha1-z0GuH42X6rCO9bNZK3l4kM6MbnE=, tarball: '@pixi/text-html/download/@pixi/text-html-7.4.3.tgz'}
+  '@pixi/text-html@7.4.3':
+    resolution: {integrity: sha512-nm9K9gjSZAU8ETwQZBE3kMGNdO1IzyghxoRTcJCWKhekiGDpUQhopfNhqieNZ7reVJpvhpFQWjbyaHDehndUaQ==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/display': 7.4.3
       '@pixi/sprite': 7.4.3
       '@pixi/text': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-      '@pixi/text': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
-    dev: false
 
-  /@pixi/text/7.4.3_7jbw4n67slm5gct6vpsyqfzpte:
-    resolution: {integrity: sha1-AqdUFSAu5vhFNFer63jG3jz6L5g=, tarball: '@pixi/text/download/@pixi/text-7.4.3.tgz'}
+  '@pixi/text@7.4.3':
+    resolution: {integrity: sha512-IAF0iu04rPg3oiL0HZsEZI44fpJxq3UZ4xTmx8l1RyhhSXiElLvvSlSH57vt/BKMQZtCs+AqEit7yn8heK2+nQ==}
     peerDependencies:
       '@pixi/core': 7.4.3
       '@pixi/sprite': 7.4.3
-    dependencies:
-      '@pixi/core': 7.4.3
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-    dev: false
 
-  /@pixi/ticker/7.4.3:
-    resolution: {integrity: sha1-zKaSVjFGgj1/UbikS+eZPTxu0gM=, tarball: '@pixi/ticker/download/@pixi/ticker-7.4.3.tgz'}
-    dependencies:
-      '@pixi/extensions': 7.4.3
-      '@pixi/settings': 7.4.3
-      '@pixi/utils': 7.4.3
-    dev: false
+  '@pixi/ticker@7.4.3':
+    resolution: {integrity: sha512-tHsAD0iOUb6QSGGw+c8cyRBvxsq/NlfzIFBZLEHhWZ+Bx4a0MmXup6I/yJDGmyPCYE+ctCcAfY13wKAzdiVFgQ==}
 
-  /@pixi/utils/7.4.3:
-    resolution: {integrity: sha1-ciEfjl6I7uHY3GXKkhEsPYlsdFE=, tarball: '@pixi/utils/download/@pixi/utils-7.4.3.tgz'}
-    dependencies:
-      '@pixi/color': 7.4.3
-      '@pixi/constants': 7.4.3
-      '@pixi/settings': 7.4.3
-      '@types/earcut': 2.1.4
-      earcut: 2.2.4
-      eventemitter3: 4.0.7
-      url: 0.11.4
-    dev: false
+  '@pixi/utils@7.4.3':
+    resolution: {integrity: sha512-NO3Y9HAn2UKS1YdxffqsPp+kDpVm8XWvkZcS/E+rBzY9VTLnNOI7cawSRm+dacdET3a8Jad3aDKEDZ0HmAqAFA==}
 
-  /@rolldown/binding-android-arm64/1.2.3:
-    resolution: {integrity: sha1-ABuLCwGERwHv2hu2vthLaBxKSIs=, tarball: '@rolldown/binding-android-arm64/download/@rolldown/binding-android-arm64-1.2.3.tgz'}
+  '@rolldown/binding-android-arm64@1.2.4':
+    resolution: {integrity: sha512-jHC2cnyKz5xU2fhECtFl8OZ83cYNt13GZQD+0uMJ/X3o+ijmd56okHhTUwxVSHPx1IRVIJEZ1/1pPzeLCU6XKA==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [android]
 
-  /@rolldown/binding-darwin-arm64/1.2.3:
-    resolution: {integrity: sha1-XofGAu1jSm/vCS4hYuJPv7iBxOw=, tarball: '@rolldown/binding-darwin-arm64/download/@rolldown/binding-darwin-arm64-1.2.3.tgz'}
+  '@rolldown/binding-darwin-arm64@1.2.4':
+    resolution: {integrity: sha512-Dc5mPD8F5F/FS8i01syd7FTF6yB2fVthH/TRkjwJkzUK6EpoxHtqvZQP5Zwq80/5z19TWYHIg1KOHboCgVx/aQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [darwin]
 
-  /@rolldown/binding-darwin-x64/1.2.3:
-    resolution: {integrity: sha1-8y4LKGcUvQOkIdaTQV0F2X0mW3c=, tarball: '@rolldown/binding-darwin-x64/download/@rolldown/binding-darwin-x64-1.2.3.tgz'}
+  '@rolldown/binding-darwin-x64@1.2.4':
+    resolution: {integrity: sha512-fpDm4oBo6SqLvWUYCmFhdde3U9KH2fRNNMeAnAPAIwxRL345xutL0EtEUcuoxsoazdJGv/MuDBQHlCDrtbvqOg==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [darwin]
 
-  /@rolldown/binding-freebsd-x64/1.2.3:
-    resolution: {integrity: sha1-XzitV2G2t7IbV6mVZrtSY0xgqxk=, tarball: '@rolldown/binding-freebsd-x64/download/@rolldown/binding-freebsd-x64-1.2.3.tgz'}
+  '@rolldown/binding-freebsd-x64@1.2.4':
+    resolution: {integrity: sha512-rSJoreDE/HoIzoaib6MTp5jQtCTdMHKIvItAKT/ImS6Y6Ww76oUaeMyp4Vc/fAgd/ehji068IxetHXAnqUwN9A==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [freebsd]
 
-  /@rolldown/binding-linux-arm-gnueabihf/1.2.3:
-    resolution: {integrity: sha1-q03NB/G9iOjWWa4MO7nS8pCtuJc=, tarball: '@rolldown/binding-linux-arm-gnueabihf/download/@rolldown/binding-linux-arm-gnueabihf-1.2.3.tgz'}
+  '@rolldown/binding-linux-arm-gnueabihf@1.2.4':
+    resolution: {integrity: sha512-/jm8OGHgn7oGaJu3i/qZI9spUGcJ+y/lk43ttQ/iO1tOd9NissG6o97bighBCiL+BKRngmcDuR6ikfwYdJmVuQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm]
+    os: [linux]
 
-  /@rolldown/binding-linux-arm64-gnu/1.2.3:
-    resolution: {integrity: sha1-0nm3AWA5pyX7ZtgnhLmEH0Lfg9o=, tarball: '@rolldown/binding-linux-arm64-gnu/download/@rolldown/binding-linux-arm64-gnu-1.2.3.tgz'}
+  '@rolldown/binding-linux-arm64-gnu@1.2.4':
+    resolution: {integrity: sha512-tIP06BeD9EqvECBrPZ+sqdPlYrT+aYaAiu1wYziVx5elRK/ftm33JxVDy2bXGbr6J0CrtirCkR87/X5a2euEng==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [linux]
 
-  /@rolldown/binding-linux-arm64-musl/1.2.3:
-    resolution: {integrity: sha1-0Iu8k9J0IhRUjFrfffd4iUTlqJo=, tarball: '@rolldown/binding-linux-arm64-musl/download/@rolldown/binding-linux-arm64-musl-1.2.3.tgz'}
+  '@rolldown/binding-linux-arm64-musl@1.2.4':
+    resolution: {integrity: sha512-Ql1Q0EQqVThvn9VAVlwNzsUvbSFtCMGjLpRRi4pk5i7NZZ4n5ISiLMjHYtus4VQ2PvkSw24zyaCVsiS+sXPj1w==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [linux]
 
-  /@rolldown/binding-linux-ppc64-gnu/1.2.3:
-    resolution: {integrity: sha1-ZBjmN0WzGT8mqzu4h0SzpKE1bXw=, tarball: '@rolldown/binding-linux-ppc64-gnu/download/@rolldown/binding-linux-ppc64-gnu-1.2.3.tgz'}
+  '@rolldown/binding-linux-ppc64-gnu@1.2.4':
+    resolution: {integrity: sha512-GjbjXD4XXfN19D0LZNbmiCBUoDiRACsYHr0yaIbbn8aFsXjHZifcYqu/W5Er5X2X990WjHXFrxarn5chzItorQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [ppc64]
+    os: [linux]
 
-  /@rolldown/binding-linux-s390x-gnu/1.2.3:
-    resolution: {integrity: sha1-d+ww0HBM9OsctKY/UByYUsZyjPQ=, tarball: '@rolldown/binding-linux-s390x-gnu/download/@rolldown/binding-linux-s390x-gnu-1.2.3.tgz'}
+  '@rolldown/binding-linux-s390x-gnu@1.2.4':
+    resolution: {integrity: sha512-p5WR0NOwaRmJ/B1b6IjEFLLivwEsf3PrdBIhRbhTCQisbo2SvHHpG4ELB/+FgQNnB88LTOF86upmJmbvZdQ2lw==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [s390x]
+    os: [linux]
 
-  /@rolldown/binding-linux-x64-gnu/1.2.3:
-    resolution: {integrity: sha1-O5tuDdPobFl/QoWHSMol8d/Vjtg=, tarball: '@rolldown/binding-linux-x64-gnu/download/@rolldown/binding-linux-x64-gnu-1.2.3.tgz'}
+  '@rolldown/binding-linux-x64-gnu@1.2.4':
+    resolution: {integrity: sha512-4/GyVjmhR+Tc6HLJvwc1sOhPqAZtySiSMesOZyX6JQ5XBxoTDEMKQzvo07NIK6nTon/SivlZqvhzvuVBNQhObQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [linux]
 
-  /@rolldown/binding-linux-x64-musl/1.2.3:
-    resolution: {integrity: sha1-94AzxZLIvSr0goSkX45LqqC++/U=, tarball: '@rolldown/binding-linux-x64-musl/download/@rolldown/binding-linux-x64-musl-1.2.3.tgz'}
+  '@rolldown/binding-linux-x64-musl@1.2.4':
+    resolution: {integrity: sha512-l9eeLsCNvPpmSXUej0etw/J1eqV0Jj1D5G/xG6YTijmE6dkv6E2QezgWbTfQk63v952DPqrjOCoiqxq7Bw0YUQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [linux]
 
-  /@rolldown/binding-openharmony-arm64/1.2.3:
-    resolution: {integrity: sha1-NulR9ab8qSKlIF4oPQqCufmBmco=, tarball: '@rolldown/binding-openharmony-arm64/download/@rolldown/binding-openharmony-arm64-1.2.3.tgz'}
+  '@rolldown/binding-openharmony-arm64@1.2.4':
+    resolution: {integrity: sha512-e0F355MSTMm3+UOqtV3L24gFUp2N5m1f8L/7d56deik6va+AXdrt9F8LbzGpeWGWRbZEDq4m8NVnJDeBtf9DZg==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [openharmony]
 
-  /@rolldown/binding-win32-arm64-msvc/1.2.3:
-    resolution: {integrity: sha1-weSUrEfhO9hX/KCzrVnDNYAkH34=, tarball: '@rolldown/binding-win32-arm64-msvc/download/@rolldown/binding-win32-arm64-msvc-1.2.3.tgz'}
+  '@rolldown/binding-win32-arm64-msvc@1.2.4':
+    resolution: {integrity: sha512-AWLi0uBRYh6QlE7OKhiz+phZC0qwtij2QZmhmOdsLdFn64m7oMpooE9ICE3lhm9xMb4SpDo2WbHcxX1iFLFtqw==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [win32]
 
-  /@rolldown/binding-win32-x64-msvc/1.2.3:
-    resolution: {integrity: sha1-sO///NaHL4oCE3PrQ3kWsbUig6Q=, tarball: '@rolldown/binding-win32-x64-msvc/download/@rolldown/binding-win32-x64-msvc-1.2.3.tgz'}
+  '@rolldown/binding-win32-x64-msvc@1.2.4':
+    resolution: {integrity: sha512-UwSDJOg3dqCAejWdxclJjCsh3Qq4vLYMDxmyHqo1btz3stK2VqgwNd3mm5tuIwzSlGIQ/1H9Hr+Zn09mrezNqQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [win32]
 
-  /@rolldown/pluginutils/1.0.1:
-    resolution: {integrity: sha1-4/zuCT+7XOdl4a0Ij/TeKIn2+b4=, tarball: '@rolldown/pluginutils/download/@rolldown/pluginutils-1.0.1.tgz'}
-    dev: true
+  '@rolldown/pluginutils@1.0.1':
+    resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
 
-  /@tauri-apps/api/2.11.1:
-    resolution: {integrity: sha1-zWsT/CZAPKCVoC457NvsgEjShy0=, tarball: '@tauri-apps/api/download/@tauri-apps/api-2.11.1.tgz'}
-    dev: false
+  '@standard-schema/spec@1.1.0':
+    resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  /@tauri-apps/cli-darwin-arm64/2.11.4:
-    resolution: {integrity: sha1-KITm8uYjGOTKHbDW076DgNy2xUI=, tarball: '@tauri-apps/cli-darwin-arm64/download/@tauri-apps/cli-darwin-arm64-2.11.4.tgz'}
+  '@tauri-apps/api@2.11.1':
+    resolution: {integrity: sha512-M2FPuYND2m+wh5hfW9ZpSdxMPdEJovPBWwoHJmwUpysTYNHaOkVFN419m/K0LIgjb/7KU2vBgsUepJWugQCvAA==}
+
+  '@tauri-apps/cli-darwin-arm64@2.11.4':
+    resolution: {integrity: sha512-1ryOF3ZhpZ/nemHV5zVwBQBz9jDGKmKPvWPADOhc83ig0P4bMc2iER4NbC6r9sjeIZ6RVQ4g3RZIYvezhcl4TQ==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [darwin]
 
-  /@tauri-apps/cli-darwin-x64/2.11.4:
-    resolution: {integrity: sha1-2eLZKxXuL/C3gZ6lxt85jy/HVLo=, tarball: '@tauri-apps/cli-darwin-x64/download/@tauri-apps/cli-darwin-x64-2.11.4.tgz'}
+  '@tauri-apps/cli-darwin-x64@2.11.4':
+    resolution: {integrity: sha512-uFsGQAAfuyz1k/yGLmkWfkBlgKAqZfxqlHmLWx81QU27RJWfmbNHCIq8T8w1e+VClleIuZUjpHWfoE4E3DLo3A==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [darwin]
 
-  /@tauri-apps/cli-linux-arm-gnueabihf/2.11.4:
-    resolution: {integrity: sha1-rxSuI303pAOs21bHQhR2tlBX2yc=, tarball: '@tauri-apps/cli-linux-arm-gnueabihf/download/@tauri-apps/cli-linux-arm-gnueabihf-2.11.4.tgz'}
+  '@tauri-apps/cli-linux-arm-gnueabihf@2.11.4':
+    resolution: {integrity: sha512-IaHZn5CdBL21oUmjiVOS1ctw6Ip1O0pjp70FwOWmYz1myWe0SY96ZIj2FYf7pT0m8bI2h/hrs5ZbEXXh44/MkQ==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm]
+    os: [linux]
 
-  /@tauri-apps/cli-linux-arm64-gnu/2.11.4:
-    resolution: {integrity: sha1-/lIWV/sBHrmlI2xcnQ+mPrzjndQ=, tarball: '@tauri-apps/cli-linux-arm64-gnu/download/@tauri-apps/cli-linux-arm64-gnu-2.11.4.tgz'}
+  '@tauri-apps/cli-linux-arm64-gnu@2.11.4':
+    resolution: {integrity: sha512-N41/ukTRVe6XSuUTESuFdGeOW2i7k62tK+6gHK5Kd5/q5RPvvi19GaWAVPPb9u95HSGmTChSolBfzynUsssFaA==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [linux]
 
-  /@tauri-apps/cli-linux-arm64-musl/2.11.4:
-    resolution: {integrity: sha1-SsfcwiwlsXOLHTkEMnFKqdmQWhA=, tarball: '@tauri-apps/cli-linux-arm64-musl/download/@tauri-apps/cli-linux-arm64-musl-2.11.4.tgz'}
+  '@tauri-apps/cli-linux-arm64-musl@2.11.4':
+    resolution: {integrity: sha512-v277UnT/fB64xAfSroL5N3Km3tLmvATWqJJw/wRI+g6o+HkeD0slyE7gOhNs1MbjE41R7bQOTxMVoL3aomUJmw==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [linux]
 
-  /@tauri-apps/cli-linux-riscv64-gnu/2.11.4:
-    resolution: {integrity: sha1-8M2N4knI7edFz2m1fZatnx3FV0M=, tarball: '@tauri-apps/cli-linux-riscv64-gnu/download/@tauri-apps/cli-linux-riscv64-gnu-2.11.4.tgz'}
+  '@tauri-apps/cli-linux-riscv64-gnu@2.11.4':
+    resolution: {integrity: sha512-qqgNkQ2u1yZHxjhxsZaxUtRDW8dIqIYm33rx/mzwQv0SfY9x1B+iraj8vWeFiXjjSVVhEMepXSOts1TqPzvXNQ==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [riscv64]
+    os: [linux]
 
-  /@tauri-apps/cli-linux-x64-gnu/2.11.4:
-    resolution: {integrity: sha1-lEY2pUZWyVvw62ykrz/jF/TZqC4=, tarball: '@tauri-apps/cli-linux-x64-gnu/download/@tauri-apps/cli-linux-x64-gnu-2.11.4.tgz'}
+  '@tauri-apps/cli-linux-x64-gnu@2.11.4':
+    resolution: {integrity: sha512-2VRNWl84FOH0m2giiDkO2h0QXlcMJeX+zJDpI5kDIQAx6s+geF3v48F4DXfJez4GS/FdoDGnPnw1C2iYGbQ7bQ==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [linux]
 
-  /@tauri-apps/cli-linux-x64-musl/2.11.4:
-    resolution: {integrity: sha1-BQ+Yt4AO63gS1tWDQj03pbYp9XE=, tarball: '@tauri-apps/cli-linux-x64-musl/download/@tauri-apps/cli-linux-x64-musl-2.11.4.tgz'}
+  '@tauri-apps/cli-linux-x64-musl@2.11.4':
+    resolution: {integrity: sha512-o9GyhYor/nc7xarmwDE3ka2szuW3uuZzXjHWh64Q8YX5AtSgxdQkFWzrY4O8KiGtVNvFBI14H3Q49Qj5TOIP/A==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [linux]
 
-  /@tauri-apps/cli-win32-arm64-msvc/2.11.4:
-    resolution: {integrity: sha1-JL6R3Fj4nNjJFCtSeXVEmR2MwWw=, tarball: '@tauri-apps/cli-win32-arm64-msvc/download/@tauri-apps/cli-win32-arm64-msvc-2.11.4.tgz'}
+  '@tauri-apps/cli-win32-arm64-msvc@2.11.4':
+    resolution: {integrity: sha512-ld5Ehb598m0VkYyylRPNeCFsBe/km0jxis6KgMpl3IGY6I/i1RwQXO05I1AsXUXO2WC6AvB/Lw4qTf/asiuEiQ==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [win32]
 
-  /@tauri-apps/cli-win32-ia32-msvc/2.11.4:
-    resolution: {integrity: sha1-D7gN+RakvQV2yjww0jCOeGgz9DM=, tarball: '@tauri-apps/cli-win32-ia32-msvc/download/@tauri-apps/cli-win32-ia32-msvc-2.11.4.tgz'}
+  '@tauri-apps/cli-win32-ia32-msvc@2.11.4':
+    resolution: {integrity: sha512-12Hxi0XX/H5VFxO/bGgHkFWhml9VMgEOu9CidjeCeTNQ1l6fpUlbiGgSP7CLI3PFtW9/FfbeHieZ+kyWK5H7CA==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [ia32]
+    os: [win32]
 
-  /@tauri-apps/cli-win32-x64-msvc/2.11.4:
-    resolution: {integrity: sha1-MZF+JVIUcxsxoPuEcnm+cf4+Bdg=, tarball: '@tauri-apps/cli-win32-x64-msvc/download/@tauri-apps/cli-win32-x64-msvc-2.11.4.tgz'}
+  '@tauri-apps/cli-win32-x64-msvc@2.11.4':
+    resolution: {integrity: sha512-+vDiqBIU5dMISg/wNvX3sF+ZHfgJGJ5T0AcO+EHNXV9GGAG+P5fzodlDXD3QdKCRgZxMoCm5PPvj3BqLNjBthw==}
     engines: {node: '>= 10'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [win32]
 
-  /@tauri-apps/cli/2.11.4:
-    resolution: {integrity: sha1-6v6w06e9Nk0nAUhD+wqE2cly5iY=, tarball: '@tauri-apps/cli/download/@tauri-apps/cli-2.11.4.tgz'}
+  '@tauri-apps/cli@2.11.4':
+    resolution: {integrity: sha512-R8xGtMpwyetawSqm9kYOuMmEqkhUbvcUy8n0aNXIxollKBLESUu5f4Fx+64hgASYm1H+jSWq6jCW6zqTnH6hqQ==}
     engines: {node: '>= 10'}
     hasBin: true
-    optionalDependencies:
-      '@tauri-apps/cli-darwin-arm64': 2.11.4
-      '@tauri-apps/cli-darwin-x64': 2.11.4
-      '@tauri-apps/cli-linux-arm-gnueabihf': 2.11.4
-      '@tauri-apps/cli-linux-arm64-gnu': 2.11.4
-      '@tauri-apps/cli-linux-arm64-musl': 2.11.4
-      '@tauri-apps/cli-linux-riscv64-gnu': 2.11.4
-      '@tauri-apps/cli-linux-x64-gnu': 2.11.4
-      '@tauri-apps/cli-linux-x64-musl': 2.11.4
-      '@tauri-apps/cli-win32-arm64-msvc': 2.11.4
-      '@tauri-apps/cli-win32-ia32-msvc': 2.11.4
-      '@tauri-apps/cli-win32-x64-msvc': 2.11.4
-    dev: true
 
-  /@tauri-apps/plugin-process/2.3.1:
-    resolution: {integrity: sha1-//d6p1UMnFNHaJyFnVgfiCh7964=, tarball: '@tauri-apps/plugin-process/download/@tauri-apps/plugin-process-2.3.1.tgz'}
-    dependencies:
-      '@tauri-apps/api': 2.11.1
-    dev: false
+  '@tauri-apps/plugin-process@2.3.1':
+    resolution: {integrity: sha512-nCa4fGVaDL/B9ai03VyPOjfAHRHSBz5v6F/ObsB73r/dA3MHHhZtldaDMIc0V/pnUw9ehzr2iEG+XkSEyC0JJA==}
 
-  /@types/css-font-loading-module/0.0.12:
-    resolution: {integrity: sha1-ZUlIM5KII/mY++joYxKCGHXYDbU=, tarball: '@types/css-font-loading-module/download/@types/css-font-loading-module-0.0.12.tgz'}
-    dev: false
+  '@types/chai@5.2.3':
+    resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
 
-  /@types/earcut/2.1.4:
-    resolution: {integrity: sha1-WBHX0zMEj1p1c7It3ISSPmlZbaY=, tarball: '@types/earcut/download/@types/earcut-2.1.4.tgz'}
-    dev: false
+  '@types/css-font-loading-module@0.0.12':
+    resolution: {integrity: sha512-x2tZZYkSxXqWvTDgveSynfjq/T2HyiZHXb00j/+gy19yp70PHCizM48XFdjBCWH7eHBD0R5i/pw9yMBP/BH5uA==}
 
-  /@types/node/24.13.3:
-    resolution: {integrity: sha1-SfGL08ZHhm3NpRoHVsFF4UWQzhY=, tarball: '@types/node/download/@types/node-24.13.3.tgz'}
-    dependencies:
-      undici-types: 7.18.2
-    dev: true
+  '@types/deep-eql@4.0.2':
+    resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
 
-  /@types/react-dom/19.2.4_@types+react@19.2.18:
-    resolution: {integrity: sha1-Flq16X37CBhHsPZ1UGDPQKP2Zms=, tarball: '@types/react-dom/download/@types/react-dom-19.2.4.tgz'}
+  '@types/earcut@2.1.4':
+    resolution: {integrity: sha512-qp3m9PPz4gULB9MhjGID7wpo3gJ4bTGXm7ltNDsmOvsPduTeHp8wSW9YckBj3mljeOh4F0m2z/0JKAALRKbmLQ==}
+
+  '@types/estree@1.0.9':
+    resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
+
+  '@types/node@24.13.3':
+    resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
+
+  '@types/react-dom@19.2.4':
+    resolution: {integrity: sha512-Bsc+QHgp+P/F02XDzNCY9jnZNCUuLki36KT7VKrTXXLdHf+vHMNZnW1rVu5DNW/rCK+fya3DATySbLM4yhtKUw==}
     peerDependencies:
       '@types/react': ^19.2.0
-    dependencies:
-      '@types/react': 19.2.18
-    dev: true
 
-  /@types/react/19.2.18:
-    resolution: {integrity: sha1-6wtqH7Y10alpLV+Eo0lb2K0VNwc=, tarball: '@types/react/download/@types/react-19.2.18.tgz'}
-    dependencies:
-      csstype: 3.2.3
-    dev: true
+  '@types/react@19.2.18':
+    resolution: {integrity: sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==}
 
-  /@vitejs/plugin-react/6.0.5_vite@8.2.1:
-    resolution: {integrity: sha1-SO55UQk/+QVJUs/51k6HQ1XN43I=, tarball: '@vitejs/plugin-react/download/@vitejs/plugin-react-6.0.5.tgz'}
+  '@vitejs/plugin-react@6.0.5':
+    resolution: {integrity: sha512-BOVzne/NL162sMdResB25mUv+vWMF5NoAjNf09TeGlE7ZpszZWSD3winycicLJw72yeVsoCn/2kOhEuCvEShMA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rolldown/plugin-babel': ^0.1.7 || ^0.2.0
@@ -862,252 +646,226 @@ packages:
         optional: true
       babel-plugin-react-compiler:
         optional: true
-    dependencies:
-      '@rolldown/pluginutils': 1.0.1
-      vite: 8.2.1_@types+node@24.13.3
-    dev: true
 
-  /call-bind-apply-helpers/1.0.2:
-    resolution: {integrity: sha1-S1QowiK+mF15w9gmV0edvgtZstY=, tarball: call-bind-apply-helpers/download/call-bind-apply-helpers-1.0.2.tgz}
+  '@vitest/expect@4.1.10':
+    resolution: {integrity: sha512-YsCn+qAk1GWjQOWFEsEcL2gNQ0zmVmQu3T03qP6UyjhtmdtwtbuI+DASn/7iQB3HGTXkdBwGddzxPlmiql5vlA==}
+
+  '@vitest/mocker@4.1.10':
+    resolution: {integrity: sha512-v0xaezt+DKEmKfaxg133ldzADrwLGd7Ze1MfQQTYfvs8OqZIwbxyxaYURivwV7sWy5fqn3rH5uOrSp07bp44Ow==}
+    peerDependencies:
+      msw: ^2.4.9
+      vite: ^6.0.0 || ^7.0.0 || ^8.0.0
+    peerDependenciesMeta:
+      msw:
+        optional: true
+      vite:
+        optional: true
+
+  '@vitest/pretty-format@4.1.10':
+    resolution: {integrity: sha512-W1HsjSH4MXQ9YfmmhLAoIYf1HRfekQCGngeIgcei6MP5QQGWUe0gkopdZQaVCFO+JDJMrAJGwa5pRpNpvy4P8Q==}
+
+  '@vitest/runner@4.1.10':
+    resolution: {integrity: sha512-IKI6kpIH+LmpROplyLwBBaCfMgOZOMsygVa6BARD6ahA04VRuJSa6OaVG7kRvSEMD870Vd91rSSw0eegtWyLGg==}
+
+  '@vitest/snapshot@4.1.10':
+    resolution: {integrity: sha512-xRkfOT1qpTAi/Ti4Y1LtfRc3kEuqxGw59eN2jN9pRWMtS/XDevekhcFSqvQqjUNGksfjMJu3Y+oJ+4Ypn2OaJw==}
+
+  '@vitest/spy@4.1.10':
+    resolution: {integrity: sha512-PLf/Ugvoq5wO/b4rwYCR1h2PSIdXz7wnkQFMiUpLdtM7l6pqVFcQIBEHyT1+l+cj7mNwAfZHzqXqDyjvOuwbDw==}
+
+  '@vitest/utils@4.1.10':
+    resolution: {integrity: sha512-fy9am/HWxbaGt/Sawrp90vt6Y6jQwf1RX77cz3uwoJwJVMli/e1IEwRPnMNJ7vKfPTwo0diXifkpPvwH9v7nGA==}
+
+  assertion-error@2.0.1:
+    resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
+    engines: {node: '>=12'}
+
+  call-bind-apply-helpers@1.0.2:
+    resolution: {integrity: sha512-Sp1ablJ0ivDkSzjcaJdxEunN5/XvksFJ2sMBFfq6x0ryhQV/2b/KwFe21cMpmHtPOSij8K99/wSfoEuTObmuMQ==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      es-errors: 1.3.0
-      function-bind: 1.1.2
-    dev: false
 
-  /call-bound/1.0.4:
-    resolution: {integrity: sha1-I43pNdKippKSjFOMfM+pEGf9Bio=, tarball: call-bound/download/call-bound-1.0.4.tgz}
+  call-bound@1.0.4:
+    resolution: {integrity: sha512-+ys997U96po4Kx/ABpBCqhA9EuxJaQWDQg7295H4hBphv3IZg0boBKuwYpt4YXp6MZ5AmZQnU/tyMTlRpaSejg==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      call-bind-apply-helpers: 1.0.2
-      get-intrinsic: 1.3.0
-    dev: false
 
-  /csstype/3.2.3:
-    resolution: {integrity: sha1-7EjA8+mT5QZIyG2lWeJhCZXPmJo=, tarball: csstype/download/csstype-3.2.3.tgz}
-    dev: true
+  chai@6.2.2:
+    resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
+    engines: {node: '>=18'}
 
-  /detect-libc/2.1.2:
-    resolution: {integrity: sha1-aJxdzcGQDvVYOky59te0c3QgdK0=, tarball: detect-libc/download/detect-libc-2.1.2.tgz}
+  convert-source-map@2.0.0:
+    resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  csstype@3.2.3:
+    resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+
+  detect-libc@2.1.2:
+    resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
-    dev: true
 
-  /dunder-proto/1.0.1:
-    resolution: {integrity: sha1-165mfh3INIL4tw/Q9u78UNow9Yo=, tarball: dunder-proto/download/dunder-proto-1.0.1.tgz}
+  dunder-proto@1.0.1:
+    resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      call-bind-apply-helpers: 1.0.2
-      es-errors: 1.3.0
-      gopd: 1.2.0
-    dev: false
 
-  /earcut/2.2.4:
-    resolution: {integrity: sha1-bQL9TWgWDBFIJdBokKkuyq5gNDo=, tarball: earcut/download/earcut-2.2.4.tgz}
-    dev: false
+  earcut@2.2.4:
+    resolution: {integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==}
 
-  /es-define-property/1.0.1:
-    resolution: {integrity: sha1-mD6y+aZyTpMD9hrd8BHHLgngsPo=, tarball: es-define-property/download/es-define-property-1.0.1.tgz}
+  es-define-property@1.0.1:
+    resolution: {integrity: sha512-e3nRfgfUZ4rNGL232gUgX06QNyyez04KdjFrF+LTRoOXmrOgFKDg4BCdsjW8EnT69eqdYGmRpJwiPVYNrCaW3g==}
     engines: {node: '>= 0.4'}
-    dev: false
 
-  /es-errors/1.3.0:
-    resolution: {integrity: sha1-BfdaJdq5jk+x3NXhRywFRtUFfI8=, tarball: es-errors/download/es-errors-1.3.0.tgz}
+  es-errors@1.3.0:
+    resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
     engines: {node: '>= 0.4'}
-    dev: false
 
-  /es-object-atoms/1.1.2:
-    resolution: {integrity: sha1-otCzcyBXJN+lJdI7DD4bHKWCyZs=, tarball: es-object-atoms/download/es-object-atoms-1.1.2.tgz}
+  es-module-lexer@2.3.1:
+    resolution: {integrity: sha512-shc1dbU90Yl/xq1QrC7QRtfcwURZuVRfPhZbDoldJ1cn1gzDvBaBWlv0eFolj5+0znnPJz5TXLxsN77X/12KTA==}
+
+  es-object-atoms@1.1.2:
+    resolution: {integrity: sha512-HWcBoN6NileqtSydK2FqHbS/LoDd2pqrnQHLyJzBj4kOp/ky2MWMN694xOfkK8/SnUsW2DH7EfyVlydKCsm1Zw==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      es-errors: 1.3.0
-    dev: false
 
-  /eventemitter3/4.0.7:
-    resolution: {integrity: sha1-Lem2j2Uo1WRO9cWVJqG0oHMGFp8=, tarball: eventemitter3/download/eventemitter3-4.0.7.tgz}
-    dev: false
+  estree-walker@3.0.3:
+    resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
 
-  /fdir/6.5.0_picomatch@4.0.5:
-    resolution: {integrity: sha1-7Sq5Z6MxreYvGNB32uGSaE1Q01A=, tarball: fdir/download/fdir-6.5.0.tgz}
+  eventemitter3@4.0.7:
+    resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
+
+  expect-type@1.4.0:
+    resolution: {integrity: sha512-KfYbmpRm0VbLjEvVa9yGwCi9GI34xvi7A/HXYWQO65CSD2u3MczUJSuwXKFIxlGsgBQizV9q5J9NHj4VG0n+pA==}
+    engines: {node: '>=12.0.0'}
+
+  fdir@6.5.0:
+    resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       picomatch: ^3 || ^4
     peerDependenciesMeta:
       picomatch:
         optional: true
-    dependencies:
-      picomatch: 4.0.5
-    dev: true
 
-  /fsevents/2.3.3:
-    resolution: {integrity: sha1-ysZAd4XQNnWipeGlMFxpezR9kNY=, tarball: fsevents/download/fsevents-2.3.3.tgz}
+  fsevents@2.3.3:
+    resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
-    requiresBuild: true
-    dev: true
-    optional: true
+    os: [darwin]
 
-  /function-bind/1.1.2:
-    resolution: {integrity: sha1-LALYZNl/PqbIgwxGTL0Rq26rehw=, tarball: function-bind/download/function-bind-1.1.2.tgz}
-    dev: false
+  function-bind@1.1.2:
+    resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
 
-  /get-intrinsic/1.3.0:
-    resolution: {integrity: sha1-dD8OO2lkqTpUke0b/6rgVNf5jQE=, tarball: get-intrinsic/download/get-intrinsic-1.3.0.tgz}
+  get-intrinsic@1.3.0:
+    resolution: {integrity: sha512-9fSjSaos/fRIVIp+xSJlE6lfwhES7LNtKaCBIamHsjr2na1BiABJPo0mOjjz8GJDURarmCPGqaiVg5mfjb98CQ==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      call-bind-apply-helpers: 1.0.2
-      es-define-property: 1.0.1
-      es-errors: 1.3.0
-      es-object-atoms: 1.1.2
-      function-bind: 1.1.2
-      get-proto: 1.0.1
-      gopd: 1.2.0
-      has-symbols: 1.1.0
-      hasown: 2.0.4
-      math-intrinsics: 1.1.0
-    dev: false
 
-  /get-proto/1.0.1:
-    resolution: {integrity: sha1-FQs/J0OGnvPoUewMSdFbHRTQDuE=, tarball: get-proto/download/get-proto-1.0.1.tgz}
+  get-proto@1.0.1:
+    resolution: {integrity: sha512-sTSfBjoXBp89JvIKIefqw7U2CCebsc74kiY6awiGogKtoSGbgjYE/G/+l9sF3MWFPNc9IcoOC4ODfKHfxFmp0g==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      dunder-proto: 1.0.1
-      es-object-atoms: 1.1.2
-    dev: false
 
-  /gopd/1.2.0:
-    resolution: {integrity: sha1-ifVrghe9vIgCvSmd9tfxCB1+UaE=, tarball: gopd/download/gopd-1.2.0.tgz}
+  gopd@1.2.0:
+    resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
-    dev: false
 
-  /has-symbols/1.1.0:
-    resolution: {integrity: sha1-/JxqeDoISVHQuXH+EBjegTcHozg=, tarball: has-symbols/download/has-symbols-1.1.0.tgz}
+  has-symbols@1.1.0:
+    resolution: {integrity: sha512-1cDNdwJ2Jaohmb3sg4OmKaMBwuC48sYni5HUw2DvsC8LjGTLK9h+eb1X6RyuOHe4hT0ULCW68iomhjUoKUqlPQ==}
     engines: {node: '>= 0.4'}
-    dev: false
 
-  /hasown/2.0.4:
-    resolution: {integrity: sha1-jGLYy5C+sqrV0KW2dYGtmFTD8AM=, tarball: hasown/download/hasown-2.0.4.tgz}
+  hasown@2.0.4:
+    resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      function-bind: 1.1.2
-    dev: false
 
-  /ismobilejs/1.1.1:
-    resolution: {integrity: sha1-xWygro5Sskyg8iul7zIVot27qg4=, tarball: ismobilejs/download/ismobilejs-1.1.1.tgz}
-    dev: false
+  ismobilejs@1.1.1:
+    resolution: {integrity: sha512-VaFW53yt8QO61k2WJui0dHf4SlL8lxBofUuUmwBo0ljPk0Drz2TiuDW4jo3wDcv41qy/SxrJ+VAzJ/qYqsmzRw==}
 
-  /lightningcss-android-arm64/1.33.0:
-    resolution: {integrity: sha1-mmhB+IrlD8g1ApA4krQa9BvCuQc=, tarball: lightningcss-android-arm64/download/lightningcss-android-arm64-1.33.0.tgz}
+  lightningcss-android-arm64@1.33.0:
+    resolution: {integrity: sha512-gEpRTalKdosp4Bb8qWtc2iOgE5SeIHlpS1up9bFq2wAyYhl1UdTObYiHe98zEM9SQvSoqQZ1IQD0JNpg3Ml5pg==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [android]
 
-  /lightningcss-darwin-arm64/1.33.0:
-    resolution: {integrity: sha1-wPLDHAv9GfpN0/GOlXofGhUgl9Y=, tarball: lightningcss-darwin-arm64/download/lightningcss-darwin-arm64-1.33.0.tgz}
+  lightningcss-darwin-arm64@1.33.0:
+    resolution: {integrity: sha512-Sciaz8eenNTKn9b3t7+xr0ipTp9YxKQY4npwQ3mrRuL0BAVHBLyZxofhaKBAVtzmtRZ/zTyo0/to4B1uWG/Djg==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [darwin]
 
-  /lightningcss-darwin-x64/1.33.0:
-    resolution: {integrity: sha1-ywcFllrLU4xmg5Sc5pJfs833w2E=, tarball: lightningcss-darwin-x64/download/lightningcss-darwin-x64-1.33.0.tgz}
+  lightningcss-darwin-x64@1.33.0:
+    resolution: {integrity: sha512-Z5UPAxzrjlWNNyGy6i65cJzzvgJ5D3T6wMvs+gWpY9d7qRhANrxqAp6LhxIgZhWEw18RfJTGcRxjuLIBr+m8XQ==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [darwin]
 
-  /lightningcss-freebsd-x64/1.33.0:
-    resolution: {integrity: sha1-djU4gosmurJoDa2vzITueLDrUCs=, tarball: lightningcss-freebsd-x64/download/lightningcss-freebsd-x64-1.33.0.tgz}
+  lightningcss-freebsd-x64@1.33.0:
+    resolution: {integrity: sha512-QQM/Ti/hQajJwCY+RiWuCZ9sdtI/XQk7nDK5vC8kkdwixezOlDgvDx7+RT+QjK6FcFT4MpsuoBnHIo/O3StRRg==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [freebsd]
 
-  /lightningcss-linux-arm-gnueabihf/1.33.0:
-    resolution: {integrity: sha1-aGLjF2ozGu297B7TUrTX0N0HhN4=, tarball: lightningcss-linux-arm-gnueabihf/download/lightningcss-linux-arm-gnueabihf-1.33.0.tgz}
+  lightningcss-linux-arm-gnueabihf@1.33.0:
+    resolution: {integrity: sha512-N7FVBe6iS24MlM6R/4RBTxGhQheZGs7tiQ9U32UtF75NzP5Q7xWPRqLBCKxlRQRk3rY1jCIPLzx7WzOhuUIRLQ==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm]
+    os: [linux]
 
-  /lightningcss-linux-arm64-gnu/1.33.0:
-    resolution: {integrity: sha1-xqOi7RUUHa9r3CYokw+OOb30c6o=, tarball: lightningcss-linux-arm64-gnu/download/lightningcss-linux-arm64-gnu-1.33.0.tgz}
+  lightningcss-linux-arm64-gnu@1.33.0:
+    resolution: {integrity: sha512-j2v/itmy4HlNxlc6voKXYgBqNi0Ng2LShg4z7GufpEgs05P+2suBVyi9I6YHq5uoVFx9ETin3eCEhLVyXGQnKg==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [linux]
 
-  /lightningcss-linux-arm64-musl/1.33.0:
-    resolution: {integrity: sha1-f6EzSXH8goRfmCffbvigsgkUusY=, tarball: lightningcss-linux-arm64-musl/download/lightningcss-linux-arm64-musl-1.33.0.tgz}
+  lightningcss-linux-arm64-musl@1.33.0:
+    resolution: {integrity: sha512-yiO5ROMuYQgXbC60yjZU5CYSFZGKXL0HFATXt9mHJn1+zW55oCtMI9NfcVhYLMFDL7gV7oBPon/EmMMGg2OvtQ==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [linux]
 
-  /lightningcss-linux-x64-gnu/1.33.0:
-    resolution: {integrity: sha1-i5J4YuqMK7xoMaRlCSRLUNmTblU=, tarball: lightningcss-linux-x64-gnu/download/lightningcss-linux-x64-gnu-1.33.0.tgz}
+  lightningcss-linux-x64-gnu@1.33.0:
+    resolution: {integrity: sha512-ar+Ju7LmcN0Jo4FpL4hpFybwNG9/3A/Br5KW2n2jyODg3MEZXaDYADdemoNS+BDNfMgKvylJLj4S5tyRActuAg==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [linux]
 
-  /lightningcss-linux-x64-musl/1.33.0:
-    resolution: {integrity: sha1-DFJbsHff2UQEwFnP5C2teX6Wrq8=, tarball: lightningcss-linux-x64-musl/download/lightningcss-linux-x64-musl-1.33.0.tgz}
+  lightningcss-linux-x64-musl@1.33.0:
+    resolution: {integrity: sha512-RYiYbkokw0trfKqqzfF55lginwEPrD3OJDfTuJzFs1MK6iFnDenaz1fqLLtX4ITG3OktJQXOeTaw1awrBAlZPw==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [linux]
 
-  /lightningcss-win32-arm64-msvc/1.33.0:
-    resolution: {integrity: sha1-hQ7hED2smJz6tQ46wi0aaeOU5j0=, tarball: lightningcss-win32-arm64-msvc/download/lightningcss-win32-arm64-msvc-1.33.0.tgz}
+  lightningcss-win32-arm64-msvc@1.33.0:
+    resolution: {integrity: sha512-1K+MPfLSFVpphzpdbfkhlWk6wBrTObBzS2T6db10PNOZgR9GoVsAWzwNyuhUYYbTp23j+4RrncfujZ4uAzXvwA==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [arm64]
+    os: [win32]
 
-  /lightningcss-win32-x64-msvc/1.33.0:
-    resolution: {integrity: sha1-40OuFS7tNgncbhGUnRo785oclG8=, tarball: lightningcss-win32-x64-msvc/download/lightningcss-win32-x64-msvc-1.33.0.tgz}
+  lightningcss-win32-x64-msvc@1.33.0:
+    resolution: {integrity: sha512-OlEICDx/Xl0FqSp4bry8zFnCvGpig3Gl4gCquvYwHuqJKEC1+n9NgDniFvqHGmMv1ZkqDJrDqKKSykTDX+ehuA==}
     engines: {node: '>= 12.0.0'}
-    requiresBuild: true
-    dev: true
-    optional: true
+    cpu: [x64]
+    os: [win32]
 
-  /lightningcss/1.33.0:
-    resolution: {integrity: sha1-wIhn1xp5OFxuGQIU/XL+8+X5Xws=, tarball: lightningcss/download/lightningcss-1.33.0.tgz}
+  lightningcss@1.33.0:
+    resolution: {integrity: sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA==}
     engines: {node: '>= 12.0.0'}
-    dependencies:
-      detect-libc: 2.1.2
-    optionalDependencies:
-      lightningcss-android-arm64: 1.33.0
-      lightningcss-darwin-arm64: 1.33.0
-      lightningcss-darwin-x64: 1.33.0
-      lightningcss-freebsd-x64: 1.33.0
-      lightningcss-linux-arm-gnueabihf: 1.33.0
-      lightningcss-linux-arm64-gnu: 1.33.0
-      lightningcss-linux-arm64-musl: 1.33.0
-      lightningcss-linux-x64-gnu: 1.33.0
-      lightningcss-linux-x64-musl: 1.33.0
-      lightningcss-win32-arm64-msvc: 1.33.0
-      lightningcss-win32-x64-msvc: 1.33.0
-    dev: true
 
-  /math-intrinsics/1.1.0:
-    resolution: {integrity: sha1-oN10voHiqlwvJ+Zc4oNgXuTit/k=, tarball: math-intrinsics/download/math-intrinsics-1.1.0.tgz}
+  magic-string@0.30.21:
+    resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
+
+  math-intrinsics@1.1.0:
+    resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
-    dev: false
 
-  /nanoid/3.3.18:
-    resolution: {integrity: sha1-9mot4Rmf/eD88hyKXxMQaxwIGRM=, tarball: nanoid/download/nanoid-3.3.18.tgz}
+  nanoid@3.3.18:
+    resolution: {integrity: sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-    dev: true
 
-  /object-inspect/1.13.4:
-    resolution: {integrity: sha1-g3UmXiG8IND6WCwi4bE0hdbgAhM=, tarball: object-inspect/download/object-inspect-1.13.4.tgz}
+  object-inspect@1.13.4:
+    resolution: {integrity: sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==}
     engines: {node: '>= 0.4'}
-    dev: false
 
-  /oxlint/1.78.0:
-    resolution: {integrity: sha1-KGVmgXiWoqfwTSsjBazcSEe81lA=, tarball: oxlint/download/oxlint-1.78.0.tgz}
+  obug@2.1.4:
+    resolution: {integrity: sha512-4a+OsYv9UktOJKE+l1A4OufDgdRF9PifWj+tJnHURo/P+WOxpG4GzUFL9qCalmWauao6ogiG+QvnCovwPoyAWA==}
+    engines: {node: '>=12.20.0'}
+
+  oxlint@1.78.0:
+    resolution: {integrity: sha512-QgQePuxIqKOzo1KSjG2EnITEeWvWnKAm77eq8nrMtf6AGoA+zyGc4PFYtDNJSD25g/ibOwfQ851hZ4/SPkMVoA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -1118,208 +876,106 @@ packages:
         optional: true
       vite-plus:
         optional: true
-    optionalDependencies:
-      '@oxlint/binding-android-arm-eabi': 1.78.0
-      '@oxlint/binding-android-arm64': 1.78.0
-      '@oxlint/binding-darwin-arm64': 1.78.0
-      '@oxlint/binding-darwin-x64': 1.78.0
-      '@oxlint/binding-freebsd-x64': 1.78.0
-      '@oxlint/binding-linux-arm-gnueabihf': 1.78.0
-      '@oxlint/binding-linux-arm-musleabihf': 1.78.0
-      '@oxlint/binding-linux-arm64-gnu': 1.78.0
-      '@oxlint/binding-linux-arm64-musl': 1.78.0
-      '@oxlint/binding-linux-ppc64-gnu': 1.78.0
-      '@oxlint/binding-linux-riscv64-gnu': 1.78.0
-      '@oxlint/binding-linux-riscv64-musl': 1.78.0
-      '@oxlint/binding-linux-s390x-gnu': 1.78.0
-      '@oxlint/binding-linux-x64-gnu': 1.78.0
-      '@oxlint/binding-linux-x64-musl': 1.78.0
-      '@oxlint/binding-openharmony-arm64': 1.78.0
-      '@oxlint/binding-win32-arm64-msvc': 1.78.0
-      '@oxlint/binding-win32-ia32-msvc': 1.78.0
-      '@oxlint/binding-win32-x64-msvc': 1.78.0
-    dev: true
 
-  /picocolors/1.1.1:
-    resolution: {integrity: sha1-PTIa8+q5ObCDyPkpodEs2oHCa2s=, tarball: picocolors/download/picocolors-1.1.1.tgz}
-    dev: true
+  pathe@2.0.3:
+    resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
 
-  /picomatch/4.0.5:
-    resolution: {integrity: sha1-UepXoX2G9gX4EDlZX7xA7QalX6s=, tarball: picomatch/download/picomatch-4.0.5.tgz}
+  picocolors@1.1.1:
+    resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
+
+  picomatch@4.0.5:
+    resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
-    dev: true
 
-  /pixi.js/7.4.3:
-    resolution: {integrity: sha1-CWQk4lTevLT+EGwWLVagXOp31LY=, tarball: pixi.js/download/pixi.js-7.4.3.tgz}
-    dependencies:
-      '@pixi/accessibility': 7.4.3_5xeadyefqngwnxo3jvj2fjgtfy
-      '@pixi/app': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-      '@pixi/assets': 7.4.3_@pixi+core@7.4.3
-      '@pixi/compressed-textures': 7.4.3_vxedn37wtpnt4ozhh2j5kf7zxi
-      '@pixi/core': 7.4.3
-      '@pixi/display': 7.4.3_@pixi+core@7.4.3
-      '@pixi/events': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-      '@pixi/extensions': 7.4.3
-      '@pixi/extract': 7.4.3_@pixi+core@7.4.3
-      '@pixi/filter-alpha': 7.4.3_@pixi+core@7.4.3
-      '@pixi/filter-blur': 7.4.3_@pixi+core@7.4.3
-      '@pixi/filter-color-matrix': 7.4.3_@pixi+core@7.4.3
-      '@pixi/filter-displacement': 7.4.3_@pixi+core@7.4.3
-      '@pixi/filter-fxaa': 7.4.3_@pixi+core@7.4.3
-      '@pixi/filter-noise': 7.4.3_@pixi+core@7.4.3
-      '@pixi/graphics': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
-      '@pixi/mesh': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-      '@pixi/mesh-extras': 7.4.3_7l2wkaqppxg7auqtzi6tsdukoe
-      '@pixi/mixin-cache-as-bitmap': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
-      '@pixi/mixin-get-child-by-name': 7.4.3_@pixi+display@7.4.3
-      '@pixi/mixin-get-global-position': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-      '@pixi/particle-container': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
-      '@pixi/prepare': 7.4.3_rq3qs5klubyyxapin3tgdowapu
-      '@pixi/sprite': 7.4.3_i76xz4su7ydbefnhnxdsoltecy
-      '@pixi/sprite-animated': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
-      '@pixi/sprite-tiling': 7.4.3_qegou4ohxoxx6fjwhsqriswvqy
-      '@pixi/spritesheet': 7.4.3_vxedn37wtpnt4ozhh2j5kf7zxi
-      '@pixi/text': 7.4.3_7jbw4n67slm5gct6vpsyqfzpte
-      '@pixi/text-bitmap': 7.4.3_dperfufo3ym6q22v4uhh3zhfky
-      '@pixi/text-html': 7.4.3_domgap63ib46s4q7earsfybkce
-    dev: false
+  pixi.js@7.4.3:
+    resolution: {integrity: sha512-uIWdH0EI2dVgNoqN9aFaHCmR0V65OEhMkXs2sek3c/QP2ItV6UoM+ouX9esSv3ibo20F+J5D1XwnQhUZI6wqeQ==}
 
-  /postcss/8.5.26:
-    resolution: {integrity: sha1-bnUTV4DH4Q3zQzvyJmxVLTXIxiA=, tarball: postcss/download/postcss-8.5.26.tgz}
+  postcss@8.5.26:
+    resolution: {integrity: sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==}
     engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      nanoid: 3.3.18
-      picocolors: 1.1.1
-      source-map-js: 1.2.1
-    dev: true
 
-  /punycode/1.4.1:
-    resolution: {integrity: sha1-wNWmOycYgArY4esPpSachN1BhF4=, tarball: punycode/download/punycode-1.4.1.tgz}
-    dev: false
+  punycode@1.4.1:
+    resolution: {integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==}
 
-  /qs/6.15.3:
-    resolution: {integrity: sha1-doUhMqWO1cfA72fkRBubtdYGGzs=, tarball: qs/download/qs-6.15.3.tgz}
+  qs@6.15.3:
+    resolution: {integrity: sha512-O9gl3zCl5h5blw1KGUzQKhA5oUXSl8rwUIM5o0S3nCXMliSvy5Dzx7/DJcI+SwgICv+IneSZwhBh1oSyEHA71A==}
     engines: {node: '>=0.6'}
-    dependencies:
-      es-define-property: 1.0.1
-      side-channel: 1.1.1
-    dev: false
 
-  /react-dom/19.2.8_react@19.2.8:
-    resolution: {integrity: sha1-O0a57tqHfN/yzxPSdw//SuNsLsI=, tarball: react-dom/download/react-dom-19.2.8.tgz}
+  react-dom@19.2.8:
+    resolution: {integrity: sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==}
     peerDependencies:
       react: ^19.2.8
-    dependencies:
-      react: 19.2.8
-      scheduler: 0.27.0
-    dev: false
 
-  /react/19.2.8:
-    resolution: {integrity: sha1-qAZj27WNacb+P9KR08syTop9/y0=, tarball: react/download/react-19.2.8.tgz}
+  react@19.2.8:
+    resolution: {integrity: sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==}
     engines: {node: '>=0.10.0'}
-    dev: false
 
-  /rolldown/1.2.3:
-    resolution: {integrity: sha1-EDvcu9V11RJlJ3uLUQ8ICCe2628=, tarball: rolldown/download/rolldown-1.2.3.tgz}
+  rolldown@1.2.4:
+    resolution: {integrity: sha512-rSr7irW0K7QRWzjdJXqZowkcRdDtjRduh43rBltnVKd0VFq839l1lJoDvGJb6gl7+4rTTCrPWu+YfujUL8Ug7w==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
-    dependencies:
-      '@oxc-project/types': 0.143.0
-      '@rolldown/pluginutils': 1.0.1
-    optionalDependencies:
-      '@rolldown/binding-android-arm64': 1.2.3
-      '@rolldown/binding-darwin-arm64': 1.2.3
-      '@rolldown/binding-darwin-x64': 1.2.3
-      '@rolldown/binding-freebsd-x64': 1.2.3
-      '@rolldown/binding-linux-arm-gnueabihf': 1.2.3
-      '@rolldown/binding-linux-arm64-gnu': 1.2.3
-      '@rolldown/binding-linux-arm64-musl': 1.2.3
-      '@rolldown/binding-linux-ppc64-gnu': 1.2.3
-      '@rolldown/binding-linux-s390x-gnu': 1.2.3
-      '@rolldown/binding-linux-x64-gnu': 1.2.3
-      '@rolldown/binding-linux-x64-musl': 1.2.3
-      '@rolldown/binding-openharmony-arm64': 1.2.3
-      '@rolldown/binding-win32-arm64-msvc': 1.2.3
-      '@rolldown/binding-win32-x64-msvc': 1.2.3
-    dev: true
 
-  /scheduler/0.27.0:
-    resolution: {integrity: sha1-DE74LWfR5cHjWej8dtOofwRf5b0=, tarball: scheduler/download/scheduler-0.27.0.tgz}
-    dev: false
+  scheduler@0.27.0:
+    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
-  /side-channel-list/1.0.1:
-    resolution: {integrity: sha1-wuC1oUpUCuvuO7xsP4ZmzJtQkSc=, tarball: side-channel-list/download/side-channel-list-1.0.1.tgz}
+  side-channel-list@1.0.1:
+    resolution: {integrity: sha512-mjn/0bi/oUURjc5Xl7IaWi/OJJJumuoJFQJfDDyO46+hBWsfaVM65TBHq2eoZBhzl9EchxOijpkbRC8SVBQU0w==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      es-errors: 1.3.0
-      object-inspect: 1.13.4
-    dev: false
 
-  /side-channel-map/1.0.1:
-    resolution: {integrity: sha1-1rtrN5Asb+9RdOX1M/q0xzKib0I=, tarball: side-channel-map/download/side-channel-map-1.0.1.tgz}
+  side-channel-map@1.0.1:
+    resolution: {integrity: sha512-VCjCNfgMsby3tTdo02nbjtM/ewra6jPHmpThenkTYh8pG9ucZ/1P8So4u4FGBek/BjpOVsDCMoLA/iuBKIFXRA==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      call-bound: 1.0.4
-      es-errors: 1.3.0
-      get-intrinsic: 1.3.0
-      object-inspect: 1.13.4
-    dev: false
 
-  /side-channel-weakmap/1.0.2:
-    resolution: {integrity: sha1-Ed2hnVNo5Azp7CvcH7DsvAeQ7Oo=, tarball: side-channel-weakmap/download/side-channel-weakmap-1.0.2.tgz}
+  side-channel-weakmap@1.0.2:
+    resolution: {integrity: sha512-WPS/HvHQTYnHisLo9McqBHOJk2FkHO/tlpvldyrnem4aeQp4hai3gythswg6p01oSoTl58rcpiFAjF2br2Ak2A==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      call-bound: 1.0.4
-      es-errors: 1.3.0
-      get-intrinsic: 1.3.0
-      object-inspect: 1.13.4
-      side-channel-map: 1.0.1
-    dev: false
 
-  /side-channel/1.1.1:
-    resolution: {integrity: sha1-6gLGLgXcS+pn1EQvD7ce4ZL44Ks=, tarball: side-channel/download/side-channel-1.1.1.tgz}
+  side-channel@1.1.1:
+    resolution: {integrity: sha512-6x6dK6zJdpTzF4sQeNYxwtvBzf6Eg4GtlesS94HOvTudUeyK2WXAaIfmDgsyslYrRBeFIlsi54AYsFGUuhmvrQ==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      es-errors: 1.3.0
-      object-inspect: 1.13.4
-      side-channel-list: 1.0.1
-      side-channel-map: 1.0.1
-      side-channel-weakmap: 1.0.2
-    dev: false
 
-  /source-map-js/1.2.1:
-    resolution: {integrity: sha1-HOVlD93YerwJnto33P8CTCZnrkY=, tarball: source-map-js/download/source-map-js-1.2.1.tgz}
+  siginfo@2.0.0:
+    resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
+
+  source-map-js@1.2.1:
+    resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
-  /tinyglobby/0.2.17:
-    resolution: {integrity: sha1-ViqabJ6ys7Ej05cZ+a9btE/NdjE=, tarball: tinyglobby/download/tinyglobby-0.2.17.tgz}
+  stackback@0.0.2:
+    resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
+
+  std-env@4.2.0:
+    resolution: {integrity: sha512-oCUKSupKTHX53EyjDtuZQ64pjLJ6yYCtpmEw0goYxtjG9KpbRe8KAsl2tBUGU9DyMcJ0RwJ8GqJAFzMXcXW1Rw==}
+
+  tinybench@2.9.0:
+    resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
+
+  tinyexec@1.3.0:
+    resolution: {integrity: sha512-QKAl9m8gWWGHV8jZcPeym6j+XULi6tOf1mT83WYJ4Lk2ytW/uwAWkrP0uFsdoYMdueVJ0qs26wZ+23xeB4ibNQ==}
+    engines: {node: '>=18'}
+
+  tinyglobby@0.2.17:
+    resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
     engines: {node: '>=12.0.0'}
-    dependencies:
-      fdir: 6.5.0_picomatch@4.0.5
-      picomatch: 4.0.5
-    dev: true
 
-  /typescript/6.0.3:
-    resolution: {integrity: sha1-kCUdwAeRbpcnhsuU100VsYVXfSE=, tarball: typescript/download/typescript-6.0.3.tgz}
+  tinyrainbow@3.1.1:
+    resolution: {integrity: sha512-yau8yJdTt989Mm0Bd/236QnzEiPf2xLLTqUZRUJOo/3CB078LSwzei343DgtJVmfJKJE3TMINY1u42SQsP6mXw==}
+    engines: {node: '>=14.0.0'}
+
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: true
 
-  /undici-types/7.18.2:
-    resolution: {integrity: sha1-KTV6iee3ykrvO/D9P9DNc4hCKek=, tarball: undici-types/download/undici-types-7.18.2.tgz}
-    dev: true
+  undici-types@7.18.2:
+    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
-  /url/0.11.4:
-    resolution: {integrity: sha1-rcp3s1YtVrcnRudrMwt/J7ZyHzw=, tarball: url/download/url-0.11.4.tgz}
+  url@0.11.4:
+    resolution: {integrity: sha512-oCwdVC7mTuWiPyjLUz/COz5TLk6wgp0RCsN+wHZ2Ekneac9w8uuV0njcbbie2ME+Vs+d6duwmYuR3HgQXs1fOg==}
     engines: {node: '>= 0.4'}
-    dependencies:
-      punycode: 1.4.1
-      qs: 6.15.3
-    dev: false
 
-  /vite/8.2.1_@types+node@24.13.3:
-    resolution: {integrity: sha1-b8jYu4Q71SNTCR+sl44ZTU3lsx0=, tarball: vite/download/vite-8.2.1.tgz}
+  vite@8.2.1:
+    resolution: {integrity: sha512-EU/eS7BH3XROHh2YnBefjM6DBKA6ZeMZEYQbj7NLWg5wHYlhB8B/Mayd5XsgWq+NFYccDOTemRpdETWR6Ka/lw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -1360,17 +1016,862 @@ packages:
         optional: true
       yaml:
         optional: true
+
+  vitest@4.1.10:
+    resolution: {integrity: sha512-R9jUTe5S4Qb0HCd4TNqpC7oGcrMssMRGXLW80ubjWsW9VH5GF8y1Y0SFLY9AbqSk6nt0PnOx4H4WNJYZ13GUPw==}
+    engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
+    hasBin: true
+    peerDependencies:
+      '@edge-runtime/vm': '*'
+      '@opentelemetry/api': ^1.9.0
+      '@types/node': ^20.0.0 || ^22.0.0 || >=24.0.0
+      '@vitest/browser-playwright': 4.1.10
+      '@vitest/browser-preview': 4.1.10
+      '@vitest/browser-webdriverio': 4.1.10
+      '@vitest/coverage-istanbul': 4.1.10
+      '@vitest/coverage-v8': 4.1.10
+      '@vitest/ui': 4.1.10
+      happy-dom: '*'
+      jsdom: '*'
+      vite: ^6.0.0 || ^7.0.0 || ^8.0.0
+    peerDependenciesMeta:
+      '@edge-runtime/vm':
+        optional: true
+      '@opentelemetry/api':
+        optional: true
+      '@types/node':
+        optional: true
+      '@vitest/browser-playwright':
+        optional: true
+      '@vitest/browser-preview':
+        optional: true
+      '@vitest/browser-webdriverio':
+        optional: true
+      '@vitest/coverage-istanbul':
+        optional: true
+      '@vitest/coverage-v8':
+        optional: true
+      '@vitest/ui':
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+
+  why-is-node-running@2.3.0:
+    resolution: {integrity: sha512-hUrmaWBdVDcxvYqnyh09zunKzROWjbZTiNy8dBEjkS7ehEDQibXJ7XvlmtbwuTclUiIyN+CyXQD4Vmko8fNm8w==}
+    engines: {node: '>=8'}
+    hasBin: true
+
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
+snapshots:
+
+  '@jridgewell/sourcemap-codec@1.5.5': {}
+
+  '@oxc-project/types@0.144.0': {}
+
+  '@oxlint/binding-android-arm-eabi@1.78.0':
+    optional: true
+
+  '@oxlint/binding-android-arm64@1.78.0':
+    optional: true
+
+  '@oxlint/binding-darwin-arm64@1.78.0':
+    optional: true
+
+  '@oxlint/binding-darwin-x64@1.78.0':
+    optional: true
+
+  '@oxlint/binding-freebsd-x64@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-arm-gnueabihf@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-arm-musleabihf@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-arm64-gnu@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-arm64-musl@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-ppc64-gnu@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-riscv64-gnu@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-riscv64-musl@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-s390x-gnu@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-x64-gnu@1.78.0':
+    optional: true
+
+  '@oxlint/binding-linux-x64-musl@1.78.0':
+    optional: true
+
+  '@oxlint/binding-openharmony-arm64@1.78.0':
+    optional: true
+
+  '@oxlint/binding-win32-arm64-msvc@1.78.0':
+    optional: true
+
+  '@oxlint/binding-win32-ia32-msvc@1.78.0':
+    optional: true
+
+  '@oxlint/binding-win32-x64-msvc@1.78.0':
+    optional: true
+
+  '@pixi-spine/all-3.8@4.0.6(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
     dependencies:
-      '@types/node': 24.13.3
+      '@pixi-spine/base': 4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi-spine/loader-3.8': 4.0.6(9553f3e9bc0d628f58a2a66c59a27e42)
+      '@pixi-spine/loader-base': 4.0.6(@pixi-spine/base@4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)
+      '@pixi-spine/runtime-3.8': 4.0.6(@pixi-spine/base@4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/core@7.4.3)
+      '@pixi/assets': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/graphics': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/mesh': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/mesh-extras': 7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi-spine/base@4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/graphics': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/mesh': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/mesh-extras': 7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi-spine/loader-3.8@4.0.6(9553f3e9bc0d628f58a2a66c59a27e42)':
+    dependencies:
+      '@pixi-spine/loader-base': 4.0.6(@pixi-spine/base@4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)
+      '@pixi-spine/runtime-3.8': 4.0.6(@pixi-spine/base@4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/core@7.4.3)
+
+  '@pixi-spine/loader-base@4.0.6(@pixi-spine/base@4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi-spine/base': 4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/assets': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/core': 7.4.3
+
+  '@pixi-spine/runtime-3.8@4.0.6(@pixi-spine/base@4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi-spine/base': 4.0.6(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/core': 7.4.3
+
+  '@pixi/accessibility@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/events@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/events': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi/app@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+
+  '@pixi/assets@7.4.3(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@types/css-font-loading-module': 0.0.12
+
+  '@pixi/color@7.4.3':
+    dependencies:
+      '@pixi/colord': 2.9.6
+
+  '@pixi/colord@2.9.6': {}
+
+  '@pixi/compressed-textures@7.4.3(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/assets': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/core': 7.4.3
+
+  '@pixi/constants@7.4.3': {}
+
+  '@pixi/core@7.4.3':
+    dependencies:
+      '@pixi/color': 7.4.3
+      '@pixi/constants': 7.4.3
+      '@pixi/extensions': 7.4.3
+      '@pixi/math': 7.4.3
+      '@pixi/runner': 7.4.3
+      '@pixi/settings': 7.4.3
+      '@pixi/ticker': 7.4.3
+      '@pixi/utils': 7.4.3
+
+  '@pixi/display@7.4.3(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/core': 7.4.3
+
+  '@pixi/events@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+
+  '@pixi/extensions@7.4.3': {}
+
+  '@pixi/extract@7.4.3(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/core': 7.4.3
+
+  '@pixi/filter-alpha@7.4.3(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/core': 7.4.3
+
+  '@pixi/filter-blur@7.4.3(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/core': 7.4.3
+
+  '@pixi/filter-color-matrix@7.4.3(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/core': 7.4.3
+
+  '@pixi/filter-displacement@7.4.3(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/core': 7.4.3
+
+  '@pixi/filter-fxaa@7.4.3(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/core': 7.4.3
+
+  '@pixi/filter-noise@7.4.3(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/core': 7.4.3
+
+  '@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi/math@7.4.3': {}
+
+  '@pixi/mesh-extras@7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/mesh': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+
+  '@pixi/mixin-cache-as-bitmap@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi/mixin-get-child-by-name@7.4.3(@pixi/display@7.4.3(@pixi/core@7.4.3))':
+    dependencies:
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+
+  '@pixi/mixin-get-global-position@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+
+  '@pixi/particle-container@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi/prepare@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/text@7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/graphics': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/text': 7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+
+  '@pixi/runner@7.4.3': {}
+
+  '@pixi/settings@7.4.3':
+    dependencies:
+      '@pixi/constants': 7.4.3
+      '@types/css-font-loading-module': 0.0.12
+      ismobilejs: 1.1.1
+
+  '@pixi/sprite-animated@7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi/sprite-tiling@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+
+  '@pixi/spritesheet@7.4.3(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)':
+    dependencies:
+      '@pixi/assets': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/core': 7.4.3
+
+  '@pixi/text-bitmap@7.4.3(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/text@7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))':
+    dependencies:
+      '@pixi/assets': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/mesh': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/text': 7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+
+  '@pixi/text-html@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/text@7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/text': 7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+
+  '@pixi/text@7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))':
+    dependencies:
+      '@pixi/core': 7.4.3
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+
+  '@pixi/ticker@7.4.3':
+    dependencies:
+      '@pixi/extensions': 7.4.3
+      '@pixi/settings': 7.4.3
+      '@pixi/utils': 7.4.3
+
+  '@pixi/utils@7.4.3':
+    dependencies:
+      '@pixi/color': 7.4.3
+      '@pixi/constants': 7.4.3
+      '@pixi/settings': 7.4.3
+      '@types/earcut': 2.1.4
+      earcut: 2.2.4
+      eventemitter3: 4.0.7
+      url: 0.11.4
+
+  '@rolldown/binding-android-arm64@1.2.4':
+    optional: true
+
+  '@rolldown/binding-darwin-arm64@1.2.4':
+    optional: true
+
+  '@rolldown/binding-darwin-x64@1.2.4':
+    optional: true
+
+  '@rolldown/binding-freebsd-x64@1.2.4':
+    optional: true
+
+  '@rolldown/binding-linux-arm-gnueabihf@1.2.4':
+    optional: true
+
+  '@rolldown/binding-linux-arm64-gnu@1.2.4':
+    optional: true
+
+  '@rolldown/binding-linux-arm64-musl@1.2.4':
+    optional: true
+
+  '@rolldown/binding-linux-ppc64-gnu@1.2.4':
+    optional: true
+
+  '@rolldown/binding-linux-s390x-gnu@1.2.4':
+    optional: true
+
+  '@rolldown/binding-linux-x64-gnu@1.2.4':
+    optional: true
+
+  '@rolldown/binding-linux-x64-musl@1.2.4':
+    optional: true
+
+  '@rolldown/binding-openharmony-arm64@1.2.4':
+    optional: true
+
+  '@rolldown/binding-win32-arm64-msvc@1.2.4':
+    optional: true
+
+  '@rolldown/binding-win32-x64-msvc@1.2.4':
+    optional: true
+
+  '@rolldown/pluginutils@1.0.1': {}
+
+  '@standard-schema/spec@1.1.0': {}
+
+  '@tauri-apps/api@2.11.1': {}
+
+  '@tauri-apps/cli-darwin-arm64@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-darwin-x64@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-arm-gnueabihf@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-arm64-gnu@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-arm64-musl@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-riscv64-gnu@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-x64-gnu@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-x64-musl@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-win32-arm64-msvc@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-win32-ia32-msvc@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli-win32-x64-msvc@2.11.4':
+    optional: true
+
+  '@tauri-apps/cli@2.11.4':
+    optionalDependencies:
+      '@tauri-apps/cli-darwin-arm64': 2.11.4
+      '@tauri-apps/cli-darwin-x64': 2.11.4
+      '@tauri-apps/cli-linux-arm-gnueabihf': 2.11.4
+      '@tauri-apps/cli-linux-arm64-gnu': 2.11.4
+      '@tauri-apps/cli-linux-arm64-musl': 2.11.4
+      '@tauri-apps/cli-linux-riscv64-gnu': 2.11.4
+      '@tauri-apps/cli-linux-x64-gnu': 2.11.4
+      '@tauri-apps/cli-linux-x64-musl': 2.11.4
+      '@tauri-apps/cli-win32-arm64-msvc': 2.11.4
+      '@tauri-apps/cli-win32-ia32-msvc': 2.11.4
+      '@tauri-apps/cli-win32-x64-msvc': 2.11.4
+
+  '@tauri-apps/plugin-process@2.3.1':
+    dependencies:
+      '@tauri-apps/api': 2.11.1
+
+  '@types/chai@5.2.3':
+    dependencies:
+      '@types/deep-eql': 4.0.2
+      assertion-error: 2.0.1
+
+  '@types/css-font-loading-module@0.0.12': {}
+
+  '@types/deep-eql@4.0.2': {}
+
+  '@types/earcut@2.1.4': {}
+
+  '@types/estree@1.0.9': {}
+
+  '@types/node@24.13.3':
+    dependencies:
+      undici-types: 7.18.2
+
+  '@types/react-dom@19.2.4(@types/react@19.2.18)':
+    dependencies:
+      '@types/react': 19.2.18
+
+  '@types/react@19.2.18':
+    dependencies:
+      csstype: 3.2.3
+
+  '@vitejs/plugin-react@6.0.5(vite@8.2.1(@types/node@24.13.3))':
+    dependencies:
+      '@rolldown/pluginutils': 1.0.1
+      vite: 8.2.1(@types/node@24.13.3)
+
+  '@vitest/expect@4.1.10':
+    dependencies:
+      '@standard-schema/spec': 1.1.0
+      '@types/chai': 5.2.3
+      '@vitest/spy': 4.1.10
+      '@vitest/utils': 4.1.10
+      chai: 6.2.2
+      tinyrainbow: 3.1.1
+
+  '@vitest/mocker@4.1.10(vite@8.2.1(@types/node@24.13.3))':
+    dependencies:
+      '@vitest/spy': 4.1.10
+      estree-walker: 3.0.3
+      magic-string: 0.30.21
+    optionalDependencies:
+      vite: 8.2.1(@types/node@24.13.3)
+
+  '@vitest/pretty-format@4.1.10':
+    dependencies:
+      tinyrainbow: 3.1.1
+
+  '@vitest/runner@4.1.10':
+    dependencies:
+      '@vitest/utils': 4.1.10
+      pathe: 2.0.3
+
+  '@vitest/snapshot@4.1.10':
+    dependencies:
+      '@vitest/pretty-format': 4.1.10
+      '@vitest/utils': 4.1.10
+      magic-string: 0.30.21
+      pathe: 2.0.3
+
+  '@vitest/spy@4.1.10': {}
+
+  '@vitest/utils@4.1.10':
+    dependencies:
+      '@vitest/pretty-format': 4.1.10
+      convert-source-map: 2.0.0
+      tinyrainbow: 3.1.1
+
+  assertion-error@2.0.1: {}
+
+  call-bind-apply-helpers@1.0.2:
+    dependencies:
+      es-errors: 1.3.0
+      function-bind: 1.1.2
+
+  call-bound@1.0.4:
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      get-intrinsic: 1.3.0
+
+  chai@6.2.2: {}
+
+  convert-source-map@2.0.0: {}
+
+  csstype@3.2.3: {}
+
+  detect-libc@2.1.2: {}
+
+  dunder-proto@1.0.1:
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      es-errors: 1.3.0
+      gopd: 1.2.0
+
+  earcut@2.2.4: {}
+
+  es-define-property@1.0.1: {}
+
+  es-errors@1.3.0: {}
+
+  es-module-lexer@2.3.1: {}
+
+  es-object-atoms@1.1.2:
+    dependencies:
+      es-errors: 1.3.0
+
+  estree-walker@3.0.3:
+    dependencies:
+      '@types/estree': 1.0.9
+
+  eventemitter3@4.0.7: {}
+
+  expect-type@1.4.0: {}
+
+  fdir@6.5.0(picomatch@4.0.5):
+    optionalDependencies:
+      picomatch: 4.0.5
+
+  fsevents@2.3.3:
+    optional: true
+
+  function-bind@1.1.2: {}
+
+  get-intrinsic@1.3.0:
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      es-define-property: 1.0.1
+      es-errors: 1.3.0
+      es-object-atoms: 1.1.2
+      function-bind: 1.1.2
+      get-proto: 1.0.1
+      gopd: 1.2.0
+      has-symbols: 1.1.0
+      hasown: 2.0.4
+      math-intrinsics: 1.1.0
+
+  get-proto@1.0.1:
+    dependencies:
+      dunder-proto: 1.0.1
+      es-object-atoms: 1.1.2
+
+  gopd@1.2.0: {}
+
+  has-symbols@1.1.0: {}
+
+  hasown@2.0.4:
+    dependencies:
+      function-bind: 1.1.2
+
+  ismobilejs@1.1.1: {}
+
+  lightningcss-android-arm64@1.33.0:
+    optional: true
+
+  lightningcss-darwin-arm64@1.33.0:
+    optional: true
+
+  lightningcss-darwin-x64@1.33.0:
+    optional: true
+
+  lightningcss-freebsd-x64@1.33.0:
+    optional: true
+
+  lightningcss-linux-arm-gnueabihf@1.33.0:
+    optional: true
+
+  lightningcss-linux-arm64-gnu@1.33.0:
+    optional: true
+
+  lightningcss-linux-arm64-musl@1.33.0:
+    optional: true
+
+  lightningcss-linux-x64-gnu@1.33.0:
+    optional: true
+
+  lightningcss-linux-x64-musl@1.33.0:
+    optional: true
+
+  lightningcss-win32-arm64-msvc@1.33.0:
+    optional: true
+
+  lightningcss-win32-x64-msvc@1.33.0:
+    optional: true
+
+  lightningcss@1.33.0:
+    dependencies:
+      detect-libc: 2.1.2
+    optionalDependencies:
+      lightningcss-android-arm64: 1.33.0
+      lightningcss-darwin-arm64: 1.33.0
+      lightningcss-darwin-x64: 1.33.0
+      lightningcss-freebsd-x64: 1.33.0
+      lightningcss-linux-arm-gnueabihf: 1.33.0
+      lightningcss-linux-arm64-gnu: 1.33.0
+      lightningcss-linux-arm64-musl: 1.33.0
+      lightningcss-linux-x64-gnu: 1.33.0
+      lightningcss-linux-x64-musl: 1.33.0
+      lightningcss-win32-arm64-msvc: 1.33.0
+      lightningcss-win32-x64-msvc: 1.33.0
+
+  magic-string@0.30.21:
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+
+  math-intrinsics@1.1.0: {}
+
+  nanoid@3.3.18: {}
+
+  object-inspect@1.13.4: {}
+
+  obug@2.1.4: {}
+
+  oxlint@1.78.0:
+    optionalDependencies:
+      '@oxlint/binding-android-arm-eabi': 1.78.0
+      '@oxlint/binding-android-arm64': 1.78.0
+      '@oxlint/binding-darwin-arm64': 1.78.0
+      '@oxlint/binding-darwin-x64': 1.78.0
+      '@oxlint/binding-freebsd-x64': 1.78.0
+      '@oxlint/binding-linux-arm-gnueabihf': 1.78.0
+      '@oxlint/binding-linux-arm-musleabihf': 1.78.0
+      '@oxlint/binding-linux-arm64-gnu': 1.78.0
+      '@oxlint/binding-linux-arm64-musl': 1.78.0
+      '@oxlint/binding-linux-ppc64-gnu': 1.78.0
+      '@oxlint/binding-linux-riscv64-gnu': 1.78.0
+      '@oxlint/binding-linux-riscv64-musl': 1.78.0
+      '@oxlint/binding-linux-s390x-gnu': 1.78.0
+      '@oxlint/binding-linux-x64-gnu': 1.78.0
+      '@oxlint/binding-linux-x64-musl': 1.78.0
+      '@oxlint/binding-openharmony-arm64': 1.78.0
+      '@oxlint/binding-win32-arm64-msvc': 1.78.0
+      '@oxlint/binding-win32-ia32-msvc': 1.78.0
+      '@oxlint/binding-win32-x64-msvc': 1.78.0
+
+  pathe@2.0.3: {}
+
+  picocolors@1.1.1: {}
+
+  picomatch@4.0.5: {}
+
+  pixi.js@7.4.3:
+    dependencies:
+      '@pixi/accessibility': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/events@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/app': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/assets': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/compressed-textures': 7.4.3(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)
+      '@pixi/core': 7.4.3
+      '@pixi/display': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/events': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/extensions': 7.4.3
+      '@pixi/extract': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/filter-alpha': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/filter-blur': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/filter-color-matrix': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/filter-displacement': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/filter-fxaa': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/filter-noise': 7.4.3(@pixi/core@7.4.3)
+      '@pixi/graphics': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/mesh': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/mesh-extras': 7.4.3(@pixi/core@7.4.3)(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/mixin-cache-as-bitmap': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/mixin-get-child-by-name': 7.4.3(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/mixin-get-global-position': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/particle-container': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/prepare': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/graphics@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))(@pixi/text@7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))
+      '@pixi/sprite': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))
+      '@pixi/sprite-animated': 7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/sprite-tiling': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/spritesheet': 7.4.3(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)
+      '@pixi/text': 7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))
+      '@pixi/text-bitmap': 7.4.3(@pixi/assets@7.4.3(@pixi/core@7.4.3))(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/mesh@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/text@7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))
+      '@pixi/text-html': 7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3)))(@pixi/text@7.4.3(@pixi/core@7.4.3)(@pixi/sprite@7.4.3(@pixi/core@7.4.3)(@pixi/display@7.4.3(@pixi/core@7.4.3))))
+
+  postcss@8.5.26:
+    dependencies:
+      nanoid: 3.3.18
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
+  punycode@1.4.1: {}
+
+  qs@6.15.3:
+    dependencies:
+      es-define-property: 1.0.1
+      side-channel: 1.1.1
+
+  react-dom@19.2.8(react@19.2.8):
+    dependencies:
+      react: 19.2.8
+      scheduler: 0.27.0
+
+  react@19.2.8: {}
+
+  rolldown@1.2.4:
+    dependencies:
+      '@oxc-project/types': 0.144.0
+      '@rolldown/pluginutils': 1.0.1
+    optionalDependencies:
+      '@rolldown/binding-android-arm64': 1.2.4
+      '@rolldown/binding-darwin-arm64': 1.2.4
+      '@rolldown/binding-darwin-x64': 1.2.4
+      '@rolldown/binding-freebsd-x64': 1.2.4
+      '@rolldown/binding-linux-arm-gnueabihf': 1.2.4
+      '@rolldown/binding-linux-arm64-gnu': 1.2.4
+      '@rolldown/binding-linux-arm64-musl': 1.2.4
+      '@rolldown/binding-linux-ppc64-gnu': 1.2.4
+      '@rolldown/binding-linux-s390x-gnu': 1.2.4
+      '@rolldown/binding-linux-x64-gnu': 1.2.4
+      '@rolldown/binding-linux-x64-musl': 1.2.4
+      '@rolldown/binding-openharmony-arm64': 1.2.4
+      '@rolldown/binding-win32-arm64-msvc': 1.2.4
+      '@rolldown/binding-win32-x64-msvc': 1.2.4
+
+  scheduler@0.27.0: {}
+
+  side-channel-list@1.0.1:
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+
+  side-channel-map@1.0.1:
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+
+  side-channel-weakmap@1.0.2:
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-map: 1.0.1
+
+  side-channel@1.1.1:
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-list: 1.0.1
+      side-channel-map: 1.0.1
+      side-channel-weakmap: 1.0.2
+
+  siginfo@2.0.0: {}
+
+  source-map-js@1.2.1: {}
+
+  stackback@0.0.2: {}
+
+  std-env@4.2.0: {}
+
+  tinybench@2.9.0: {}
+
+  tinyexec@1.3.0: {}
+
+  tinyglobby@0.2.17:
+    dependencies:
+      fdir: 6.5.0(picomatch@4.0.5)
+      picomatch: 4.0.5
+
+  tinyrainbow@3.1.1: {}
+
+  typescript@6.0.3: {}
+
+  undici-types@7.18.2: {}
+
+  url@0.11.4:
+    dependencies:
+      punycode: 1.4.1
+      qs: 6.15.3
+
+  vite@8.2.1(@types/node@24.13.3):
+    dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.5
       postcss: 8.5.26
-      rolldown: 1.2.3
+      rolldown: 1.2.4
       tinyglobby: 0.2.17
     optionalDependencies:
+      '@types/node': 24.13.3
       fsevents: 2.3.3
-    dev: true
 
-  /zod/4.4.3:
-    resolution: {integrity: sha1-toDxcohdGLvr8hqDTqJeVaG781Y=, tarball: zod/download/zod-4.4.3.tgz}
-    dev: false
+  vitest@4.1.10(@types/node@24.13.3)(vite@8.2.1(@types/node@24.13.3)):
+    dependencies:
+      '@vitest/expect': 4.1.10
+      '@vitest/mocker': 4.1.10(vite@8.2.1(@types/node@24.13.3))
+      '@vitest/pretty-format': 4.1.10
+      '@vitest/runner': 4.1.10
+      '@vitest/snapshot': 4.1.10
+      '@vitest/spy': 4.1.10
+      '@vitest/utils': 4.1.10
+      es-module-lexer: 2.3.1
+      expect-type: 1.4.0
+      magic-string: 0.30.21
+      obug: 2.1.4
+      pathe: 2.0.3
+      picomatch: 4.0.5
+      std-env: 4.2.0
+      tinybench: 2.9.0
+      tinyexec: 1.3.0
+      tinyglobby: 0.2.17
+      tinyrainbow: 3.1.1
+      vite: 8.2.1(@types/node@24.13.3)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 24.13.3
+    transitivePeerDependencies:
+      - msw
+
+  why-is-node-running@2.3.0:
+    dependencies:
+      siginfo: 2.0.0
+      stackback: 0.0.2
+
+  zod@4.4.3: {}

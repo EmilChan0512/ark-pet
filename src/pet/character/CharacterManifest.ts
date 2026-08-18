@@ -10,13 +10,24 @@ const manifestSchema = z.object({
   skeleton: z.string().min(1),
   atlas: z.string().min(1),
   scale: z.number().positive().default(1),
+  nativeFacing: z.enum(['left', 'right']).default('right'),
   spineVersion: z.string().min(3).optional(),
   defaultSkin: z.string().min(1).optional(),
   animations: z.object({
     idle: z.string().min(1),
     interact: z.string().min(1).optional(),
     drag: z.string().min(1).optional(),
+    walk: z.string().min(1).optional(),
+    sit: z.string().min(1).optional(),
+    sleep: z.string().min(1).optional(),
   }),
+  voice: z
+    .object({
+      characterId: z.string().min(1),
+      voiceIdentity: z.string().min(1),
+      locale: z.string().min(2),
+    })
+    .optional(),
 })
 
 export async function loadCharacterCatalog(): Promise<CharacterCatalogEntry[]> {

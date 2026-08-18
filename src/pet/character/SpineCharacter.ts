@@ -4,7 +4,7 @@ import {
   type SkeletonData,
   type TrackEntry,
 } from '@pixi-spine/all-3.8'
-import type { CharacterManifestWithPaths } from '../../types/character'
+import type { CharacterManifestWithPaths, FacingDirection } from '../../types/character'
 
 const SPINE_RUNTIME_VERSION = '3.8'
 
@@ -21,9 +21,12 @@ export class SpineCharacter {
   private spine: Spine | null = null
   private readonly completeListeners = new Set<AnimationCompleteListener>()
   private assetAliases: { skeleton: string } | null = null
+  private scale = 1
+  private facing: FacingDirection = 'right'
 
   async load(manifest: CharacterManifestWithPaths) {
     this.manifest = manifest
+    this.facing = manifest.nativeFacing ?? 'right'
 
     const exportedVersion = await this.detectExportedVersion(manifest)
     this.assertRuntimeCompatibility(manifest, exportedVersion)
@@ -129,7 +132,14 @@ export class SpineCharacter {
   }
 
   setScale(scale: number) {
-    this.spine?.scale.set(scale)
+    this.scale = scale
+    this.applyTransform()
+  }
+
+  setFacing(facing: FacingDirection) {
+    if (this.facing === facing) return
+    this.facing = facing
+    this.applyTransform()
   }
 
   setPosition(x: number, y: number) {
@@ -139,6 +149,10 @@ export class SpineCharacter {
 
   getBounds() {
     return this.spine?.getBounds() ?? null
+  }
+
+  getLocalBounds() {
+    return this.spine?.getLocalBounds() ?? null
   }
 
   getAnimationNames() {
@@ -162,6 +176,13 @@ export class SpineCharacter {
       void Assets.unload(this.assetAliases.skeleton)
       this.assetAliases = null
     }
+  }
+
+  private applyTransform() {
+    if (!this.spine) return
+    const nativeFacing = this.manifest?.nativeFacing ?? 'right'
+    const direction = this.facing === nativeFacing ? 1 : -1
+    this.spine.scale.set(this.scale * direction, this.scale)
   }
 
   private resolveAnimationName(

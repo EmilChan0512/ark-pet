@@ -19,6 +19,7 @@ export class PixiRenderer {
         clearBeforeRender: true,
         resolution: window.devicePixelRatio || 1,
       })
+      app.ticker.maxFPS = 60
 
       const view = app.view as HTMLCanvasElement
       view.style.width = '100%'
@@ -63,6 +64,14 @@ export class PixiRenderer {
 
   resumeTicker() {
     this.app?.ticker.start()
+  }
+
+  setMaxFPS(fps: 30 | 60) {
+    if (this.app) this.app.ticker.maxFPS = fps
+  }
+
+  removeTickerCallback(callback: () => void) {
+    this.app?.ticker.remove(callback)
   }
 
   destroy() {

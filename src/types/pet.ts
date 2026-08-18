@@ -1,4 +1,6 @@
 import type { CharacterManifestWithPaths, PetState } from './character'
+import type { AmbientSchedulerStatus } from '../pet/behavior/ambient/AmbientScheduler'
+import type { SpeechAudioSource } from '../pet/speech/types'
 
 export interface WindowPoint {
   x: number
@@ -16,6 +18,18 @@ export interface DebugSnapshot {
   characterId: string | null
   rendererStatus: 'idle' | 'ready' | 'error'
   characterManifest: CharacterManifestWithPaths | null
+  activeBehavior: string | null
+  lastBehaviorError: string | null
+  ambientSchedulerStatus: AmbientSchedulerStatus
+  nextAmbientActionAt: number | null
+  activeRuntimeCommand: string | null
+  runtimeCommandQueueDepth: number
+  lastRuntimeCommandError: string | null
+  activeSpeechSession: string | null
+  speechQueueDepth: number
+  speechAudioSource: SpeechAudioSource | null
+  speechVoiceEnabled: boolean
+  lastSpeechError: string | null
   lastError: string | null
 }
 

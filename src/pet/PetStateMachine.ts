@@ -4,9 +4,12 @@ type Listener = (state: PetState) => void
 
 const transitions: Record<PetState, PetState[]> = {
   loading: ['idle', 'error'],
-  idle: ['interacting', 'dragging', 'error'],
-  interacting: ['idle', 'error'],
-  dragging: ['idle', 'error'],
+  idle: ['loading', 'interacting', 'dragging', 'walking', 'sitting', 'sleeping', 'error'],
+  interacting: ['loading', 'idle', 'dragging', 'error'],
+  dragging: ['loading', 'idle', 'error'],
+  walking: ['loading', 'idle', 'interacting', 'dragging', 'error'],
+  sitting: ['loading', 'idle', 'interacting', 'dragging', 'error'],
+  sleeping: ['loading', 'idle', 'interacting', 'dragging', 'error'],
   error: ['loading', 'idle'],
 }
 
