@@ -5,6 +5,7 @@ export type DesktopActivityCategory =
   | 'creative' | 'media' | 'gaming' | 'system' | 'other' | 'unknown'
 
 export type DesktopIdleBucket = 'short' | 'medium' | 'long'
+export type PerceptionScene = 'coding-problem' | 'focused-reading' | 'media' | 'conversation' | 'general'
 
 export type ContextEvent =
   | { readonly type: 'pet.clicked'; readonly at: number; readonly clickCount: number }
@@ -20,6 +21,7 @@ export type ContextEvent =
   | { readonly type: 'desktop.system-idle-returned'; readonly at: number; readonly idleBucket: DesktopIdleBucket }
   | { readonly type: 'desktop.session-locked'; readonly at: number }
   | { readonly type: 'desktop.session-unlocked'; readonly at: number }
+  | { readonly type: 'perception.scene-noticed'; readonly at: number; readonly scene: PerceptionScene }
 
 export type ReactionCondition =
   | { readonly type: 'click-count'; readonly min?: number; readonly max?: number }
@@ -28,6 +30,7 @@ export type ReactionCondition =
   | { readonly type: 'period'; readonly value: LocalTimePeriod }
   | { readonly type: 'desktop-category'; readonly value: DesktopActivityCategory }
   | { readonly type: 'idle-bucket'; readonly value: DesktopIdleBucket }
+  | { readonly type: 'perception-scene'; readonly value: PerceptionScene }
 
 export type ReactionPlanStep =
   | { readonly type: 'behavior'; readonly id: string }

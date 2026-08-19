@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-export const PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v6'
+export const PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v7'
+export const LEGACY_V6_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v6'
 export const LEGACY_V5_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v5'
 export const LEGACY_V4_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v4'
 export const LEGACY_V3_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v3'
@@ -21,10 +22,18 @@ const petSettingsSchema = z
     activeCharacterId: z.string().min(1).max(96),
     desktopAwarenessEnabled: z.boolean(),
     desktopAwarenessConsentVersion: z.number().int().positive().nullable(),
+    contentPerceptionEnabled: z.boolean(),
+    contentPerceptionConsentVersion: z.number().int().positive().nullable(),
+    initiativeEnabled: z.boolean(),
+    initiativeStyle: z.enum(['quiet', 'balanced', 'expressive']),
   })
   .strict()
 
-const v5PetSettingsSchema = petSettingsSchema.omit({ desktopAwarenessEnabled: true, desktopAwarenessConsentVersion: true })
+const v6PetSettingsSchema = petSettingsSchema.omit({
+  contentPerceptionEnabled: true, contentPerceptionConsentVersion: true,
+  initiativeEnabled: true, initiativeStyle: true,
+})
+const v5PetSettingsSchema = v6PetSettingsSchema.omit({ desktopAwarenessEnabled: true, desktopAwarenessConsentVersion: true })
 const v4PetSettingsSchema = v5PetSettingsSchema.omit({ activeCharacterId: true })
 const v3PetSettingsSchema = v4PetSettingsSchema.omit({ personalityEnabled: true })
 const v2PetSettingsSchema = v3PetSettingsSchema.omit({
@@ -49,6 +58,10 @@ export const DEFAULT_PET_SETTINGS: PetSettings = Object.freeze({
   activeCharacterId: 'demo',
   desktopAwarenessEnabled: false,
   desktopAwarenessConsentVersion: null,
+  contentPerceptionEnabled: false,
+  contentPerceptionConsentVersion: null,
+  initiativeEnabled: true,
+  initiativeStyle: 'balanced',
 })
 
 export interface PetSettingsStore {
@@ -63,17 +76,29 @@ export function parsePetSettings(
   value: unknown,
   defaults: PetSettings = DEFAULT_PET_SETTINGS,
 ): PetSettings | null {
+  const phase11Defaults = {
+    contentPerceptionEnabled: false,
+    contentPerceptionConsentVersion: null,
+    initiativeEnabled: defaults.initiativeEnabled,
+    initiativeStyle: defaults.initiativeStyle,
+  } as const
   const current = petSettingsSchema.safeParse(value)
   if (current.success) return current.data
 
+  const v6 = v6PetSettingsSchema.safeParse(value)
+  if (v6.success) return {
+    ...v6.data,
+    ...phase11Defaults,
+  }
+
   const v5 = v5PetSettingsSchema.safeParse(value)
-  if (v5.success) return { ...v5.data, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null }
+  if (v5.success) return { ...v5.data, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null, ...phase11Defaults }
 
   const v4 = v4PetSettingsSchema.safeParse(value)
-  if (v4.success) return { ...v4.data, activeCharacterId: defaults.activeCharacterId, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null }
+  if (v4.success) return { ...v4.data, activeCharacterId: defaults.activeCharacterId, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null, ...phase11Defaults }
 
   const v3 = v3PetSettingsSchema.safeParse(value)
-  if (v3.success) return { ...v3.data, personalityEnabled: defaults.personalityEnabled, activeCharacterId: defaults.activeCharacterId, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null }
+  if (v3.success) return { ...v3.data, personalityEnabled: defaults.personalityEnabled, activeCharacterId: defaults.activeCharacterId, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null, ...phase11Defaults }
 
   const v2 = v2PetSettingsSchema.safeParse(value)
   if (v2.success) {
@@ -86,6 +111,7 @@ export function parsePetSettings(
       activeCharacterId: defaults.activeCharacterId,
       desktopAwarenessEnabled: false,
       desktopAwarenessConsentVersion: null,
+      ...phase11Defaults,
     }
   }
 
@@ -101,6 +127,7 @@ export function parsePetSettings(
       activeCharacterId: defaults.activeCharacterId,
       desktopAwarenessEnabled: false,
       desktopAwarenessConsentVersion: null,
+      ...phase11Defaults,
     }
   }
 
@@ -119,17 +146,18 @@ function parseStoredValue(raw: string | null) {
 function loadSettings(): PetSettings {
   try {
     const currentRaw = window.localStorage.getItem(PET_SETTINGS_STORAGE_KEY)
+    const v6Raw = window.localStorage.getItem(LEGACY_V6_PET_SETTINGS_STORAGE_KEY)
     const v5Raw = window.localStorage.getItem(LEGACY_V5_PET_SETTINGS_STORAGE_KEY)
     const v4Raw = window.localStorage.getItem(LEGACY_V4_PET_SETTINGS_STORAGE_KEY)
     const v3Raw = window.localStorage.getItem(LEGACY_V3_PET_SETTINGS_STORAGE_KEY)
     const v2Raw = window.localStorage.getItem(LEGACY_V2_PET_SETTINGS_STORAGE_KEY)
     const legacyRaw = window.localStorage.getItem(LEGACY_PET_SETTINGS_STORAGE_KEY)
-    if (!currentRaw && !v5Raw && !v4Raw && !v3Raw && !v2Raw && !legacyRaw) return DEFAULT_PET_SETTINGS
+    if (!currentRaw && !v6Raw && !v5Raw && !v4Raw && !v3Raw && !v2Raw && !legacyRaw) return DEFAULT_PET_SETTINGS
 
     const current = parseStoredValue(currentRaw)
     if (current) return current
 
-    const migrated = parseStoredValue(v5Raw) ?? parseStoredValue(v4Raw) ?? parseStoredValue(v3Raw) ?? parseStoredValue(v2Raw) ?? parseStoredValue(legacyRaw)
+    const migrated = parseStoredValue(v6Raw) ?? parseStoredValue(v5Raw) ?? parseStoredValue(v4Raw) ?? parseStoredValue(v3Raw) ?? parseStoredValue(v2Raw) ?? parseStoredValue(legacyRaw)
     if (migrated) {
       window.localStorage.setItem(PET_SETTINGS_STORAGE_KEY, JSON.stringify(migrated))
       return migrated

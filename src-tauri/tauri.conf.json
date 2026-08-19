@@ -41,6 +41,23 @@
         "minimizable": false,
         "visible": true,
         "focus": true
+      },
+      {
+        "label": "debug",
+        "title": "Ark Pet · Companion Debug",
+        "url": "index.html?view=debug",
+        "width": 560,
+        "height": 680,
+        "minWidth": 440,
+        "minHeight": 480,
+        "center": false,
+        "transparent": false,
+        "decorations": true,
+        "alwaysOnTop": false,
+        "skipTaskbar": false,
+        "resizable": true,
+        "visible": false,
+        "focus": false
       }
     ]
   },

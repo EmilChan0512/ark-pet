@@ -3,6 +3,7 @@ import type { AmbientSchedulerStatus } from '../pet/behavior/ambient/AmbientSche
 import type { SpeechAudioSource, VoiceProgressStatus } from '../pet/speech/types'
 import type { ContextEvent, LocalTimePeriod } from '../pet/reaction/types'
 import type { DesktopAwarenessSnapshot } from '../pet/reaction/sources/DesktopContextSource'
+import type { CharacterMindSnapshot } from '../pet/perception/PerceptionAgency'
 
 export interface WindowPoint {
   x: number
@@ -43,6 +44,7 @@ export interface DebugSnapshot {
   reactionDecisionLog: readonly string[]
   currentLocalTimePeriod: LocalTimePeriod | null
   desktopAwareness: DesktopAwarenessSnapshot
+  characterMind: CharacterMindSnapshot
   lastReactionError: string | null
   lastError: string | null
 }

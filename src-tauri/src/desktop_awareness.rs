@@ -1,4 +1,4 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::sync::{
     atomic::{AtomicBool, Ordering},
     Arc, Mutex,
@@ -24,6 +24,7 @@ enum CapabilityState {
 #[serde(rename_all = "camelCase")]
 pub struct DesktopAwarenessCapabilities {
     foreground_category: CapabilityState,
+    foreground_title: CapabilityState,
     system_idle: CapabilityState,
     session_lock: CapabilityState,
 }
@@ -37,6 +38,15 @@ struct CoarseDesktopSample {
     idle_bucket: Option<&'static str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     session_state: Option<&'static str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    window_title: Option<String>,
+}
+
+#[derive(Clone, Copy, Debug, Default, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DesktopAwarenessOptions {
+    #[serde(default)]
+    include_window_title: bool,
 }
 
 struct Observer {
@@ -52,6 +62,7 @@ fn capabilities() -> DesktopAwarenessCapabilities {
     {
         DesktopAwarenessCapabilities {
             foreground_category: CapabilityState::Available,
+            foreground_title: CapabilityState::Available,
             system_idle: CapabilityState::Available,
             session_lock: CapabilityState::Available,
         }
@@ -60,6 +71,7 @@ fn capabilities() -> DesktopAwarenessCapabilities {
     {
         DesktopAwarenessCapabilities {
             foreground_category: CapabilityState::Available,
+            foreground_title: CapabilityState::Unsupported,
             system_idle: CapabilityState::Available,
             session_lock: CapabilityState::Unsupported,
         }
@@ -68,6 +80,7 @@ fn capabilities() -> DesktopAwarenessCapabilities {
     {
         DesktopAwarenessCapabilities {
             foreground_category: CapabilityState::Unsupported,
+            foreground_title: CapabilityState::Unsupported,
             system_idle: CapabilityState::Unsupported,
             session_lock: CapabilityState::Unsupported,
         }
@@ -85,6 +98,7 @@ fn stop_locked(observer: &mut Option<Observer>) {
 pub fn start_desktop_awareness(
     app: AppHandle,
     state: State<'_, DesktopAwarenessState>,
+    options: Option<DesktopAwarenessOptions>,
 ) -> Result<DesktopAwarenessCapabilities, &'static str> {
     let caps = capabilities();
     let mut observer = state.0.lock().map_err(|_| "observer-state-unavailable")?;
@@ -92,6 +106,7 @@ pub fn start_desktop_awareness(
 
     #[cfg(any(windows, target_os = "macos"))]
     {
+        let include_window_title = options.unwrap_or_default().include_window_title;
         let stop = Arc::new(AtomicBool::new(false));
         let thread_stop = Arc::clone(&stop);
         let thread = thread::Builder::new()
@@ -99,7 +114,7 @@ pub fn start_desktop_awareness(
             .spawn(move || {
                 let mut previous: Option<CoarseDesktopSample> = None;
                 while !thread_stop.load(Ordering::Acquire) {
-                    let sample = platform_sample();
+                    let sample = platform_sample(include_window_title);
                     if previous.as_ref() != Some(&sample) {
                         // Payload is already minimized. Never log adapter inputs or payloads.
                         let _ = app.emit("desktop-awareness://sample", &sample);
@@ -120,13 +135,13 @@ pub fn start_desktop_awareness(
 }
 
 #[cfg(windows)]
-fn platform_sample() -> CoarseDesktopSample {
-    windows_adapter::sample()
+fn platform_sample(include_window_title: bool) -> CoarseDesktopSample {
+    windows_adapter::sample(include_window_title)
 }
 
 #[cfg(target_os = "macos")]
-fn platform_sample() -> CoarseDesktopSample {
-    macos_adapter::sample()
+fn platform_sample(include_window_title: bool) -> CoarseDesktopSample {
+    macos_adapter::sample(include_window_title)
 }
 
 #[tauri::command]
@@ -149,18 +164,19 @@ mod windows_adapter {
     };
     use windows_sys::Win32::UI::Input::KeyboardAndMouse::{GetLastInputInfo, LASTINPUTINFO};
     use windows_sys::Win32::UI::WindowsAndMessaging::{
-        GetForegroundWindow, GetWindowThreadProcessId,
+        GetForegroundWindow, GetWindowTextLengthW, GetWindowTextW, GetWindowThreadProcessId,
     };
 
-    pub(super) fn sample() -> CoarseDesktopSample {
+    pub(super) fn sample(include_window_title: bool) -> CoarseDesktopSample {
         let locked = is_session_locked();
         let idle_ms = aggregate_idle_ms();
+        let category = if locked {
+            "system"
+        } else {
+            foreground_category()
+        };
         CoarseDesktopSample {
-            category: if locked {
-                "system"
-            } else {
-                foreground_category()
-            },
+            category,
             idle_state: if idle_ms >= IDLE_SHORT_MS {
                 "idle"
             } else {
@@ -176,6 +192,11 @@ mod windows_adapter {
                 None
             },
             session_state: Some(if locked { "locked" } else { "available" }),
+            window_title: if include_window_title && !locked && category != "system" {
+                foreground_title()
+            } else {
+                None
+            },
         }
     }
 
@@ -239,6 +260,27 @@ mod windows_adapter {
         classify_normalized_identity(&identity)
     }
 
+    fn foreground_title() -> Option<String> {
+        let window = unsafe { GetForegroundWindow() };
+        if window.is_null() {
+            return None;
+        }
+        let length = unsafe { GetWindowTextLengthW(window) };
+        if length <= 0 {
+            return None;
+        }
+        let bounded = usize::min(length as usize, 512);
+        let mut buffer = vec![0u16; bounded + 1];
+        let copied = unsafe { GetWindowTextW(window, buffer.as_mut_ptr(), buffer.len() as i32) };
+        if copied <= 0 {
+            return None;
+        }
+        let title = String::from_utf16_lossy(&buffer[..copied as usize])
+            .trim()
+            .to_string();
+        (!title.is_empty()).then_some(title)
+    }
+
     pub(super) fn classify_normalized_identity(identity: &str) -> &'static str {
         match identity {
             "code.exe"
@@ -295,14 +337,27 @@ mod windows_adapter {
         #[test]
         #[ignore = "Windows platform smoke test"]
         fn platform_smoke_returns_only_public_coarse_values() {
-            let sample = sample();
+            let sample = sample(false);
             assert!([
-                "development", "browsing", "communication", "productivity",
-                "creative", "media", "gaming", "system", "other", "unknown",
-            ].contains(&sample.category));
+                "development",
+                "browsing",
+                "communication",
+                "productivity",
+                "creative",
+                "media",
+                "gaming",
+                "system",
+                "other",
+                "unknown",
+            ]
+            .contains(&sample.category));
             assert!(["active", "idle"].contains(&sample.idle_state));
-            assert!(sample.idle_bucket.is_none_or(|bucket| ["short", "medium", "long"].contains(&bucket)));
-            assert!(sample.session_state.is_none_or(|state| ["available", "locked"].contains(&state)));
+            assert!(sample
+                .idle_bucket
+                .is_none_or(|bucket| ["short", "medium", "long"].contains(&bucket)));
+            assert!(sample
+                .session_state
+                .is_none_or(|state| ["available", "locked"].contains(&state)));
         }
     }
 }
@@ -327,7 +382,7 @@ mod macos_adapter {
         fn objc_autoreleasePoolPop(pool: *mut c_void);
     }
 
-    pub(super) fn sample() -> CoarseDesktopSample {
+    pub(super) fn sample(_include_window_title: bool) -> CoarseDesktopSample {
         let idle_ms = unsafe { CGEventSourceSecondsSinceLastEventType(0, u32::MAX) };
         let idle_ms = if idle_ms.is_finite() && idle_ms >= 0.0 {
             (idle_ms * 1000.0) as u64
@@ -353,6 +408,7 @@ mod macos_adapter {
             // A reliable lock notification requires a lifecycle integration;
             // this sub-capability is reported unsupported rather than guessed.
             session_state: None,
+            window_title: None,
         }
     }
 
@@ -448,6 +504,7 @@ mod privacy_tests {
             idle_state: "active",
             idle_bucket: None,
             session_state: Some("available"),
+            window_title: None,
         })
         .unwrap();
         let object = payload.as_object().unwrap();

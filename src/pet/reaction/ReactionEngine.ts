@@ -20,8 +20,11 @@ function matchesCondition(rule: PersonaReaction, event: ContextEvent) {
     if (condition.type === 'desktop-category') {
       return event.type === 'desktop.activity-category-entered' && event.category === condition.value
     }
-    return (event.type === 'desktop.system-idle-entered' || event.type === 'desktop.system-idle-returned') &&
-      event.idleBucket === condition.value
+    if (condition.type === 'idle-bucket') {
+      return (event.type === 'desktop.system-idle-entered' || event.type === 'desktop.system-idle-returned') &&
+        event.idleBucket === condition.value
+    }
+    return event.type === 'perception.scene-noticed' && event.scene === condition.value
   })
 }
 

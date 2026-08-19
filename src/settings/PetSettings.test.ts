@@ -8,6 +8,24 @@ const legacySettings = {
   showDebugPanel: false,
 }
 
+const phase11Defaults = {
+  contentPerceptionEnabled: false,
+  contentPerceptionConsentVersion: null,
+  initiativeEnabled: DEFAULT_PET_SETTINGS.initiativeEnabled,
+  initiativeStyle: DEFAULT_PET_SETTINGS.initiativeStyle,
+} as const
+
+function withoutPhase11() {
+  const {
+    contentPerceptionEnabled: _content,
+    contentPerceptionConsentVersion: _contentConsent,
+    initiativeEnabled: _initiative,
+    initiativeStyle: _initiativeStyle,
+    ...settings
+  } = DEFAULT_PET_SETTINGS
+  return settings
+}
+
 describe('parsePetSettings', () => {
   it('preserves current settings', () => {
     const current = { ...DEFAULT_PET_SETTINGS, ...legacySettings, autonomousBehavior: false }
@@ -25,6 +43,7 @@ describe('parsePetSettings', () => {
       activeCharacterId: DEFAULT_PET_SETTINGS.activeCharacterId,
       desktopAwarenessEnabled: false,
       desktopAwarenessConsentVersion: null,
+      ...phase11Defaults,
     })
   })
 
@@ -39,22 +58,28 @@ describe('parsePetSettings', () => {
       activeCharacterId: DEFAULT_PET_SETTINGS.activeCharacterId,
       desktopAwarenessEnabled: false,
       desktopAwarenessConsentVersion: null,
+      ...phase11Defaults,
     })
   })
 
   it('migrates Phase 7 v3 settings to the personality default', () => {
-    const { personalityEnabled: _personality, activeCharacterId: _character, desktopAwarenessEnabled: _awareness, desktopAwarenessConsentVersion: _consent, ...v3 } = DEFAULT_PET_SETTINGS
-    expect(parsePetSettings(v3)).toEqual({ ...v3, personalityEnabled: true, activeCharacterId: 'demo', desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null })
+    const { personalityEnabled: _personality, activeCharacterId: _character, desktopAwarenessEnabled: _awareness, desktopAwarenessConsentVersion: _consent, ...v3 } = withoutPhase11()
+    expect(parsePetSettings(v3)).toEqual({ ...v3, personalityEnabled: true, activeCharacterId: 'demo', desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null, ...phase11Defaults })
   })
 
   it('migrates Phase 8 v4 settings to the built-in character', () => {
-    const { activeCharacterId: _removed, desktopAwarenessEnabled: _awareness, desktopAwarenessConsentVersion: _consent, ...v4 } = DEFAULT_PET_SETTINGS
-    expect(parsePetSettings(v4)).toEqual({ ...v4, activeCharacterId: 'demo', desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null })
+    const { activeCharacterId: _removed, desktopAwarenessEnabled: _awareness, desktopAwarenessConsentVersion: _consent, ...v4 } = withoutPhase11()
+    expect(parsePetSettings(v4)).toEqual({ ...v4, activeCharacterId: 'demo', desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null, ...phase11Defaults })
   })
 
   it('migrates Phase 9 v5 with awareness safely disabled', () => {
-    const { desktopAwarenessEnabled: _enabled, desktopAwarenessConsentVersion: _consent, ...v5 } = DEFAULT_PET_SETTINGS
-    expect(parsePetSettings(v5)).toEqual({ ...v5, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null })
+    const { desktopAwarenessEnabled: _enabled, desktopAwarenessConsentVersion: _consent, ...v5 } = withoutPhase11()
+    expect(parsePetSettings(v5)).toEqual({ ...v5, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null, ...phase11Defaults })
+  })
+
+  it('migrates Phase 10 v6 with content perception off by default', () => {
+    const v6 = withoutPhase11()
+    expect(parsePetSettings(v6)).toEqual({ ...v6, ...phase11Defaults })
   })
 
   it('rejects corrupt, incomplete, and unknown settings', () => {

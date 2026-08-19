@@ -28,6 +28,9 @@ import { loadCharacterPersona } from './persona/CharacterPersonaLoader'
 import type { ContextEvent } from './reaction/types'
 import { DesktopContextSource } from './reaction/sources/DesktopContextSource'
 import { TauriDesktopAwarenessPort } from '../services/desktopAwareness'
+import {
+  DesktopTitlePerceptionModule, PerceptionAgency, PerceptionModuleRegistry,
+} from './perception/PerceptionAgency'
 
 interface PointerSession {
   x: number
@@ -58,6 +61,8 @@ export class PetRuntime {
   private readonly sessionContextSource: SessionContextSource
   private readonly timeContextSource: TimeContextSource
   private readonly desktopContextSource: DesktopContextSource
+  private readonly desktopAwarenessPort = new TauriDesktopAwarenessPort()
+  private readonly perceptionAgency: PerceptionAgency
   private reactionEngine: ReactionEngine | null = null
   private readonly hitTestController = new HitTestController(
     () => this.getCharacterBounds(),
@@ -78,7 +83,6 @@ export class PetRuntime {
   private settings: PetSettings
   private uiInteractionActive = false
   private pointerOverInteractiveUi = false
-  private debugPanelWindowExpanded: boolean | null = null
   private hidden = false
   private facing: FacingDirection = 'right'
   private characterGeneration = 0
@@ -187,13 +191,20 @@ export class PetRuntime {
     this.timeContextSource = new TimeContextSource(this.contextEventBus)
     this.desktopContextSource = new DesktopContextSource(
       this.contextEventBus,
-      new TauriDesktopAwarenessPort(),
+      this.desktopAwarenessPort,
       (snapshot) => {
         this.sessionContextSource.setSystemIdleAuthoritative(
           snapshot.status === 'active' && snapshot.capabilities.systemIdle === 'available',
         )
         this.debugStore.patch({ desktopAwareness: snapshot })
       },
+    )
+    this.perceptionAgency = new PerceptionAgency(
+      this.contextEventBus,
+      new PerceptionModuleRegistry([
+        new DesktopTitlePerceptionModule(this.desktopAwarenessPort),
+      ]),
+      (snapshot) => this.debugStore.patch({ characterMind: snapshot }),
     )
     this.contextEventBus.subscribe((event) => {
       if (event.type === 'desktop.session-locked') {
@@ -361,21 +372,10 @@ export class PetRuntime {
 
   async applySettings(settings: PetSettings) {
     const personalityChanged = this.settings.personalityEnabled !== settings.personalityEnabled
-    const awarenessDisabled = this.settings.desktopAwarenessEnabled && !settings.desktopAwarenessEnabled
+    const awarenessDisabled = this.settings.desktopAwarenessEnabled &&
+      !settings.desktopAwarenessEnabled && !settings.contentPerceptionEnabled
+    const perceptionDisabled = this.settings.contentPerceptionEnabled && !settings.contentPerceptionEnabled
     this.settings = settings
-    if (
-      import.meta.env.DEV &&
-      this.debugPanelWindowExpanded !== settings.showDebugPanel
-    ) {
-      this.debugPanelWindowExpanded = settings.showDebugPanel
-      // A 400 px pet window cannot contain both the character and a 280 px
-      // diagnostics panel side by side. Expand only in development while the
-      // panel is visible; production and panel-off geometry stay unchanged.
-      await this.nativeWindowService.setWindowSize(
-        settings.showDebugPanel ? 800 : 400,
-        500,
-      )
-    }
     this.renderer.setMaxFPS(settings.fps)
     await this.nativeWindowService.setAlwaysOnTop(settings.alwaysOnTop)
     await this.behaviorAdapter.setAutonomousEnabled(
@@ -387,8 +387,8 @@ export class PetRuntime {
     if (settings.speechMode === 'off') this.speechCoordinator.pause('disabled')
     else this.resumeSpeechIfAllowed()
     this.reactionEngine?.setEnabled(settings.personalityEnabled)
-    if (awarenessDisabled) {
-      this.cancelReactions('desktop-awareness-disabled')
+    if (awarenessDisabled || perceptionDisabled) {
+      this.cancelReactions(perceptionDisabled ? 'content-perception-disabled' : 'desktop-awareness-disabled')
       this.speechCoordinator.cancelAll('disabled')
     }
     if (personalityChanged && !settings.personalityEnabled) {
@@ -436,6 +436,7 @@ export class PetRuntime {
   async destroy() {
     // Behavior cleanup owns future timers and motion subscriptions, so it must
     // finish before the renderer and native ports it may reference disappear.
+    this.perceptionAgency.destroy()
     await this.desktopContextSource.destroy()
     this.reactionEngine?.destroy()
     this.reactionAdapter.cancel('destroyed')
@@ -772,11 +773,21 @@ export class PetRuntime {
   }
 
   private syncDesktopAwareness() {
+    const perceptionEnabled = this.settings.contentPerceptionEnabled &&
+      this.settings.contentPerceptionConsentVersion === 1
+    const runtimeReady = this.characterReady && this.settings.personalityEnabled && !this.uiInteractionActive
+    this.perceptionAgency.configure({
+      enabled: perceptionEnabled,
+      ready: runtimeReady && !this.hidden,
+      initiativeEnabled: this.settings.initiativeEnabled,
+      style: this.settings.initiativeStyle,
+    })
     return this.desktopContextSource.configure({
-      enabled: this.settings.desktopAwarenessEnabled,
-      consented: this.settings.desktopAwarenessConsentVersion === 1,
-      ready: this.characterReady && this.settings.personalityEnabled && !this.uiInteractionActive,
+      enabled: this.settings.desktopAwarenessEnabled || perceptionEnabled,
+      consented: perceptionEnabled || this.settings.desktopAwarenessConsentVersion === 1,
+      ready: runtimeReady,
       visible: !this.hidden,
+      includeWindowTitle: perceptionEnabled,
     })
   }
 
