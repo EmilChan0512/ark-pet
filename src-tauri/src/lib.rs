@@ -1,5 +1,6 @@
 pub mod commands;
 pub mod character_packages;
+pub mod desktop_awareness;
 pub mod speech;
 pub mod tray;
 pub mod window;
@@ -13,6 +14,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .manage(speech::VoiceState::discover())
         .manage(character_packages::CharacterPackageState::default())
+        .manage(desktop_awareness::DesktopAwarenessState::default())
         .invoke_handler(tauri::generate_handler![
             speech::get_voice_capabilities,
             speech::resolve_original_voice_clip,
@@ -25,6 +27,8 @@ pub fn run() {
             character_packages::list_installed_characters,
             character_packages::remove_character_package,
             character_packages::cleanup_character_staging,
+            desktop_awareness::start_desktop_awareness,
+            desktop_awareness::stop_desktop_awareness,
         ])
         .setup(|app| {
             let character_root = app.path().app_data_dir()?.join("characters");

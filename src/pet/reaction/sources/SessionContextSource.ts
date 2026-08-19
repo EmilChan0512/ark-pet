@@ -11,6 +11,7 @@ export class SessionContextSource {
   private lastActivityAt: number | null = null
   private lastLongActiveAt: number | null = null
   private ready = false
+  private systemIdleAuthoritative = false
 
   constructor(bus: ContextEventBus, persistence: FirstMeetingPersistencePort, options: Partial<SessionContextOptions> = {}) {
     this.bus = bus; this.persistence = persistence
@@ -33,7 +34,7 @@ export class SessionContextSource {
     if (!this.ready) return
     const idleMs = this.lastActivityAt === null ? 0 : at - this.lastActivityAt
     this.lastActivityAt = at
-    if (idleMs >= this.options.idleThresholdMs) this.bus.publish({ type: 'session.user-returned', at, idleMs })
+    if (!this.systemIdleAuthoritative && idleMs >= this.options.idleThresholdMs) this.bus.publish({ type: 'session.user-returned', at, idleMs })
   }
 
   update(now: number) {
@@ -46,5 +47,6 @@ export class SessionContextSource {
   }
 
   reset() { this.ready = false; this.startedAt = null; this.lastActivityAt = null; this.lastLongActiveAt = null }
+  setSystemIdleAuthoritative(authoritative: boolean) { this.systemIdleAuthoritative = authoritative }
   clearFirstMeetingMarker() { this.persistence.clear() }
 }

@@ -16,6 +16,8 @@ import {
 import type { CharacterCatalogEntry } from '../types/character'
 import './App.css'
 
+const DESKTOP_AWARENESS_CONSENT_VERSION = 1
+
 const DEV_AI_VOICE_SAMPLES = [
   {
     key: 'walk-return',
@@ -74,6 +76,13 @@ function createDebugStore(): DebugStore {
     reactionBlockedReason: null,
     reactionDecisionLog: [],
     currentLocalTimePeriod: null,
+    desktopAwareness: {
+      enabled: false, consented: false, status: 'off',
+      capabilities: { foregroundCategory: 'unsupported', systemIdle: 'unsupported', sessionLock: 'unsupported' },
+      category: 'unknown', idleState: 'unavailable', idleBucket: null,
+      sessionState: 'unavailable', lastEventType: null, blockedReason: 'awareness disabled',
+      generation: 0, errorCode: null,
+    },
     lastReactionError: null,
     lastError: null,
   }
@@ -109,6 +118,7 @@ export default function App() {
   const [packageInspection, setPackageInspection] = useState<PackageInspection | null>(null)
   const [packageBusy, setPackageBusy] = useState(false)
   const [packageOutcome, setPackageOutcome] = useState('Catalog not loaded')
+  const [awarenessDisclosureOpen, setAwarenessDisclosureOpen] = useState(false)
   const snapshot = useSyncExternalStore(
     debugStore.subscribe,
     debugStore.getSnapshot,
@@ -469,6 +479,65 @@ export default function App() {
             />
           </label>
 
+          <section className="awareness-settings" aria-label="Desktop awareness">
+            <div className="settings-toggle">
+              <span>
+                <strong>Desktop awareness</strong>
+                <small>Optional local reactions to coarse desktop state</small>
+              </span>
+              <input
+                type="checkbox"
+                checked={settings.desktopAwarenessEnabled}
+                onChange={(event) => {
+                  if (!event.target.checked) {
+                    settingsStore.update({ desktopAwarenessEnabled: false })
+                  } else if (settings.desktopAwarenessConsentVersion !== DESKTOP_AWARENESS_CONSENT_VERSION) {
+                    setAwarenessDisclosureOpen(true)
+                  } else {
+                    settingsStore.update({ desktopAwarenessEnabled: true })
+                  }
+                }}
+              />
+            </div>
+            <div className="awareness-status" role="status">
+              <span>Status: {snapshot.desktopAwareness.status}</span>
+              <span>Category: {snapshot.desktopAwareness.category}</span>
+              <span>Idle: {snapshot.desktopAwareness.idleState}{snapshot.desktopAwareness.idleBucket ? ` · ${snapshot.desktopAwareness.idleBucket}` : ''}</span>
+              <span>Session: {snapshot.desktopAwareness.sessionState}</span>
+              <span>Capabilities: app {snapshot.desktopAwareness.capabilities.foregroundCategory}, idle {snapshot.desktopAwareness.capabilities.systemIdle}, lock {snapshot.desktopAwareness.capabilities.sessionLock}</span>
+              {snapshot.desktopAwareness.errorCode ? <span>Error: {snapshot.desktopAwareness.errorCode}</span> : null}
+            </div>
+            <small className="awareness-not-collected">
+              Never collected: titles, URLs, screen contents, files, keyboard input, clipboard,
+              messages, document text, or activity history.
+            </small>
+            {settings.desktopAwarenessEnabled ? (
+              <button type="button" onClick={() => settingsStore.update({ desktopAwarenessEnabled: false })}>
+                Disable immediately
+              </button>
+            ) : null}
+          </section>
+
+          {awarenessDisclosureOpen ? (
+            <section className="awareness-disclosure" role="dialog" aria-modal="true" aria-label="Desktop awareness disclosure">
+              <h2>Enable private desktop awareness?</h2>
+              <p>Ark Pet reads only system idle duration, lock/unlock state, and the current app’s broad local category.</p>
+              <p>It does not read titles, URLs, screen contents, files, keyboard input, clipboard data, messages, or document text.</p>
+              <p>Raw application identity is classified inside the native process, then discarded. It is never stored, sent to a persona, uploaded, or included in telemetry.</p>
+              <p>Awareness stays local and can be disabled immediately.</p>
+              <div className="settings-panel__actions">
+                <button type="button" className="settings-panel__done" onClick={() => {
+                  settingsStore.update({
+                    desktopAwarenessConsentVersion: DESKTOP_AWARENESS_CONSENT_VERSION,
+                    desktopAwarenessEnabled: true,
+                  })
+                  setAwarenessDisclosureOpen(false)
+                }}>Enable</button>
+                <button type="button" onClick={() => setAwarenessDisclosureOpen(false)}>Not now</button>
+              </div>
+            </section>
+          ) : null}
+
           <label className="settings-toggle">
             <span>
               <strong>Autonomous behavior</strong>
@@ -600,6 +669,14 @@ export default function App() {
             <pre className="debug-panel__voice-log">{snapshot.voiceProgressLog.join('\n')}</pre>
           ) : null}
           <div>Time Period: {snapshot.currentLocalTimePeriod ?? 'n/a'}</div>
+          <div>Desktop Awareness: {snapshot.desktopAwareness.status} · generation {snapshot.desktopAwareness.generation}</div>
+          <div>Desktop Capabilities: app {snapshot.desktopAwareness.capabilities.foregroundCategory}, idle {snapshot.desktopAwareness.capabilities.systemIdle}, lock {snapshot.desktopAwareness.capabilities.sessionLock}</div>
+          <div>Desktop Category: {snapshot.desktopAwareness.category}</div>
+          <div>Desktop Idle: {snapshot.desktopAwareness.idleState}{snapshot.desktopAwareness.idleBucket ? ` · ${snapshot.desktopAwareness.idleBucket}` : ''}</div>
+          <div>Desktop Session: {snapshot.desktopAwareness.sessionState}</div>
+          <div>Desktop Last Event: {snapshot.desktopAwareness.lastEventType ?? 'n/a'}</div>
+          {snapshot.desktopAwareness.blockedReason ? <div>Desktop Blocked: {snapshot.desktopAwareness.blockedReason}</div> : null}
+          {snapshot.desktopAwareness.errorCode ? <div>Desktop Error: {snapshot.desktopAwareness.errorCode}</div> : null}
           <div>Last Context: {snapshot.lastContextEvent?.type ?? 'n/a'}</div>
           <div>Selected Reaction: {snapshot.selectedReactionId ?? 'n/a'}</div>
           <div>Active Reaction: {snapshot.activeReactionId ?? 'n/a'} ({snapshot.reactionState})</div>
@@ -632,6 +709,10 @@ export default function App() {
               ['Returned', { type: 'session.user-returned', at: performance.now(), idleMs: 600_000 }],
               ['Long active', { type: 'session.long-active', at: performance.now(), activeMs: 7_200_000 }],
               ['Late night', { type: 'time.period-entered', at: performance.now(), period: 'late-night' }],
+              ['Dev app', { type: 'desktop.activity-category-entered', at: performance.now(), category: 'development' }],
+              ['Gaming app', { type: 'desktop.activity-category-entered', at: performance.now(), category: 'gaming' }],
+              ['Long idle return', { type: 'desktop.system-idle-returned', at: performance.now(), idleBucket: 'long' }],
+              ['Unlocked', { type: 'desktop.session-unlocked', at: performance.now() }],
             ] as const).map(([label, event]) => (
               <button key={label} type="button" onClick={() => void commandCoordinatorRef.current?.dispatch({ type: 'simulate-context', event })}>
                 {label}

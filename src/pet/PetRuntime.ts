@@ -26,6 +26,8 @@ import { SessionContextSource } from './reaction/sources/SessionContextSource'
 import { TimeContextSource } from './reaction/sources/TimeContextSource'
 import { loadCharacterPersona } from './persona/CharacterPersonaLoader'
 import type { ContextEvent } from './reaction/types'
+import { DesktopContextSource } from './reaction/sources/DesktopContextSource'
+import { TauriDesktopAwarenessPort } from '../services/desktopAwareness'
 
 interface PointerSession {
   x: number
@@ -55,6 +57,7 @@ export class PetRuntime {
   private readonly interactionContextSource: InteractionContextSource
   private readonly sessionContextSource: SessionContextSource
   private readonly timeContextSource: TimeContextSource
+  private readonly desktopContextSource: DesktopContextSource
   private reactionEngine: ReactionEngine | null = null
   private readonly hitTestController = new HitTestController(
     () => this.getCharacterBounds(),
@@ -80,6 +83,7 @@ export class PetRuntime {
   private facing: FacingDirection = 'right'
   private characterGeneration = 0
   private characterLoadLog: string[] = []
+  private characterReady = false
   private readonly host: HTMLElement
   private readonly debugStore: DebugStore
   private readonly onSettingsRequested: () => void
@@ -181,7 +185,23 @@ export class PetRuntime {
       clear: () => window.localStorage.removeItem('ark-pet.personality.first-meeting-date'),
     })
     this.timeContextSource = new TimeContextSource(this.contextEventBus)
-    this.contextEventBus.subscribe((event) => this.reactionEngine?.handle(event))
+    this.desktopContextSource = new DesktopContextSource(
+      this.contextEventBus,
+      new TauriDesktopAwarenessPort(),
+      (snapshot) => {
+        this.sessionContextSource.setSystemIdleAuthoritative(
+          snapshot.status === 'active' && snapshot.capabilities.systemIdle === 'available',
+        )
+        this.debugStore.patch({ desktopAwareness: snapshot })
+      },
+    )
+    this.contextEventBus.subscribe((event) => {
+      if (event.type === 'desktop.session-locked') {
+        this.cancelReactions('session-locked')
+        this.speechCoordinator.cancelAll('session-locked')
+      }
+      this.reactionEngine?.handle(event)
+    })
   }
 
   private readonly updateDebugSnapshot = () => {
@@ -254,6 +274,7 @@ export class PetRuntime {
       this.hidden = false
       void this.behaviorAdapter.resume(performance.now())
       this.resumeSpeechIfAllowed()
+      await this.syncDesktopAwareness()
     }
   }
 
@@ -263,6 +284,7 @@ export class PetRuntime {
     this.speechCoordinator.pause('hidden')
     await this.behaviorAdapter.pause('hidden')
     this.hidden = true
+    await this.syncDesktopAwareness()
     this.renderer.pauseTicker()
     await this.nativeWindowService.hide()
   }
@@ -272,6 +294,8 @@ export class PetRuntime {
     this.cancelReactions('reload')
     this.speechCoordinator.pause('reload')
     await this.behaviorAdapter.pause('reload')
+    this.characterReady = false
+    await this.syncDesktopAwareness()
     await this.loadCharacter(this.currentManifest?.id ?? 'demo')
   }
 
@@ -337,6 +361,7 @@ export class PetRuntime {
 
   async applySettings(settings: PetSettings) {
     const personalityChanged = this.settings.personalityEnabled !== settings.personalityEnabled
+    const awarenessDisabled = this.settings.desktopAwarenessEnabled && !settings.desktopAwarenessEnabled
     this.settings = settings
     if (
       import.meta.env.DEV &&
@@ -362,6 +387,10 @@ export class PetRuntime {
     if (settings.speechMode === 'off') this.speechCoordinator.pause('disabled')
     else this.resumeSpeechIfAllowed()
     this.reactionEngine?.setEnabled(settings.personalityEnabled)
+    if (awarenessDisabled) {
+      this.cancelReactions('desktop-awareness-disabled')
+      this.speechCoordinator.cancelAll('disabled')
+    }
     if (personalityChanged && !settings.personalityEnabled) {
       this.reactionAdapter.cancel('disabled')
       this.sessionContextSource.reset()
@@ -372,6 +401,7 @@ export class PetRuntime {
       this.timeContextSource.setReady(true)
       this.timeContextSource.update(now)
     }
+    await this.syncDesktopAwareness()
 
     const character = this.characterManager.getCurrentCharacter()
     if (character && this.currentManifest) {
@@ -395,15 +425,18 @@ export class PetRuntime {
       await this.nativeWindowService.setIgnoreCursorEvents(false)
       this.debugStore.patch({ mousePassthrough: false, hitTest: false })
       await this.behaviorAdapter.pause('paused')
+      await this.syncDesktopAwareness()
     } else {
       void this.behaviorAdapter.resume(performance.now())
       this.resumeSpeechIfAllowed()
+      await this.syncDesktopAwareness()
     }
   }
 
   async destroy() {
     // Behavior cleanup owns future timers and motion subscriptions, so it must
     // finish before the renderer and native ports it may reference disappear.
+    await this.desktopContextSource.destroy()
     this.reactionEngine?.destroy()
     this.reactionAdapter.cancel('destroyed')
     this.contextEventBus.destroy()
@@ -524,6 +557,8 @@ export class PetRuntime {
     this.cancelReactions('character-reload')
     this.sessionContextSource.reset()
     this.timeContextSource.setReady(false)
+    this.characterReady = false
+    await this.syncDesktopAwareness()
     await this.behaviorAdapter.pause('reload')
     this.controller.enterLoading()
     this.debugStore.patch({
@@ -603,6 +638,7 @@ export class PetRuntime {
       })
 
       this.enterIdle()
+      this.characterReady = true
       if (!this.hidden && !this.uiInteractionActive) {
         void this.behaviorAdapter.resume(performance.now())
         this.resumeSpeechIfAllowed()
@@ -613,6 +649,7 @@ export class PetRuntime {
         this.timeContextSource.setReady(true)
         this.timeContextSource.update(now)
       }
+      await this.syncDesktopAwareness()
 
       this.debugStore.patch({
         petState: 'idle',
@@ -628,6 +665,7 @@ export class PetRuntime {
       const previousManifest = this.characterManager.getCurrentManifest()
       if (previousCharacterId && previousCharacter && previousManifest?.id === previousCharacterId) {
         this.currentManifest = previousManifest
+        this.characterReady = true
         this.enterIdle()
         if (!this.hidden && !this.uiInteractionActive) void this.behaviorAdapter.resume(performance.now())
         if (this.settings.personalityEnabled) {
@@ -637,6 +675,7 @@ export class PetRuntime {
           this.timeContextSource.update(now)
         }
         this.debugStore.patch({ petState: 'idle', characterId: previousCharacterId, characterManifest: previousManifest, lastError: message })
+        await this.syncDesktopAwareness()
       } else {
         this.controller.enterError()
         this.createPlaceholder(message)
@@ -730,6 +769,15 @@ export class PetRuntime {
   private localDateKey() {
     const date = new Date()
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  }
+
+  private syncDesktopAwareness() {
+    return this.desktopContextSource.configure({
+      enabled: this.settings.desktopAwarenessEnabled,
+      consented: this.settings.desktopAwarenessConsentVersion === 1,
+      ready: this.characterReady && this.settings.personalityEnabled && !this.uiInteractionActive,
+      visible: !this.hidden,
+    })
   }
 
   private hasAmbientAnimation(kind: AmbientAnimationKind) {

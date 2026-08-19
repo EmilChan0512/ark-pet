@@ -16,7 +16,12 @@ function matchesCondition(rule: PersonaReaction, event: ContextEvent) {
     }
     if (condition.type === 'idle-ms') return event.type === 'session.user-returned' && event.idleMs >= condition.min
     if (condition.type === 'active-ms') return event.type === 'session.long-active' && event.activeMs >= condition.min
-    return event.type === 'time.period-entered' && event.period === condition.value
+    if (condition.type === 'period') return event.type === 'time.period-entered' && event.period === condition.value
+    if (condition.type === 'desktop-category') {
+      return event.type === 'desktop.activity-category-entered' && event.category === condition.value
+    }
+    return (event.type === 'desktop.system-idle-entered' || event.type === 'desktop.system-idle-returned') &&
+      event.idleBucket === condition.value
   })
 }
 

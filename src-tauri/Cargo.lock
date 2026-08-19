@@ -3390,6 +3390,7 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-dialog",
  "tauri-plugin-process",
+ "windows-sys 0.59.0",
  "zip",
 ]
 
