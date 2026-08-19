@@ -23,6 +23,8 @@ describe('parsePetSettings', () => {
       characterVoiceFallback: DEFAULT_PET_SETTINGS.characterVoiceFallback,
       personalityEnabled: DEFAULT_PET_SETTINGS.personalityEnabled,
       activeCharacterId: DEFAULT_PET_SETTINGS.activeCharacterId,
+      desktopAwarenessEnabled: false,
+      desktopAwarenessConsentVersion: null,
     })
   })
 
@@ -35,17 +37,24 @@ describe('parsePetSettings', () => {
       characterVoiceFallback: DEFAULT_PET_SETTINGS.characterVoiceFallback,
       personalityEnabled: DEFAULT_PET_SETTINGS.personalityEnabled,
       activeCharacterId: DEFAULT_PET_SETTINGS.activeCharacterId,
+      desktopAwarenessEnabled: false,
+      desktopAwarenessConsentVersion: null,
     })
   })
 
   it('migrates Phase 7 v3 settings to the personality default', () => {
-    const { personalityEnabled: _personality, activeCharacterId: _character, ...v3 } = DEFAULT_PET_SETTINGS
-    expect(parsePetSettings(v3)).toEqual({ ...v3, personalityEnabled: true, activeCharacterId: 'demo' })
+    const { personalityEnabled: _personality, activeCharacterId: _character, desktopAwarenessEnabled: _awareness, desktopAwarenessConsentVersion: _consent, ...v3 } = DEFAULT_PET_SETTINGS
+    expect(parsePetSettings(v3)).toEqual({ ...v3, personalityEnabled: true, activeCharacterId: 'demo', desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null })
   })
 
   it('migrates Phase 8 v4 settings to the built-in character', () => {
-    const { activeCharacterId: _removed, ...v4 } = DEFAULT_PET_SETTINGS
-    expect(parsePetSettings(v4)).toEqual({ ...v4, activeCharacterId: 'demo' })
+    const { activeCharacterId: _removed, desktopAwarenessEnabled: _awareness, desktopAwarenessConsentVersion: _consent, ...v4 } = DEFAULT_PET_SETTINGS
+    expect(parsePetSettings(v4)).toEqual({ ...v4, activeCharacterId: 'demo', desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null })
+  })
+
+  it('migrates Phase 9 v5 with awareness safely disabled', () => {
+    const { desktopAwarenessEnabled: _enabled, desktopAwarenessConsentVersion: _consent, ...v5 } = DEFAULT_PET_SETTINGS
+    expect(parsePetSettings(v5)).toEqual({ ...v5, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null })
   })
 
   it('rejects corrupt, incomplete, and unknown settings', () => {

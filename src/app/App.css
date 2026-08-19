@@ -86,6 +86,41 @@
   justify-content: space-between;
 }
 
+.awareness-settings {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(126, 148, 190, 0.28);
+  border-radius: 10px;
+  background: rgba(33, 42, 61, 0.62);
+}
+
+.awareness-status {
+  display: grid;
+  gap: 2px;
+  font-size: 11px;
+  color: #bdc9df;
+}
+
+.awareness-not-collected {
+  line-height: 1.45;
+  color: #9eabc2;
+}
+
+.awareness-disclosure {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(142, 178, 241, 0.48);
+  border-radius: 12px;
+  background: #202a3d;
+}
+
+.awareness-disclosure h2,
+.awareness-disclosure p { margin: 0; }
+
+.awareness-disclosure p { font-size: 12px; line-height: 1.5; color: #d0d8e8; }
+
 .settings-panel__header h1 {
   margin: 2px 0 0;
   font-size: 22px;

@@ -96,9 +96,8 @@ Architecture maintenance guides:
   package trust boundary, atomic catalog, switching, and creator workflow.
 - [Phase 9 requirements](docs/phase-9-requirements.md): safe local character
   import, installation, switching, persistence, and removal.
-
-Planned phase execution contracts (not yet implemented):
-
+- [Desktop awareness](docs/architecture/desktop-awareness.md): consent,
+  native minimization, coarse event schema, lifecycle, and privacy review.
 - [Phase 10 requirements](docs/phase-10-requirements.md): opt-in,
   privacy-preserving desktop awareness with coarse local context only.
 
@@ -177,11 +176,14 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 
 ## Status
 
-Phase 1–9 are integrated. Phase 4 establishes the behavior engine, Phase 5 adds
+Phase 1–10 are integrated. Phase 4 establishes the behavior engine, Phase 5 adds
 modular ambient behaviors, Phase 6 establishes the runtime command boundary,
 and Phase 7 adds offline character speech. Phase 8 adds a deterministic local
 context-event path, validated character personas, weighted/cooldown reaction
 policy, and cancellation-safe composition of behavior, animation, and speech.
 Phase 9 adds the non-executable Character Package v1 trust boundary, atomic
 catalog installation, generation-safe switching, persistence, and removal.
+Phase 10 adds off-by-default desktop awareness with native identity
+minimization, coarse category/idle/session events, deterministic reactions,
+and versioned local consent without activity history or telemetry.
 Release packaging and macOS AI synthesis remain deferred.

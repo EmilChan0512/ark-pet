@@ -71,8 +71,51 @@
       "event": "session.user-returned",
       "priority": 160,
       "cooldownMs": 300000,
+      "cooldownGroup": "pepe.return",
       "conditions": [{ "type": "idle-ms", "min": 300000 }],
       "plan": [{ "type": "speak", "text": "欢迎回来，博士。", "source": "ambient", "dedupeKey": "personality.returned" }]
+    },
+    {
+      "id": "pepe.desktop-long-idle-return",
+      "event": "desktop.system-idle-returned",
+      "priority": 160,
+      "cooldownMs": 900000,
+      "cooldownGroup": "pepe.return",
+      "conditions": [{ "type": "idle-bucket", "value": "long" }],
+      "plan": [{ "type": "speak", "text": "欢迎回来，博士。休息得还好吗？", "source": "ambient", "dedupeKey": "personality.returned" }]
+    },
+    {
+      "id": "pepe.desktop-development",
+      "event": "desktop.activity-category-entered",
+      "priority": 40,
+      "cooldownMs": 10800000,
+      "conditions": [{ "type": "desktop-category", "value": "development" }],
+      "plan": [{ "type": "speak", "text": "要开始写代码了吗，博士？", "source": "ambient", "dedupeKey": "personality.desktop.development" }]
+    },
+    {
+      "id": "pepe.desktop-gaming",
+      "event": "desktop.activity-category-entered",
+      "priority": 35,
+      "cooldownMs": 43200000,
+      "oncePerLocalDay": true,
+      "conditions": [{ "type": "desktop-category", "value": "gaming" }],
+      "plan": [{ "type": "speak", "text": "今天也要玩得开心哦。", "source": "ambient", "dedupeKey": "personality.desktop.gaming" }]
+    },
+    {
+      "id": "pepe.desktop-media",
+      "event": "desktop.activity-category-entered",
+      "priority": 30,
+      "cooldownMs": 14400000,
+      "conditions": [{ "type": "desktop-category", "value": "media" }],
+      "plan": [{ "type": "speak", "text": "我会安静陪你听一会儿。", "source": "ambient", "dedupeKey": "personality.desktop.media" }]
+    },
+    {
+      "id": "pepe.desktop-unlocked",
+      "event": "desktop.session-unlocked",
+      "priority": 145,
+      "cooldownMs": 900000,
+      "cooldownGroup": "pepe.return",
+      "plan": [{ "type": "speak", "text": "博士，欢迎回来。", "source": "ambient", "dedupeKey": "personality.returned" }]
     },
     {
       "id": "pepe.long-active",

@@ -45,6 +45,24 @@ describe('reaction context sources', () => {
     ])
   })
 
+  it('suppresses pointer-idle return when system idle is authoritative', () => {
+    const events: ContextEvent[] = []
+    const bus = new ContextEventBus()
+    bus.subscribe((event) => events.push(event))
+    const source = new SessionContextSource(
+      bus,
+      { getLastDate: () => '2026-01-01', setLastDate: () => {}, clear: () => {} },
+      { idleThresholdMs: 10 },
+    )
+    source.characterReady(0, '2026-01-01')
+    source.setSystemIdleAuthoritative(true)
+    source.recordActivity(20)
+    expect(events.some((event) => event.type === 'session.user-returned')).toBe(false)
+    source.setSystemIdleAuthoritative(false)
+    source.recordActivity(40)
+    expect(events.filter((event) => event.type === 'session.user-returned')).toHaveLength(1)
+  })
+
   it('checks the current period immediately after becoming ready again', () => {
     const events: ContextEvent[] = []; const bus = new ContextEventBus(); bus.subscribe((event) => events.push(event))
     let hour = 23; const source = new TimeContextSource(bus, () => hour)

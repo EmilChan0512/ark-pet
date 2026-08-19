@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-export const PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v5'
+export const PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v6'
+export const LEGACY_V5_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v5'
 export const LEGACY_V4_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v4'
 export const LEGACY_V3_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v3'
 export const LEGACY_V2_PET_SETTINGS_STORAGE_KEY = 'ark-pet.settings.v2'
@@ -18,10 +19,13 @@ const petSettingsSchema = z
     characterVoiceFallback: z.enum(['exact-clip-only', 'cue-and-text-replacement']),
     personalityEnabled: z.boolean(),
     activeCharacterId: z.string().min(1).max(96),
+    desktopAwarenessEnabled: z.boolean(),
+    desktopAwarenessConsentVersion: z.number().int().positive().nullable(),
   })
   .strict()
 
-const v4PetSettingsSchema = petSettingsSchema.omit({ activeCharacterId: true })
+const v5PetSettingsSchema = petSettingsSchema.omit({ desktopAwarenessEnabled: true, desktopAwarenessConsentVersion: true })
+const v4PetSettingsSchema = v5PetSettingsSchema.omit({ activeCharacterId: true })
 const v3PetSettingsSchema = v4PetSettingsSchema.omit({ personalityEnabled: true })
 const v2PetSettingsSchema = v3PetSettingsSchema.omit({
   speechMode: true,
@@ -43,6 +47,8 @@ export const DEFAULT_PET_SETTINGS: PetSettings = Object.freeze({
   characterVoiceFallback: 'cue-and-text-replacement',
   personalityEnabled: true,
   activeCharacterId: 'demo',
+  desktopAwarenessEnabled: false,
+  desktopAwarenessConsentVersion: null,
 })
 
 export interface PetSettingsStore {
@@ -60,11 +66,14 @@ export function parsePetSettings(
   const current = petSettingsSchema.safeParse(value)
   if (current.success) return current.data
 
+  const v5 = v5PetSettingsSchema.safeParse(value)
+  if (v5.success) return { ...v5.data, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null }
+
   const v4 = v4PetSettingsSchema.safeParse(value)
-  if (v4.success) return { ...v4.data, activeCharacterId: defaults.activeCharacterId }
+  if (v4.success) return { ...v4.data, activeCharacterId: defaults.activeCharacterId, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null }
 
   const v3 = v3PetSettingsSchema.safeParse(value)
-  if (v3.success) return { ...v3.data, personalityEnabled: defaults.personalityEnabled, activeCharacterId: defaults.activeCharacterId }
+  if (v3.success) return { ...v3.data, personalityEnabled: defaults.personalityEnabled, activeCharacterId: defaults.activeCharacterId, desktopAwarenessEnabled: false, desktopAwarenessConsentVersion: null }
 
   const v2 = v2PetSettingsSchema.safeParse(value)
   if (v2.success) {
@@ -75,6 +84,8 @@ export function parsePetSettings(
       characterVoiceFallback: defaults.characterVoiceFallback,
       personalityEnabled: defaults.personalityEnabled,
       activeCharacterId: defaults.activeCharacterId,
+      desktopAwarenessEnabled: false,
+      desktopAwarenessConsentVersion: null,
     }
   }
 
@@ -88,6 +99,8 @@ export function parsePetSettings(
       characterVoiceFallback: defaults.characterVoiceFallback,
       personalityEnabled: defaults.personalityEnabled,
       activeCharacterId: defaults.activeCharacterId,
+      desktopAwarenessEnabled: false,
+      desktopAwarenessConsentVersion: null,
     }
   }
 
@@ -106,16 +119,17 @@ function parseStoredValue(raw: string | null) {
 function loadSettings(): PetSettings {
   try {
     const currentRaw = window.localStorage.getItem(PET_SETTINGS_STORAGE_KEY)
+    const v5Raw = window.localStorage.getItem(LEGACY_V5_PET_SETTINGS_STORAGE_KEY)
     const v4Raw = window.localStorage.getItem(LEGACY_V4_PET_SETTINGS_STORAGE_KEY)
     const v3Raw = window.localStorage.getItem(LEGACY_V3_PET_SETTINGS_STORAGE_KEY)
     const v2Raw = window.localStorage.getItem(LEGACY_V2_PET_SETTINGS_STORAGE_KEY)
     const legacyRaw = window.localStorage.getItem(LEGACY_PET_SETTINGS_STORAGE_KEY)
-    if (!currentRaw && !v4Raw && !v3Raw && !v2Raw && !legacyRaw) return DEFAULT_PET_SETTINGS
+    if (!currentRaw && !v5Raw && !v4Raw && !v3Raw && !v2Raw && !legacyRaw) return DEFAULT_PET_SETTINGS
 
     const current = parseStoredValue(currentRaw)
     if (current) return current
 
-    const migrated = parseStoredValue(v4Raw) ?? parseStoredValue(v3Raw) ?? parseStoredValue(v2Raw) ?? parseStoredValue(legacyRaw)
+    const migrated = parseStoredValue(v5Raw) ?? parseStoredValue(v4Raw) ?? parseStoredValue(v3Raw) ?? parseStoredValue(v2Raw) ?? parseStoredValue(legacyRaw)
     if (migrated) {
       window.localStorage.setItem(PET_SETTINGS_STORAGE_KEY, JSON.stringify(migrated))
       return migrated

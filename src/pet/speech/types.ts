@@ -18,6 +18,7 @@ export type SpeechCancellationReason =
   | 'hidden'
   | 'reload'
   | 'ui-interaction'
+  | 'session-locked'
   | 'disabled'
   | 'destroyed'
   | 'failed'

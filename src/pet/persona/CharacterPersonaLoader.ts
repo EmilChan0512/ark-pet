@@ -6,6 +6,11 @@ const conditionSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('idle-ms'), min: z.number().nonnegative() }).strict(),
   z.object({ type: z.literal('active-ms'), min: z.number().nonnegative() }).strict(),
   z.object({ type: z.literal('period'), value: z.enum(['morning', 'day', 'evening', 'late-night']) }).strict(),
+  z.object({ type: z.literal('desktop-category'), value: z.enum([
+    'development', 'browsing', 'communication', 'productivity', 'creative',
+    'media', 'gaming', 'system', 'other', 'unknown',
+  ]) }).strict(),
+  z.object({ type: z.literal('idle-bucket'), value: z.enum(['short', 'medium', 'long']) }).strict(),
 ])
 
 const planStepSchema = z.discriminatedUnion('type', [
@@ -32,6 +37,8 @@ const personaSchema = z.object({
       'pet.clicked', 'pet.drag-started', 'pet.drag-ended', 'session.started',
       'session.first-meeting-today', 'session.user-returned', 'session.long-active',
       'time.period-entered',
+      'desktop.activity-category-entered', 'desktop.system-idle-entered',
+      'desktop.system-idle-returned', 'desktop.session-locked', 'desktop.session-unlocked',
     ]),
     priority: z.number().finite(),
     weight: z.number().positive().optional(),
