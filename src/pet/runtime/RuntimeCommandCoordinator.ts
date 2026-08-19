@@ -7,6 +7,9 @@ export type RuntimeCommand =
   | { readonly type: 'show' }
   | { readonly type: 'hide' }
   | { readonly type: 'reload-character' }
+  | { readonly type: 'select-character'; readonly characterId: string }
+  | { readonly type: 'install-character-package'; readonly inspectionToken: string }
+  | { readonly type: 'remove-character-package'; readonly packageId: string; readonly characterId: string }
   | { readonly type: 'request-settings' }
   | { readonly type: 'apply-settings'; readonly settings: PetSettings }
   | { readonly type: 'set-ui-interaction'; readonly active: boolean }
@@ -52,12 +55,20 @@ const NULL_DIAGNOSTICS: RuntimeCommandDiagnostics = {
   reportError: () => {},
 }
 
+function commandErrorMessage(error: unknown) {
+  if (typeof error === 'object' && error && 'code' in error && 'message' in error) {
+    return `${String(error.code)}: ${String(error.message)}`
+  }
+  return error instanceof Error ? error.message : String(error)
+}
+
 function coalescingKey(command: RuntimeCommand): string | null {
   switch (command.type) {
     case 'show':
     case 'hide':
       return 'visibility'
     case 'reload-character':
+    case 'select-character':
     case 'request-settings':
     case 'apply-settings':
     case 'set-ui-interaction':
@@ -67,6 +78,9 @@ function coalescingKey(command: RuntimeCommand): string | null {
     case 'simulate-context':
     case 'clear-first-meeting-marker':
     case 'clear-reaction-cooldowns':
+      return command.type
+    case 'install-character-package':
+    case 'remove-character-package':
       return command.type
     default:
       return null
@@ -153,9 +167,7 @@ export class RuntimeCommandCoordinator {
           await this.handler.execute(entry.command)
         } catch (error) {
           outcome = 'failed'
-          this.lastError = `[${entry.command.type}] ${
-            error instanceof Error ? error.message : String(error)
-          }`
+          this.lastError = `[${entry.command.type}] ${commandErrorMessage(error)}`
           this.reportError(entry.command, error)
         }
 

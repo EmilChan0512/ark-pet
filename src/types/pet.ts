@@ -19,6 +19,7 @@ export interface DebugSnapshot {
   characterId: string | null
   rendererStatus: 'idle' | 'ready' | 'error'
   characterManifest: CharacterManifestWithPaths | null
+  characterLoadLog: readonly string[]
   activeBehavior: string | null
   lastBehaviorError: string | null
   ambientSchedulerStatus: AmbientSchedulerStatus

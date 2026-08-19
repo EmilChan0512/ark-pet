@@ -12,6 +12,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@pixi-spine/all-3.8": "4.0.6",
     "@pixi/assets": "7.4.3",
     "@pixi/core": "7.4.3",
     "@pixi/display": "7.4.3",
@@ -19,8 +20,8 @@
     "@pixi/mesh": "7.4.3",
     "@pixi/mesh-extras": "7.4.3",
     "@pixi/sprite": "7.4.3",
-    "@pixi-spine/all-3.8": "4.0.6",
     "@tauri-apps/api": "2.11.1",
+    "@tauri-apps/plugin-dialog": "2.7.2",
     "@tauri-apps/plugin-process": "2.3.1",
     "pixi.js": "7.4.3",
     "react": "^19.2.7",

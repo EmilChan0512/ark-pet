@@ -9,6 +9,7 @@
     "core:default",
     "core:app:allow-default-window-icon",
     "process:default",
+    "dialog:allow-open",
     "core:window:allow-cursor-position",
     "core:window:allow-hide",
     "core:window:allow-inner-position",

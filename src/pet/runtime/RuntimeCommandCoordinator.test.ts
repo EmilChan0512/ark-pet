@@ -67,6 +67,10 @@ describe('RuntimeCommandCoordinator', () => {
       { type: 'reload-character' } as const,
     ],
     [
+      { type: 'select-character', characterId: 'com.example.a' } as const,
+      { type: 'select-character', characterId: 'com.example.c' } as const,
+    ],
+    [
       { type: 'request-settings' } as const,
       { type: 'request-settings' } as const,
     ],

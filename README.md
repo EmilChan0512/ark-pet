@@ -92,11 +92,13 @@ Architecture maintenance guides:
   events, persona policy, priority translation, cooldowns, and cancellation.
 - [Phase 8 requirements](docs/phase-8-requirements.md): deterministic local
   personality reactions and product acceptance criteria.
+- [Character package system](docs/architecture/character-packages.md): local
+  package trust boundary, atomic catalog, switching, and creator workflow.
+- [Phase 9 requirements](docs/phase-9-requirements.md): safe local character
+  import, installation, switching, persistence, and removal.
 
 Planned phase execution contracts (not yet implemented):
 
-- [Phase 9 requirements](docs/phase-9-requirements.md): safe local Character
-  Package v1, atomic installation, catalog management, and character switching.
 - [Phase 10 requirements](docs/phase-10-requirements.md): opt-in,
   privacy-preserving desktop awareness with coarse local context only.
 
@@ -161,6 +163,9 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 - Shows an optional debug panel in development
 - Reacts locally to normal/repeated clicks, the first meeting of the day, user
   return, long sessions, and late-night entry through a character persona
+- Imports validated local `.arkpet` v1 packages through staged atomic native
+  installation, supports persisted character switching, and safely removes
+  installed characters while preserving the built-in fallback
 - Provides tray actions for show, hide, reload, settings, and quit
 
 ## Notes
@@ -172,9 +177,11 @@ The supplied package exports `Spine 3.8.99`, and the project has been migrated t
 
 ## Status
 
-Phase 1–8 are integrated. Phase 4 establishes the behavior engine, Phase 5 adds
+Phase 1–9 are integrated. Phase 4 establishes the behavior engine, Phase 5 adds
 modular ambient behaviors, Phase 6 establishes the runtime command boundary,
 and Phase 7 adds offline character speech. Phase 8 adds a deterministic local
 context-event path, validated character personas, weighted/cooldown reaction
 policy, and cancellation-safe composition of behavior, animation, and speech.
+Phase 9 adds the non-executable Character Package v1 trust boundary, atomic
+catalog installation, generation-safe switching, persistence, and removal.
 Release packaging and macOS AI synthesis remain deferred.
