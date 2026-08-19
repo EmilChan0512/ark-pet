@@ -32,6 +32,7 @@ interface ActiveSession extends QueueEntry {
   playbackStarted: boolean
   playbackFinished: boolean
   synthesisTimedOut: boolean
+  presentationVisible: boolean
   settled: boolean
 }
 
@@ -195,6 +196,7 @@ export class SpeechSessionCoordinator {
       active.synthesisTimedOut = true
       active.voiceController.abort()
       this.recordVoiceProgress('ready', `Synthesis timed out for ${active.request.id}; using text`)
+      this.showTextFallback(active)
     }
     if (now >= active.hardDeadline) {
       this.cancelActive('failed', 'completed')
@@ -284,7 +286,8 @@ export class SpeechSessionCoordinator {
     const generation = ++this.generation
     const duration = displayDuration(entry.request.text)
     const voiceContext = this.voiceEnabled ? this.getVoiceContext() : null
-    const visibleDuration = voiceContext
+    const deferUntilSynthesized = Boolean(voiceContext && !entry.request.cue)
+    const visibleDuration = voiceContext && !deferUntilSynthesized
       ? Math.max(duration, this.options.synthesisTimeoutMs + 500)
       : duration
     const active: ActiveSession = {
@@ -293,16 +296,17 @@ export class SpeechSessionCoordinator {
       voiceController: new AbortController(),
       text: entry.request.text,
       audio: null,
-      displayDeadline: now + visibleDuration,
+      displayDeadline: deferUntilSynthesized ? Number.POSITIVE_INFINITY : now + visibleDuration,
       synthesisDeadline: now + this.options.synthesisTimeoutMs,
       hardDeadline: now + this.options.hardTimeoutMs,
       playbackStarted: false,
       playbackFinished: false,
       synthesisTimedOut: false,
+      presentationVisible: false,
       settled: false,
     }
     this.active = active
-    this.show(active)
+    if (!deferUntilSynthesized) this.show(active)
 
     if (voiceContext) {
       this.recordVoiceProgress('synthesizing', `Synthesizing ${entry.request.id}`)
@@ -323,13 +327,17 @@ export class SpeechSessionCoordinator {
         active.voiceController.signal,
       )
     } catch (error) {
-      if (!active.voiceController.signal.aborted) this.reportError(active.request.id, 'resolve', error)
+      if (!active.voiceController.signal.aborted) {
+        this.reportError(active.request.id, 'resolve', error)
+        this.showTextFallback(active)
+      }
       return
     }
 
     if (!artifact || !this.isCurrent(active) || active.voiceController.signal.aborted) {
       if (this.isCurrent(active) && !active.voiceController.signal.aborted) {
         this.recordVoiceProgress('ready', `No voice artifact for ${active.request.id}; using text`)
+        this.showTextFallback(active)
       }
       return
     }
@@ -339,6 +347,7 @@ export class SpeechSessionCoordinator {
       artifact.voiceIdentity !== context.voiceIdentity
     ) {
       this.reportError(active.request.id, 'identity', new Error('Voice artifact identity mismatch'))
+      this.showTextFallback(active)
       return
     }
 
@@ -384,6 +393,7 @@ export class SpeechSessionCoordinator {
     }
     try {
       this.presentation.show(presentation)
+      active.presentationVisible = true
     } catch (error) {
       this.reportError(active.request.id, 'present', error)
     }
@@ -395,10 +405,12 @@ export class SpeechSessionCoordinator {
     this.active = null
     ++this.generation
     active.voiceController.abort()
-    try {
-      this.presentation.hide(active.request.id)
-    } catch (error) {
-      this.reportError(active.request.id, 'hide', error)
+    if (active.presentationVisible) {
+      try {
+        this.presentation.hide(active.request.id)
+      } catch (error) {
+        this.reportError(active.request.id, 'hide', error)
+      }
     }
     if (!active.settled) {
       active.settled = true
@@ -483,6 +495,16 @@ export class SpeechSessionCoordinator {
     } catch {
       // Observability cannot become a second speech failure.
     }
+    this.publishSnapshot()
+  }
+
+  private showTextFallback(active: ActiveSession) {
+    if (!this.isCurrent(active) || active.presentationVisible) return
+    active.displayDeadline = Math.min(
+      active.hardDeadline,
+      this.lastNow + displayDuration(active.text),
+    )
+    this.show(active)
     this.publishSnapshot()
   }
 

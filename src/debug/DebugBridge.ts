@@ -10,13 +10,23 @@ export type DebugCommand =
   | { readonly type: 'clear-first-meeting-marker' }
   | { readonly type: 'set-debug-window-visible'; readonly visible: boolean }
 
+let visibilityRequestGeneration = 0
+
 export async function setDebugWindowVisible(visible: boolean) {
   if (!isTauri() || !import.meta.env.DEV) return
+  const generation = ++visibilityRequestGeneration
   try {
-    const debugWindow = (await getAllWindows()).find((window) => window.label === 'debug')
-    if (!debugWindow) return
-    if (visible) { await debugWindow.show(); await debugWindow.setFocus() }
-    else await debugWindow.hide()
+    for (let attempt = 0; attempt < (visible ? 20 : 1); attempt += 1) {
+      if (generation !== visibilityRequestGeneration) return
+      const debugWindow = (await getAllWindows()).find((window) => window.label === 'debug')
+      if (debugWindow) {
+        if (visible) { await debugWindow.show(); await debugWindow.setFocus() }
+        else await debugWindow.hide()
+        return
+      }
+      await new Promise((resolve) => window.setTimeout(resolve, 100))
+    }
+    console.warn('[DebugBridge] Debug window was not available after startup')
   } catch (error) {
     console.warn('[DebugBridge] Could not change debug window visibility', error)
   }

@@ -35,9 +35,9 @@ conservative:
 
 | Style | Minimum attention | Initiative cooldown |
 | --- | ---: | ---: |
-| Quiet | 0.80 | 60 minutes |
-| Balanced | 0.45 | 20 minutes |
-| Expressive | 0.20 | 8 minutes |
+| Quiet | 0.80 | 20 minutes |
+| Balanced | 0.45 | 6 minutes |
+| Expressive | 0.20 | 2 minutes |
 
 ## Privacy acceptance
 

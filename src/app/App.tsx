@@ -318,6 +318,12 @@ export default function App() {
     const handleDevelopmentShortcut = (event: KeyboardEvent) => {
       if (event.key === 'F10') setSettingsOpen(true)
       if (event.key === 'Escape') setSettingsOpen(false)
+      if (event.key === 'F11') {
+        settingsStore.update({
+          showDebugPanel: !settingsStore.getSnapshot().showDebugPanel,
+        })
+        return
+      }
       if (event.key !== 'F8' && event.key !== 'F9') return
       settingsStore.update({ speechMode: 'character-voice' })
       const originalClip = event.key === 'F8'
@@ -596,10 +602,11 @@ export default function App() {
               disabled={!settings.initiativeEnabled}
               onChange={(event) => settingsStore.update({ initiativeStyle: event.target.value as typeof settings.initiativeStyle })}
             >
-              <option value="quiet">Quiet · rarely interrupts</option>
-              <option value="balanced">Balanced</option>
-              <option value="expressive">Expressive · shares more often</option>
+              <option value="quiet">Quiet · attention ≥80% · about 20 min</option>
+              <option value="balanced">Balanced · attention ≥45% · about 6 min</option>
+              <option value="expressive">Expressive · attention ≥20% · about 2 min</option>
             </select>
+            <small>Attention is her live response to a scene, not a user-controlled value. Inspect it in Debug → Mind.</small>
           </label>
 
           <label className="settings-toggle">

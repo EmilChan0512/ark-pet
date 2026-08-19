@@ -106,7 +106,7 @@ describe('PerceptionAgency', () => {
     await vi.advanceTimersByTimeAsync(100)
     expect(events).toHaveLength(1)
     expect(agency.getSnapshot().blockedReason).toBe('initiative cooldown')
-    now += 8 * 60_000
+    now += 2 * 60_000
     port.emit('Chat with team')
     await vi.advanceTimersByTimeAsync(100)
     expect(events).toHaveLength(2)

@@ -5,6 +5,15 @@ import type { CoarseDesktopSample, DesktopAwarenessPort } from '../reaction/sour
 export type CharacterMood = 'calm' | 'curious' | 'concerned' | 'engaged'
 export type InitiativeStyle = 'quiet' | 'balanced' | 'expressive'
 
+export const INITIATIVE_STYLE_POLICY: Readonly<Record<InitiativeStyle, {
+  readonly minimumAttention: number
+  readonly cooldownMs: number
+}>> = Object.freeze({
+  quiet: { minimumAttention: 0.8, cooldownMs: 20 * 60_000 },
+  balanced: { minimumAttention: 0.45, cooldownMs: 6 * 60_000 },
+  expressive: { minimumAttention: 0.2, cooldownMs: 2 * 60_000 },
+})
+
 export interface PerceptionObservation {
   readonly moduleId: string
   readonly kind: 'foreground-title'
@@ -161,16 +170,15 @@ export class PerceptionAgency {
   private consider(title: string) {
     const interpretation = interpretTitle(title)
     const now = this.now()
-    const cooldown = this.style === 'quiet' ? 60 * 60_000 : this.style === 'expressive' ? 8 * 60_000 : 20 * 60_000
-    const minimumAttention = this.style === 'quiet' ? 0.8 : this.style === 'expressive' ? 0.2 : 0.45
-    const eligible = this.initiativeEnabled && interpretation.attention >= minimumAttention && now - this.lastInitiativeAt >= cooldown
+    const policy = INITIATIVE_STYLE_POLICY[this.style]
+    const eligible = this.initiativeEnabled && interpretation.attention >= policy.minimumAttention && now - this.lastInitiativeAt >= policy.cooldownMs
     const intent = eligible ? `Respond to ${interpretation.scene}` : null
     this.patch({
       status: 'ready', mood: interpretation.mood, scene: interpretation.scene,
       attention: interpretation.attention, currentThought: interpretation.thought,
       currentIntent: intent,
       blockedReason: eligible ? null : !this.initiativeEnabled ? 'initiative disabled'
-        : interpretation.attention < minimumAttention ? 'attention below personality threshold' : 'initiative cooldown',
+        : interpretation.attention < policy.minimumAttention ? 'attention below personality threshold' : 'initiative cooldown',
     })
     if (!eligible) return
     this.lastInitiativeAt = now

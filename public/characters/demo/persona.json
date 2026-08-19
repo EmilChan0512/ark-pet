@@ -121,7 +121,7 @@
       "id": "pepe.perception.coding-problem",
       "event": "perception.scene-noticed",
       "priority": 55,
-      "cooldownMs": 1200000,
+      "cooldownMs": 30000,
       "cooldownGroup": "pepe.perception.initiative",
       "conditions": [{ "type": "perception-scene", "value": "coding-problem" }],
       "plan": [{ "type": "speak", "text": "看起来遇到麻烦了。别急，我陪你慢慢找。", "source": "ambient", "dedupeKey": "perception.coding-problem" }]
@@ -130,7 +130,7 @@
       "id": "pepe.perception.reading",
       "event": "perception.scene-noticed",
       "priority": 35,
-      "cooldownMs": 2400000,
+      "cooldownMs": 30000,
       "cooldownGroup": "pepe.perception.initiative",
       "conditions": [{ "type": "perception-scene", "value": "focused-reading" }],
       "plan": [{ "type": "speak", "text": "这篇东西让博士看得很认真呢。", "source": "ambient", "dedupeKey": "perception.reading" }]
@@ -139,7 +139,7 @@
       "id": "pepe.perception.media",
       "event": "perception.scene-noticed",
       "priority": 30,
-      "cooldownMs": 2400000,
+      "cooldownMs": 30000,
       "cooldownGroup": "pepe.perception.initiative",
       "conditions": [{ "type": "perception-scene", "value": "media" }],
       "plan": [{ "type": "speak", "text": "听起来像是有趣的东西，我也在这里陪着。", "source": "ambient", "dedupeKey": "perception.media" }]
@@ -148,7 +148,7 @@
       "id": "pepe.perception.conversation",
       "event": "perception.scene-noticed",
       "priority": 25,
-      "cooldownMs": 2400000,
+      "cooldownMs": 30000,
       "cooldownGroup": "pepe.perception.initiative",
       "conditions": [{ "type": "perception-scene", "value": "conversation" }],
       "plan": [{ "type": "speak", "text": "博士在和别人聊天呀，我先在旁边待一会儿。", "source": "ambient", "dedupeKey": "perception.conversation" }]
