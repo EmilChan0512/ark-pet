@@ -273,7 +273,7 @@ mod windows_adapter {
 
     #[cfg(test)]
     mod tests {
-        use super::classify_normalized_identity;
+        use super::{classify_normalized_identity, sample};
         #[test]
         fn classifies_exact_known_identities() {
             assert_eq!(classify_normalized_identity("code.exe"), "development");
@@ -287,6 +287,22 @@ mod windows_adapter {
                 classify_normalized_identity("secret-project-title.exe"),
                 "unknown"
             );
+        }
+
+        /// Explicitly invoked by the Phase 10 acceptance command. It is kept
+        /// out of the normal deterministic suite because it samples the real
+        /// desktop once, but it still asserts only the minimized contract.
+        #[test]
+        #[ignore = "Windows platform smoke test"]
+        fn platform_smoke_returns_only_public_coarse_values() {
+            let sample = sample();
+            assert!([
+                "development", "browsing", "communication", "productivity",
+                "creative", "media", "gaming", "system", "other", "unknown",
+            ].contains(&sample.category));
+            assert!(["active", "idle"].contains(&sample.idle_state));
+            assert!(sample.idle_bucket.is_none_or(|bucket| ["short", "medium", "long"].contains(&bucket)));
+            assert!(sample.session_state.is_none_or(|state| ["available", "locked"].contains(&state)));
         }
     }
 }
