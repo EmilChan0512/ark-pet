@@ -1,6 +1,7 @@
 import { defaultWindowIcon } from '@tauri-apps/api/app'
 import { isTauri } from '@tauri-apps/api/core'
 import { LogicalSize, PhysicalPosition } from '@tauri-apps/api/dpi'
+import { listen } from '@tauri-apps/api/event'
 import { Menu } from '@tauri-apps/api/menu'
 import { TrayIcon } from '@tauri-apps/api/tray'
 import { currentMonitor, cursorPosition, getCurrentWindow } from '@tauri-apps/api/window'
@@ -142,4 +143,9 @@ export async function ensureTray(callbacks: TrayCallbacks) {
 export async function quitApplication() {
   if (!isTauri()) return
   await exit(0)
+}
+
+export async function listenForSettingsRequest(onSettings: () => Promise<void> | void) {
+  if (!isTauri()) return () => {}
+  return listen('ark://open-settings', () => onSettings())
 }

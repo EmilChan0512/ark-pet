@@ -8,6 +8,7 @@ default-run = "tauri-spine-desktop-pet"
 
 [build-dependencies]
 tauri-build = { version = "2.6.3", features = [] }
+cc = "1"
 
 [dependencies]
 tauri = { version = "2.11.5", features = ["protocol-asset", "macos-private-api", "tray-icon", "image-png", "image-ico"] }

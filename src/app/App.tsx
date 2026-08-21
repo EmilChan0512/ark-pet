@@ -7,7 +7,7 @@ import {
   type RuntimeCommand,
 } from '../pet/runtime/RuntimeCommandCoordinator'
 import { createPetSettingsStore } from '../settings/PetSettings'
-import { ensureTray, quitApplication } from '../services/tauri'
+import { ensureTray, listenForSettingsRequest, quitApplication } from '../services/tauri'
 import {
   CharacterPackageService,
   builtInCharacter,
@@ -222,6 +222,7 @@ export default function App() {
     commandCoordinatorRef.current = coordinator
 
     let trayCleanup: (() => Promise<void>) | null = null
+    let settingsRequestCleanup: (() => void) | null = null
     let disposed = false
 
     const dispatch = (command: RuntimeCommand) => coordinator.dispatch(command)
@@ -261,6 +262,13 @@ export default function App() {
         console.error('[App] Failed to initialize pet runtime', error)
       })
 
+    void listenForSettingsRequest(async () => {
+      await dispatch({ type: 'request-settings' })
+    }).then((cleanup) => {
+      if (disposed) cleanup()
+      else settingsRequestCleanup = cleanup
+    })
+
     return () => {
       disposed = true
       if (runtimeGenerationRef.current === runtimeGeneration) {
@@ -268,6 +276,7 @@ export default function App() {
       }
       void coordinator.dispatch({ type: 'destroy' })
       void trayCleanup?.()
+      settingsRequestCleanup?.()
       commandCoordinatorRef.current = null
     }
   }, [debugStore, refreshCharacterCatalog, settingsStore])
