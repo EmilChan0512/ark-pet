@@ -4,6 +4,7 @@ import type { DesktopActivityCategory, DesktopIdleBucket } from '../types'
 export type DesktopCapabilityState = 'available' | 'unsupported' | 'denied' | 'error'
 export interface DesktopAwarenessCapabilities {
   readonly foregroundCategory: DesktopCapabilityState
+  readonly foregroundTitle: DesktopCapabilityState
   readonly systemIdle: DesktopCapabilityState
   readonly sessionLock: DesktopCapabilityState
 }
@@ -14,9 +15,11 @@ export interface CoarseDesktopSample {
   readonly idleBucket?: DesktopIdleBucket
   readonly sessionState?: 'available' | 'locked'
   readonly errorCode?: string
+  readonly windowTitle?: string
 }
+export interface DesktopAwarenessStartOptions { readonly includeWindowTitle: boolean }
 export interface DesktopAwarenessPort {
-  start(): Promise<DesktopAwarenessCapabilities>
+  start(options: DesktopAwarenessStartOptions): Promise<DesktopAwarenessCapabilities>
   stop(): Promise<void>
   subscribe(listener: (sample: CoarseDesktopSample) => void): () => void
 }
@@ -36,7 +39,8 @@ export interface DesktopAwarenessSnapshot {
 }
 
 const UNAVAILABLE: DesktopAwarenessCapabilities = {
-  foregroundCategory: 'unsupported', systemIdle: 'unsupported', sessionLock: 'unsupported',
+  foregroundCategory: 'unsupported', foregroundTitle: 'unsupported',
+  systemIdle: 'unsupported', sessionLock: 'unsupported',
 }
 
 export class DesktopContextSource {
@@ -64,6 +68,7 @@ export class DesktopContextSource {
   private idleState: 'active' | 'idle' | null = null
   private lastIdleBucket: DesktopIdleBucket = 'short'
   private locked = false
+  private includeWindowTitle = false
   private readonly unsubscribe: () => void
 
   constructor(
@@ -84,25 +89,28 @@ export class DesktopContextSource {
 
   getSnapshot() { return { ...this.snapshot, capabilities: { ...this.snapshot.capabilities } } }
 
-  async configure(options: { enabled: boolean; consented: boolean; ready: boolean; visible: boolean }) {
+  async configure(options: { enabled: boolean; consented: boolean; ready: boolean; visible: boolean; includeWindowTitle?: boolean }) {
     if (this.destroyed) return
     this.enabled = options.enabled
     this.consented = options.consented
     this.ready = options.ready
     this.visible = options.visible
+    const includeWindowTitleChanged = this.includeWindowTitle !== Boolean(options.includeWindowTitle)
+    this.includeWindowTitle = Boolean(options.includeWindowTitle)
     const shouldRun = this.enabled && this.consented && this.ready && this.visible
     if (!shouldRun) {
       await this.stop(this.enabled && this.consented ? 'paused' : 'off', this.enabled ? 'runtime not ready or hidden' : 'awareness disabled')
       return
     }
-    if (this.running) return
+    if (this.running && !includeWindowTitleChanged) return
+    if (this.running) await this.stop('paused', 'observation permissions changed')
     const generation = ++this.generation
     // Native observers may publish their initial minimized sample before the
     // start command resolves, so accept samples for this starting generation.
     this.running = true
     this.patch({ enabled: this.enabled, consented: this.consented, status: 'starting', blockedReason: null, generation, errorCode: null })
     try {
-      const capabilities = await this.port.start()
+      const capabilities = await this.port.start({ includeWindowTitle: this.includeWindowTitle })
       if (this.destroyed || generation !== this.generation) { await this.port.stop(); return }
       const supported = Object.values(capabilities).some((value) => value === 'available')
       this.running = supported

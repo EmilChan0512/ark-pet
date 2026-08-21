@@ -14,22 +14,16 @@ import {
   type PackageInspection,
 } from '../services/characterPackages'
 import type { CharacterCatalogEntry } from '../types/character'
+import {
+  listenDebugCommands,
+  publishDebugSnapshot,
+  setDebugWindowVisible,
+} from '../debug/DebugBridge'
+import { INITIAL_DEBUG_SNAPSHOT } from '../debug/initialDebugSnapshot'
 import './App.css'
 
 const DESKTOP_AWARENESS_CONSENT_VERSION = 1
-
-const DEV_AI_VOICE_SAMPLES = [
-  {
-    key: 'walk-return',
-    label: 'AI 1 · 散步归来',
-    text: 'Dr.Stardust，你和欣特莱雅小姐散步回来了啊，唔，今天天气不错？',
-  },
-  {
-    key: 'evening-book',
-    label: 'AI 2 · 晚上读古籍',
-    text: '晚上好，博士，来和我一块看看这本古籍吧。',
-  },
-] as const
+const CONTENT_PERCEPTION_CONSENT_VERSION = 1
 
 function formatPackageError(error: unknown) {
   if (typeof error === 'object' && error && 'code' in error && 'message' in error) {
@@ -44,47 +38,9 @@ function formatBytes(bytes: number) {
 
 function createDebugStore(): DebugStore {
   let snapshot: DebugSnapshot = {
-    fps: 0,
-    petState: 'loading',
-    currentAnimation: null,
-    windowPosition: null,
-    pointerPosition: null,
-    hitTest: false,
-    mousePassthrough: false,
-    characterId: null,
-    rendererStatus: 'idle',
-    characterManifest: null,
-    characterLoadLog: [],
-    activeBehavior: null,
-    lastBehaviorError: null,
-    ambientSchedulerStatus: 'paused',
-    nextAmbientActionAt: null,
-    activeRuntimeCommand: null,
-    runtimeCommandQueueDepth: 0,
-    lastRuntimeCommandError: null,
-    activeSpeechSession: null,
-    speechQueueDepth: 0,
-    speechAudioSource: null,
-    speechVoiceEnabled: false,
-    voiceProgressStatus: 'disabled',
-    voiceProgressLog: [],
-    lastSpeechError: null,
-    lastContextEvent: null,
-    selectedReactionId: null,
-    activeReactionId: null,
-    reactionState: 'idle',
-    reactionBlockedReason: null,
-    reactionDecisionLog: [],
-    currentLocalTimePeriod: null,
-    desktopAwareness: {
-      enabled: false, consented: false, status: 'off',
-      capabilities: { foregroundCategory: 'unsupported', systemIdle: 'unsupported', sessionLock: 'unsupported' },
-      category: 'unknown', idleState: 'unavailable', idleBucket: null,
-      sessionState: 'unavailable', lastEventType: null, blockedReason: 'awareness disabled',
-      generation: 0, errorCode: null,
-    },
-    lastReactionError: null,
-    lastError: null,
+    ...INITIAL_DEBUG_SNAPSHOT,
+    desktopAwareness: { ...INITIAL_DEBUG_SNAPSHOT.desktopAwareness },
+    characterMind: { ...INITIAL_DEBUG_SNAPSHOT.characterMind },
   }
   const listeners = new Set<() => void>()
 
@@ -107,8 +63,8 @@ function createDebugStore(): DebugStore {
 
 export default function App() {
   const hostRef = useRef<HTMLDivElement | null>(null)
-  const debugPanelRef = useRef<HTMLElement | null>(null)
   const commandCoordinatorRef = useRef<RuntimeCommandCoordinator | null>(null)
+  const snapshotRef = useRef<DebugSnapshot>(INITIAL_DEBUG_SNAPSHOT)
   const runtimeGenerationRef = useRef(0)
   const debugStore = useMemo(() => createDebugStore(), [])
   const settingsStore = useMemo(() => createPetSettingsStore(), [])
@@ -119,6 +75,7 @@ export default function App() {
   const [packageBusy, setPackageBusy] = useState(false)
   const [packageOutcome, setPackageOutcome] = useState('Catalog not loaded')
   const [awarenessDisclosureOpen, setAwarenessDisclosureOpen] = useState(false)
+  const [contentDisclosureOpen, setContentDisclosureOpen] = useState(false)
   const snapshot = useSyncExternalStore(
     debugStore.subscribe,
     debugStore.getSnapshot,
@@ -129,6 +86,7 @@ export default function App() {
     settingsStore.getSnapshot,
     settingsStore.getSnapshot,
   )
+  snapshotRef.current = snapshot
 
   const refreshCharacterCatalog = useCallback(async () => {
     try {
@@ -243,7 +201,7 @@ export default function App() {
       runtimeDebugStore,
       settingsStore.getSnapshot(),
       () => setSettingsOpen(true),
-      () => debugPanelRef.current?.getBoundingClientRect() ?? null,
+      () => null,
       (characterId) => settingsStore.update({ activeCharacterId: characterId }),
     )
     const coordinator = new RuntimeCommandCoordinator(
@@ -319,6 +277,36 @@ export default function App() {
   }, [settings])
 
   useEffect(() => {
+    if (!import.meta.env.DEV) return
+    void setDebugWindowVisible(settings.showDebugPanel)
+  }, [settings.showDebugPanel])
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) return
+    const publish = () => void publishDebugSnapshot(snapshotRef.current)
+    publish()
+    const interval = window.setInterval(publish, 250)
+    let cleanup = () => {}
+    let active = true
+    void listenDebugCommands((command) => {
+      if (command.type === 'set-debug-window-visible') {
+        settingsStore.update({ showDebugPanel: command.visible })
+      } else {
+        void commandCoordinatorRef.current?.dispatch(command)
+      }
+    }).then((next) => {
+      if (active) cleanup = next
+      else next()
+    })
+    return () => {
+      active = false
+      window.clearInterval(interval)
+      cleanup()
+      void setDebugWindowVisible(false)
+    }
+  }, [settingsStore])
+
+  useEffect(() => {
     void commandCoordinatorRef.current?.dispatch({
       type: 'set-ui-interaction',
       active: settingsOpen,
@@ -330,6 +318,12 @@ export default function App() {
     const handleDevelopmentShortcut = (event: KeyboardEvent) => {
       if (event.key === 'F10') setSettingsOpen(true)
       if (event.key === 'Escape') setSettingsOpen(false)
+      if (event.key === 'F11') {
+        settingsStore.update({
+          showDebugPanel: !settingsStore.getSnapshot().showDebugPanel,
+        })
+        return
+      }
       if (event.key !== 'F8' && event.key !== 'F9') return
       settingsStore.update({ speechMode: 'character-voice' })
       const originalClip = event.key === 'F8'
@@ -508,8 +502,8 @@ export default function App() {
               {snapshot.desktopAwareness.errorCode ? <span>Error: {snapshot.desktopAwareness.errorCode}</span> : null}
             </div>
             <small className="awareness-not-collected">
-              Never collected: titles, URLs, screen contents, files, keyboard input, clipboard,
-              messages, document text, or activity history.
+              This coarse switch never reads titles or content. Foreground title access is a
+              separate permission below.
             </small>
             {settings.desktopAwarenessEnabled ? (
               <button type="button" onClick={() => settingsStore.update({ desktopAwarenessEnabled: false })}>
@@ -537,6 +531,83 @@ export default function App() {
               </div>
             </section>
           ) : null}
+
+          <section className="awareness-settings" aria-label="Content perception">
+            <div className="settings-toggle">
+              <span>
+                <strong>Foreground context</strong>
+                <small>Let her notice a stable foreground window title and form her own response</small>
+              </span>
+              <input
+                type="checkbox"
+                checked={settings.contentPerceptionEnabled}
+                onChange={(event) => {
+                  if (!event.target.checked) {
+                    settingsStore.update({ contentPerceptionEnabled: false })
+                  } else if (settings.contentPerceptionConsentVersion !== CONTENT_PERCEPTION_CONSENT_VERSION) {
+                    setContentDisclosureOpen(true)
+                  } else {
+                    settingsStore.update({
+                      contentPerceptionEnabled: true,
+                      desktopAwarenessEnabled: true,
+                      desktopAwarenessConsentVersion: DESKTOP_AWARENESS_CONSENT_VERSION,
+                    })
+                  }
+                }}
+              />
+            </div>
+            <small className="awareness-not-collected">
+              Phase 11 MVP reads only the current window title on Windows. Screen pixels, URLs,
+              filenames, input, clipboard, and messages remain future permission-scoped sensors.
+            </small>
+          </section>
+
+          {contentDisclosureOpen ? (
+            <section className="awareness-disclosure" role="dialog" aria-modal="true" aria-label="Content perception disclosure">
+              <h2>Let her notice foreground context?</h2>
+              <p>Ark Pet will read the title of the foreground window after it remains stable for three seconds.</p>
+              <p>The raw title is interpreted locally, kept only in short-lived memory, and is not stored, uploaded, passed into persona files, or shown in the normal debug snapshot.</p>
+              <p>She may decide to react based on her initiative style. This permission can be disabled in Settings at any time.</p>
+              <div className="settings-panel__actions">
+                <button type="button" className="settings-panel__done" onClick={() => {
+                  settingsStore.update({
+                    contentPerceptionConsentVersion: CONTENT_PERCEPTION_CONSENT_VERSION,
+                    contentPerceptionEnabled: true,
+                    desktopAwarenessConsentVersion: DESKTOP_AWARENESS_CONSENT_VERSION,
+                    desktopAwarenessEnabled: true,
+                  })
+                  setContentDisclosureOpen(false)
+                }}>Enable</button>
+                <button type="button" onClick={() => setContentDisclosureOpen(false)}>Not now</button>
+              </div>
+            </section>
+          ) : null}
+
+          <label className="settings-toggle">
+            <span>
+              <strong>Self-initiated responses</strong>
+              <small>She decides whether a noticed scene is worth acting on</small>
+            </span>
+            <input
+              type="checkbox"
+              checked={settings.initiativeEnabled}
+              onChange={(event) => settingsStore.update({ initiativeEnabled: event.target.checked })}
+            />
+          </label>
+
+          <label className="settings-field">
+            <span>Initiative style</span>
+            <select
+              value={settings.initiativeStyle}
+              disabled={!settings.initiativeEnabled}
+              onChange={(event) => settingsStore.update({ initiativeStyle: event.target.value as typeof settings.initiativeStyle })}
+            >
+              <option value="quiet">Quiet · attention ≥80% · about 20 min</option>
+              <option value="balanced">Balanced · attention ≥45% · about 6 min</option>
+              <option value="expressive">Expressive · attention ≥20% · about 2 min</option>
+            </select>
+            <small>Attention is her live response to a scene, not a user-controlled value. Inspect it in Debug → Mind.</small>
+          </label>
 
           <label className="settings-toggle">
             <span>
@@ -593,7 +664,7 @@ export default function App() {
             <label className="settings-toggle">
               <span>
                 <strong>Debug panel</strong>
-                <small>Show live renderer and interaction state</small>
+                <small>Open the compact independent development window</small>
               </span>
               <input
                 type="checkbox"
@@ -630,103 +701,6 @@ export default function App() {
         </aside>
       ) : null}
 
-      {import.meta.env.DEV && settings.showDebugPanel && !settingsOpen ? (
-        <aside ref={debugPanelRef} className="debug-panel">
-          <div>FPS: {snapshot.fps}</div>
-          <div>Pet State: {snapshot.petState}</div>
-          <div>Current Animation: {snapshot.currentAnimation ?? 'n/a'}</div>
-          <div>
-            Window Position:{' '}
-            {snapshot.windowPosition
-              ? `${snapshot.windowPosition.x}, ${snapshot.windowPosition.y}`
-              : 'n/a'}
-          </div>
-          <div>
-            Pointer Position:{' '}
-            {snapshot.pointerPosition
-              ? `${Math.round(snapshot.pointerPosition.x)}, ${Math.round(snapshot.pointerPosition.y)}`
-              : 'n/a'}
-          </div>
-          <div>Hit Test: {String(snapshot.hitTest)}</div>
-          <div>Mouse Passthrough: {String(snapshot.mousePassthrough)}</div>
-          <div>Character ID: {snapshot.characterId ?? 'n/a'}</div>
-          <div>Character Catalog: {characterCatalog.length} ({characterCatalog.filter((entry) => entry.source === 'installed').length} installed)</div>
-          <div>Package Outcome: {packageOutcome}</div>
-          <div>Character Load:</div>
-          {snapshot.characterLoadLog.length > 0 ? (
-            <pre className="debug-panel__character-load-log">{snapshot.characterLoadLog.join('\n')}</pre>
-          ) : null}
-          <div>Active Behavior: {snapshot.activeBehavior ?? 'n/a'}</div>
-          <div>Ambient Scheduler: {snapshot.ambientSchedulerStatus}</div>
-          <div>Runtime Command: {snapshot.activeRuntimeCommand ?? 'n/a'}</div>
-          <div>Command Queue: {snapshot.runtimeCommandQueueDepth}</div>
-          <div>Speech Session: {snapshot.activeSpeechSession ?? 'n/a'}</div>
-          <div>Speech Queue: {snapshot.speechQueueDepth}</div>
-          <div>Speech Audio: {snapshot.speechAudioSource ?? 'text-only'}</div>
-          <div>Character Voice: {snapshot.speechVoiceEnabled ? 'enabled' : 'disabled'}</div>
-          <div>Voice Progress: {snapshot.voiceProgressStatus}</div>
-          {snapshot.voiceProgressLog.length > 0 ? (
-            <pre className="debug-panel__voice-log">{snapshot.voiceProgressLog.join('\n')}</pre>
-          ) : null}
-          <div>Time Period: {snapshot.currentLocalTimePeriod ?? 'n/a'}</div>
-          <div>Desktop Awareness: {snapshot.desktopAwareness.status} · generation {snapshot.desktopAwareness.generation}</div>
-          <div>Desktop Capabilities: app {snapshot.desktopAwareness.capabilities.foregroundCategory}, idle {snapshot.desktopAwareness.capabilities.systemIdle}, lock {snapshot.desktopAwareness.capabilities.sessionLock}</div>
-          <div>Desktop Category: {snapshot.desktopAwareness.category}</div>
-          <div>Desktop Idle: {snapshot.desktopAwareness.idleState}{snapshot.desktopAwareness.idleBucket ? ` · ${snapshot.desktopAwareness.idleBucket}` : ''}</div>
-          <div>Desktop Session: {snapshot.desktopAwareness.sessionState}</div>
-          <div>Desktop Last Event: {snapshot.desktopAwareness.lastEventType ?? 'n/a'}</div>
-          {snapshot.desktopAwareness.blockedReason ? <div>Desktop Blocked: {snapshot.desktopAwareness.blockedReason}</div> : null}
-          {snapshot.desktopAwareness.errorCode ? <div>Desktop Error: {snapshot.desktopAwareness.errorCode}</div> : null}
-          <div>Last Context: {snapshot.lastContextEvent?.type ?? 'n/a'}</div>
-          <div>Selected Reaction: {snapshot.selectedReactionId ?? 'n/a'}</div>
-          <div>Active Reaction: {snapshot.activeReactionId ?? 'n/a'} ({snapshot.reactionState})</div>
-          {snapshot.reactionBlockedReason ? <div>Reaction Blocked: {snapshot.reactionBlockedReason}</div> : null}
-          {snapshot.reactionDecisionLog.length > 0 ? (
-            <pre className="debug-panel__decision-log">{snapshot.reactionDecisionLog.join('\n')}</pre>
-          ) : null}
-          {snapshot.lastRuntimeCommandError ? (
-            <pre>{snapshot.lastRuntimeCommandError}</pre>
-          ) : null}
-          {snapshot.lastBehaviorError ? <pre>{snapshot.lastBehaviorError}</pre> : null}
-          {snapshot.lastSpeechError ? <pre>{snapshot.lastSpeechError}</pre> : null}
-          {snapshot.lastReactionError ? <pre>{snapshot.lastReactionError}</pre> : null}
-          {snapshot.lastError ? <pre>{snapshot.lastError}</pre> : null}
-          <div className="debug-panel__voice-actions" aria-label="Pepe AI voice samples">
-            {DEV_AI_VOICE_SAMPLES.map((sample) => (
-              <button
-                key={sample.key}
-                type="button"
-                title={sample.text}
-                onClick={() => testDynamicCharacterVoice(sample.text, sample.key)}
-              >
-                {sample.label}
-              </button>
-            ))}
-          </div>
-          <div className="debug-panel__voice-actions" aria-label="Personality event simulations">
-            {([
-              ['First meeting', { type: 'session.first-meeting-today', at: performance.now() }],
-              ['Returned', { type: 'session.user-returned', at: performance.now(), idleMs: 600_000 }],
-              ['Long active', { type: 'session.long-active', at: performance.now(), activeMs: 7_200_000 }],
-              ['Late night', { type: 'time.period-entered', at: performance.now(), period: 'late-night' }],
-              ['Dev app', { type: 'desktop.activity-category-entered', at: performance.now(), category: 'development' }],
-              ['Gaming app', { type: 'desktop.activity-category-entered', at: performance.now(), category: 'gaming' }],
-              ['Long idle return', { type: 'desktop.system-idle-returned', at: performance.now(), idleBucket: 'long' }],
-              ['Unlocked', { type: 'desktop.session-unlocked', at: performance.now() }],
-            ] as const).map(([label, event]) => (
-              <button key={label} type="button" onClick={() => void commandCoordinatorRef.current?.dispatch({ type: 'simulate-context', event })}>
-                {label}
-              </button>
-            ))}
-            <button type="button" onClick={() => void commandCoordinatorRef.current?.dispatch({ type: 'clear-first-meeting-marker' })}>
-              Clear daily greeting
-            </button>
-            <button type="button" onClick={() => void commandCoordinatorRef.current?.dispatch({ type: 'clear-reaction-cooldowns' })}>
-              Clear reaction cooldowns
-            </button>
-          </div>
-        </aside>
-      ) : null}
     </div>
   )
 }

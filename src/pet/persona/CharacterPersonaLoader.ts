@@ -11,6 +11,9 @@ const conditionSchema = z.discriminatedUnion('type', [
     'media', 'gaming', 'system', 'other', 'unknown',
   ]) }).strict(),
   z.object({ type: z.literal('idle-bucket'), value: z.enum(['short', 'medium', 'long']) }).strict(),
+  z.object({ type: z.literal('perception-scene'), value: z.enum([
+    'coding-problem', 'focused-reading', 'media', 'conversation', 'general',
+  ]) }).strict(),
 ])
 
 const planStepSchema = z.discriminatedUnion('type', [
@@ -39,6 +42,7 @@ const personaSchema = z.object({
       'time.period-entered',
       'desktop.activity-category-entered', 'desktop.system-idle-entered',
       'desktop.system-idle-returned', 'desktop.session-locked', 'desktop.session-unlocked',
+      'perception.scene-noticed',
     ]),
     priority: z.number().finite(),
     weight: z.number().positive().optional(),

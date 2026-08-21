@@ -1,14 +1,24 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { ContextEventBus } from '../ContextEventBus'
-import { DesktopContextSource, type CoarseDesktopSample, type DesktopAwarenessPort } from './DesktopContextSource'
+import {
+  DesktopContextSource,
+  type CoarseDesktopSample,
+  type DesktopAwarenessPort,
+  type DesktopAwarenessStartOptions,
+} from './DesktopContextSource'
 
 class FakeDesktopPort implements DesktopAwarenessPort {
   starts = 0
   stops = 0
+  startOptions: DesktopAwarenessStartOptions[] = []
   listener: ((sample: CoarseDesktopSample) => void) | null = null
-  async start() {
+  async start(options: DesktopAwarenessStartOptions) {
     this.starts += 1
-    return { foregroundCategory: 'available', systemIdle: 'available', sessionLock: 'available' } as const
+    this.startOptions.push(options)
+    return {
+      foregroundCategory: 'available', foregroundTitle: 'available',
+      systemIdle: 'available', sessionLock: 'available',
+    } as const
   }
   async stop() { this.stops += 1 }
   subscribe(listener: (sample: CoarseDesktopSample) => void) { this.listener = listener; return () => { this.listener = null } }
@@ -89,6 +99,23 @@ describe('DesktopContextSource', () => {
     await source.destroy()
     await source.destroy()
     expect(port.stops).toBeGreaterThanOrEqual(1)
+  })
+
+  it('requests title access only when configured and safely restarts the observer', async () => {
+    const port = new FakeDesktopPort()
+    const source = new DesktopContextSource(new ContextEventBus(), port)
+    await source.configure({ enabled: true, consented: true, ready: true, visible: true })
+    expect(port.startOptions).toEqual([{ includeWindowTitle: false }])
+    await source.configure({
+      enabled: true, consented: true, ready: true, visible: true, includeWindowTitle: true,
+    })
+    expect(port.startOptions).toEqual([
+      { includeWindowTitle: false },
+      { includeWindowTitle: true },
+    ])
+    expect(port.stops).toBe(1)
+    expect(source.getSnapshot().status).toBe('active')
+    await source.destroy()
   })
 
   it('frontend coarse payload cannot contain raw identity fields', () => {

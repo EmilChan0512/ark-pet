@@ -131,6 +131,59 @@ describe('SpeechSessionCoordinator', () => {
     await expect(outcome).resolves.toBe('completed')
   })
 
+  it('waits for generated audio before showing its speech bubble', async () => {
+    const synthesis = deferred<CharacterVoiceArtifact | null>()
+    const playback = deferred<void>()
+    const { coordinator, visible } = harness(
+      { resolve: () => synthesis.promise },
+      { play: () => playback.promise, stop: vi.fn(), destroy: vi.fn() },
+    )
+    coordinator.setVoiceEnabled(true)
+    const outcome = coordinator.enqueue({ id: 'generated', source: 'ambient', text: '还没合成好' }, 0)
+
+    expect(visible).toEqual([])
+    synthesis.resolve({
+      characterId: 'char_4058_pepe',
+      characterGeneration: 1,
+      voiceIdentity: 'pepe.zh-CN.cn_012',
+      transcript: '现在可以说了',
+      source: 'character-ai',
+      audioUri: 'memory://generated',
+    })
+    await Promise.resolve()
+    await Promise.resolve()
+
+    expect(visible).toEqual([expect.objectContaining({
+      sessionId: 'generated', text: '现在可以说了', audioSource: 'character-ai',
+    })])
+    playback.resolve()
+    await Promise.resolve()
+    coordinator.update(350)
+    await expect(outcome).resolves.toBe('completed')
+  })
+
+  it('shows text fallback only after generated-voice synthesis times out', async () => {
+    const synthesis = deferred<CharacterVoiceArtifact | null>()
+    const presentation: SpeechPresentation[] = []
+    const coordinator = new SpeechSessionCoordinator(
+      { show: (item) => presentation.push(item), hide: vi.fn(), destroy: vi.fn() },
+      { resolve: () => synthesis.promise },
+      { play: vi.fn(), stop: vi.fn(), destroy: vi.fn() },
+      () => ({ characterId: 'char_4058_pepe', characterGeneration: 1, voiceIdentity: 'pepe.zh-CN.cn_012' }),
+      undefined,
+      { synthesisTimeoutMs: 100 },
+    )
+    coordinator.resume()
+    coordinator.setVoiceEnabled(true)
+    const outcome = coordinator.enqueue({ id: 'timeout', source: 'ambient', text: '文字降级' }, 0)
+    coordinator.update(99)
+    expect(presentation).toEqual([])
+    coordinator.update(100)
+    expect(presentation).toEqual([expect.objectContaining({ text: '文字降级', audioSource: null })])
+    coordinator.update(3_000)
+    await expect(outcome).resolves.toBe('completed')
+  })
+
   it('reports bounded voice preparation, synthesis, and playback progress', async () => {
     const playback = deferred<void>()
     const artifact: CharacterVoiceArtifact = {

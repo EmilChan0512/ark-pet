@@ -3,7 +3,8 @@
   "identifier": "default",
   "description": "Default desktop pet capability set for the main webview window.",
   "windows": [
-    "main"
+    "main",
+    "debug"
   ],
   "permissions": [
     "core:default",
@@ -20,6 +21,7 @@
     "core:window:allow-set-ignore-cursor-events",
     "core:window:allow-set-position",
     "core:window:allow-set-size",
+    "core:window:allow-set-focus",
     "core:window:allow-show"
   ]
 }
