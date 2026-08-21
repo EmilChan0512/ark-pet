@@ -1,0 +1,35 @@
+src/app/App.tsx
+  s_9d59068b8fb7f6::t_b48d907fb78e1a 10,225,265-271,279
+src-tauri/src/window/mod.rs
+  s_9d59068b8fb7f6::t_b48d907fb78e1a 3-5,10-12
+src/services/tauri.ts
+  s_9d59068b8fb7f6::t_b48d907fb78e1a 4,147-150
+src-tauri/src/window/macos_dock_menu.rs
+  s_9d59068b8fb7f6::t_b48d907fb78e1a 1-2,4-28
+  s_9d59068b8fb7f6::t_ff20b679e6c5b1 3
+src-tauri/src/window/macos_dock_menu.m
+  s_9d59068b8fb7f6::t_b48d907fb78e1a 1-5,9-17,22-43
+  s_9d59068b8fb7f6::t_748f7c3eb394b5 6-8,18-21
+src-tauri/Cargo.lock
+  s_9d59068b8fb7f6::t_46057a0da1ad51 3384
+src-tauri/build.rs
+  s_9d59068b8fb7f6::t_b48d907fb78e1a 2-10
+src-tauri/Cargo.toml
+  s_9d59068b8fb7f6::t_b48d907fb78e1a 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "bbadace802e30cfd7005ac0cab810765294e8bb2",
+  "prompts": {},
+  "sessions": {
+    "s_9d59068b8fb7f6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a023ea-4083-7871-903f-16a59b32901b",
+        "model": "GPT-5.6-Terra-joybuilder"
+      },
+      "human_author": "chenyi.266 <chenyi.266@jd.com>"
+    }
+  }
+}
